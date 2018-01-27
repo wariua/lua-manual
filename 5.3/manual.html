@@ -42,67 +42,66 @@ Freely available under the terms of the
 
 
 
-<h1>1 &ndash; <a name="1">Introduction</a></h1>
+<h1>1 &ndash; <a name="1">소개</a></h1>
 
 <p>
-Lua is a powerful, efficient, lightweight, embeddable scripting language.
-It supports procedural programming,
-object-oriented programming, functional programming,
-data-driven programming, and data description.
-
-
-<p>
-Lua combines simple procedural syntax with powerful data description
-constructs based on associative arrays and extensible semantics.
-Lua is dynamically typed,
-runs by interpreting bytecode with a register-based
-virtual machine,
-and has automatic memory management with
-incremental garbage collection,
-making it ideal for configuration, scripting,
-and rapid prototyping.
+루아(Lua)는 강력하고 효율적이며 가벼운 내장형 스크립트 언어이다.
+절차적 프로그래밍, 객체 지향 프로그래밍, 함수형 프로그래밍,
+데이터 주도 프로그래밍, 그리고 데이터 기술을 지원한다.
 
 
 <p>
-Lua is implemented as a library, written in <em>clean C</em>,
-the common subset of Standard&nbsp;C and C++.
-The Lua distribution includes a host program called <code>lua</code>,
-which uses the Lua library to offer a complete,
-standalone Lua interpreter,
-for interactive or batch use.
-Lua is intended to be used both as a powerful, lightweight,
-embeddable scripting language for any program that needs one,
-and as a powerful but lightweight and efficient stand-alone language.
+루아에서는 단순한 절차적 문법을 연관 배열과 확장식 의미론을
+기반으로 한 데이터 기술 요소와 결합시킨다.
+루아는 동적 타입이고,
+레지스터 기반 가상 머신으로 바이트코드를 해석해서 실행하며,
+점진적 쓰레기 수집으로 메모리를 자동 관리한다.
+그래서 설정, 스크립트, 빠른 프로토타입 만들기에 이상적이다.
 
 
 <p>
-As an extension language, Lua has no notion of a "main" program:
-it works <em>embedded</em> in a host client,
-called the <em>embedding program</em> or simply the <em>host</em>.
-(Frequently, this host is the stand-alone <code>lua</code> program.)
-The host program can invoke functions to execute a piece of Lua code,
-can write and read Lua variables,
-and can register C&nbsp;functions to be called by Lua code.
-Through the use of C&nbsp;functions, Lua can be augmented to cope with
-a wide range of different domains,
-thus creating customized programming languages sharing a syntactical framework.
+루아는 라이브러리로 구현되어 있으며, 표준 C와 C++의
+공통 부분집합인 <em>순수 C</em>로 작성되어 있다.
+루아 배포판에는 <code>lua</code>라는 호스트 프로그램이
+포함되어 있는데, 루아 라이브러리를 이용해
+완전한 독립형 루아 인터프리터를 제공한다.
+이를 대화식 사용이나 배치 처리에 쓸 수 있다.
+루아는 강력하고 가벼운 내장형 스크립트 언어로,
+또 강력하지만 가볍고 효율적인 독립형 언어로도
+쓸 수 있게 만들어졌다.
 
 
 <p>
-Lua is free software,
-and is provided as usual with no guarantees,
-as stated in its license.
-The implementation described in this manual is available
-at Lua's official web site, <code>www.lua.org</code>.
+확장형 언어이기에 루아에는 "main" 프로그램 개념이 없다.
+<em>감싸는 프로그램</em> 내지 <em>호스트</em>라 부르는
+호스트 클라이언트에 <em>내장</em>되어 동작한다.
+(많은 경우 이 호스트는 독립형 <code>lua</code> 프로그램이다.)
+호스트 프로그램에서는 함수를 호출해서 루아 코드 조각을 실행할 수 있고,
+루아 변수를 읽고 쓸 수 있으며,
+루아 코드에서 호출할 C 함수를 등록할 수 있다.
+C 함수 사용을 통해 광범위한 분야에 대처할 수 있도록
+루아를 강화할 수 있으며, 그래서 문법적 틀을 공유하는
+맞춤형 프로그래밍 언어를 만들 수 있다.
 
 
 <p>
-Like any other reference manual,
-this document is dry in places.
-For a discussion of the decisions behind the design of Lua,
-see the technical papers available at Lua's web site.
-For a detailed introduction to programming in Lua,
-see Roberto's book, <em>Programming in Lua</em>.
+루아는 자유 소프트웨어이며
+라이선스에서 선언하는 것처럼
+항상 그렇듯 어떤 보증도 없이 제공된다.
+이 매뉴얼에서 다루는 구현체를
+루아의 공식 웹 사이트인 <code>www.lua.org</code>
+에서 얻을 수 있다.
+
+
+<p>
+여느 참조 매뉴얼과 마찬가지로
+이 문서는 많은 부분 건조하다.
+루아 설계 배경의 결정들에 대한
+논의는 루아 웹 사이트에 있는
+기술 논문들을 보라.
+루아 프로그래밍에 대한 자세한
+소개는 Roberto의 책
+<em>Programming in Lua</em>를 보라.
 
 
 
