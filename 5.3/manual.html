@@ -376,79 +376,80 @@ C 레지스트리의 특수 인덱스에 이 값을 유지한다. (<a href="#4.5
 
 
 
-<h2>2.4 &ndash; <a name="2.4">Metatables and Metamethods</a></h2>
+<h2>2.4 &ndash; <a name="2.4">메타테이블과 메타메소드</a></h2>
 
 <p>
-Every value in Lua can have a <em>metatable</em>.
-This <em>metatable</em> is an ordinary Lua table
-that defines the behavior of the original value
-under certain special operations.
-You can change several aspects of the behavior
-of operations over a value by setting specific fields in its metatable.
-For instance, when a non-numeric value is the operand of an addition,
-Lua checks for a function in the field "<code>__add</code>" of the value's metatable.
-If it finds one,
-Lua calls this function to perform the addition.
-
-
-<p>
-The key for each event in a metatable is a string
-with the event name prefixed by two underscores;
-the corresponding values are called <em>metamethods</em>.
-In the previous example, the key is "<code>__add</code>"
-and the metamethod is the function that performs the addition.
+루아의 모든 값에는 <em>메타테이블(metatable)</em>이 있을 수 있다.
+<em>메타테이블</em>은 평범한 루아 테이블이며
+몇몇 특별한 연산들에서 기반 값의 동작을 규정한다.
+메타테이블의 개별 필드를 설정해서
+그 값에 대한 연산들의 동작에서 여러 측면을 바꿀 수 있다.
+예를 들어 수가 아닌 값이 덧셈의 피연산자일 때
+루아에서는 그 값의 메타테이블에서
+"<code>__add</code>" 필드에 함수가 있는지 확인한다.
+있으면 루아가 그 함수를 호출해서 덧셈을 수행한다.
 
 
 <p>
-You can query the metatable of any value
-using the <a href="#pdf-getmetatable"><code>getmetatable</code></a> function.
-Lua queries metamethods in metatables using a raw access (see <a href="#pdf-rawget"><code>rawget</code></a>).
-So, to retrieve the metamethod for event <code>ev</code> in object <code>o</code>,
-Lua does the equivalent to the following code:
+메타테이블의 각 이벤트에 대한 키는
+이벤트 이름 앞에 밑줄 두 개가 붙은 문자열이다.
+그 키에 대응하는 값을 <em>메타메소드(metamethod)</em>라고 한다.
+앞의 예에서 키는 "<code>__add</code>"이고
+메타메소드는 덧셈 수행 함수이다.
+
+
+<p>
+<a href="#pdf-getmetatable"><code>getmetatable</code></a> 함수를 이용해
+원하는 값의 메타테이블을 질의할 수 있다.
+루아에서는 raw 접근을 이용해 메타테이블 내의 메타메소드를 질의한다. (<a href="#pdf-rawget"><code>rawget</code></a> 참고.)
+따라서 객체 <code>o</code>에서 이벤트 <code>ev</code>에 대한 메타메소드를
+얻으려 할 때 루아에서 하는 것은 다음 코드와 동등하다.
 
 <pre>
      rawget(getmetatable(<em>o</em>) or {}, "__<em>ev</em>")
 </pre>
 
 <p>
-You can replace the metatable of tables
-using the <a href="#pdf-setmetatable"><code>setmetatable</code></a> function.
-You cannot change the metatable of other types from Lua code
-(except by using the debug library (<a href="#6.10">&sect;6.10</a>));
-you should use the C&nbsp;API for that.
+<a href="#pdf-setmetatable"><code>setmetatable</code></a> 함수를 이용해
+테이블의 메타테이블을 교체할 수 있다.
+루아 코드에서는 (debug 라이브러리 사용을 제외하면 (<a href="#6.10">6.10절</a> 참고))
+다른 타입들의 메타테이블을 바꿀 수 없다.
+그러려면 C API를 사용해야 한다.
 
 
 <p>
-Tables and full userdata have individual metatables
-(although multiple tables and userdata can share their metatables).
-Values of all other types share one single metatable per type;
-that is, there is one single metatable for all numbers,
-one for all strings, etc.
-By default, a value has no metatable,
-but the string library sets a metatable for the string type (see <a href="#6.4">&sect;6.4</a>).
+테이블과 full userdata에는 개별적으로 메타테이블이 있다.
+(단, 여러 테이블 및 userdata가 메타테이블을 공유할 수도 있다.)
+다른 타입 값들은 타입별로 하나씩 있는 메타테이블을 공유한다.
+즉, number 전체에 메타테이블 하나가 있고,
+string 전체에 하나가 있고, 하는 식이다.
+기본적으로는 값에 메타테이블이 없다.
+하지만 string 라이브러리에서는 string 타입에 메타테이블을 설정한다. (<a href="#6.4">6.4절</a> 참고.)
 
 
 <p>
-A metatable controls how an object behaves in
-arithmetic operations, bitwise operations,
-order comparisons, concatenation, length operation, calls, and indexing.
-A metatable also can define a function to be called
-when a userdata or a table is garbage collected (<a href="#2.5">&sect;2.5</a>).
+메타테이블은 객체가 산술 연산, 비트 연산,
+순서 비교, 접합, 길이 연산, 호출, 인덱스 사용에서
+어떻게 동작할지를 제어한다.
+또 userdata나 테이블이 쓰레기 수집 될 때
+호출되는 함수를 메타테이블에 정의할 수도 있다.
+(<a href="#2.5">2.5절</a> 참고.)
 
 
 <p>
-For the unary operators (negation, length, and bitwise NOT),
-the metamethod is computed and called with a dummy second operand,
-equal to the first one.
-This extra operand is only to simplify Lua's internals
-(by making these operators behave like a binary operation)
-and may be removed in future versions.
-(For most uses this extra operand is irrelevant.)
+단항 연산자(부정, 길이, 비트 NOT)에서는
+두 번째 피연산자를 첫 번째와 같은 더미 값으로 채워서
+메타메소드를 계산하고 호출한다.
+이 추가 피연산자는
+(그 연산자들이 이항 연산자처럼 동작하게 만들어서)
+루아의 내부 동작을 단순하게 만들기 위한 것이며
+향후 버전에서 제거될 수도 있다.
+(대부분의 용도에서 이 추가 피연산자는 별 상관이 없다.)
 
 
 <p>
-A detailed list of events controlled by metatables is given next.
-Each operation is identified by its corresponding key.
+메타테이블로 제어하는 이벤트들의 자세한 목록이 다음에 있다.
+해당 키로 각 연산을 식별한다.
 
 
 
@@ -657,19 +658,19 @@ are the result of the operation.
 </ul>
 
 <p>
-It is a good practice to add all needed metamethods to a table
-before setting it as a metatable of some object.
-In particular, the <code>__gc</code> metamethod works only when this order
-is followed (see <a href="#2.5.1">&sect;2.5.1</a>).
+테이블을 어떤 객체의 메타테이블로 설정하기 전에
+필요한 모든 메타메소드들을 추가해 두는 게 좋다.
+특히 <code>__gc</code> 메타메소드는 이 순서를 따를 때에만
+제대로 동작한다. (<a href="#2.5.1">2.5.1절</a> 참고.)
 
 
 <p>
-Because metatables are regular tables,
-they can contain arbitrary fields,
-not only the event names defined above.
-Some functions in the standard library
-(e.g., <a href="#pdf-tostring"><code>tostring</code></a>)
-use other fields in metatables for their own purposes.
+메타테이블도 정규 테이블이기 때문에
+위에 규정한 이벤트 이름들만이 아니라
+임의의 필드를 담을 수 있다.
+표준 라이브러리의 일부 함수들은
+(가령 <a href="#pdf-tostring"><code>tostring</code></a>)
+메타테이블의 다른 필드들을 자체 용도에 이용한다.
 
 
 
