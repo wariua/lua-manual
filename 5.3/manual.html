@@ -456,203 +456,205 @@ string 전체에 하나가 있고, 하는 식이다.
 <ul>
 
 <li><b><code>__add</code>: </b>
-the addition (<code>+</code>) operation.
-If any operand for an addition is not a number
-(nor a string coercible to a number),
-Lua will try to call a metamethod.
-First, Lua will check the first operand (even if it is valid).
-If that operand does not define a metamethod for <code>__add</code>,
-then Lua will check the second operand.
-If Lua can find a metamethod,
-it calls the metamethod with the two operands as arguments,
-and the result of the call
-(adjusted to one value)
-is the result of the operation.
-Otherwise,
-it raises an error.
+덧셈 (<code>+</code>) 연산.
+덧셈의 어느 피연산자라도 수가 아니면
+(수로 강제할 수 있는 문자열도 아니면)
+루아에서 메타메소드 호출을 시도하게 된다.
+루아에서는 먼저 첫 번째 피연산자를 (유효하더라도) 확인한다.
+그 피연산자에서 <code>__add</code>에 대한 메타메소드를
+정의하고 있지 않으면 루아가 두 번째 피연산자를 확인한다.
+메타메소드를 찾을 수 있는 경우
+루아에서 두 피연산자를 인자로 해서
+그 메타메소드를 호출하며
+(한 개 값으로 조정된) 호출 결과가
+연산 결과가 된다.
+그 외의 경우 오류를 발생시킨다.
 </li>
 
 <li><b><code>__sub</code>: </b>
-the subtraction (<code>-</code>) operation.
-Behavior similar to the addition operation.
+뺄셈 (<code>-</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__mul</code>: </b>
-the multiplication (<code>*</code>) operation.
-Behavior similar to the addition operation.
+곱셈 (<code>*</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__div</code>: </b>
-the division (<code>/</code>) operation.
-Behavior similar to the addition operation.
+나눗셈 (<code>/</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__mod</code>: </b>
-the modulo (<code>%</code>) operation.
-Behavior similar to the addition operation.
+모듈로 (<code>%</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__pow</code>: </b>
-the exponentiation (<code>^</code>) operation.
-Behavior similar to the addition operation.
+지수 (<code>^</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__unm</code>: </b>
-the negation (unary <code>-</code>) operation.
-Behavior similar to the addition operation.
+반수 (단항 <code>-</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__idiv</code>: </b>
-the floor division (<code>//</code>) operation.
-Behavior similar to the addition operation.
+내림 나눗셈 (<code>//</code>) 연산.
+덧셈 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__band</code>: </b>
-the bitwise AND (<code>&amp;</code>) operation.
-Behavior similar to the addition operation,
-except that Lua will try a metamethod
-if any operand is neither an integer
-nor a value coercible to an integer (see <a href="#3.4.3">&sect;3.4.3</a>).
+비트 AND (<code>&amp;</code>) 연산.
+덧셈 연산과 유사하게 동작하되,
+정수도 아니고 정수로 강제 가능한 (<a href="#3.4.3">3.4.3절</a> 참고) 값도 아닌
+피연산자가 하나라도 있으면
+루아에서 메타메소드를 시도하게 된다.
 </li>
 
 <li><b><code>__bor</code>: </b>
-the bitwise OR (<code>|</code>) operation.
-Behavior similar to the bitwise AND operation.
+비트 OR (<code>|</code>) 연산.
+비트 AND 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__bxor</code>: </b>
-the bitwise exclusive OR (binary <code>~</code>) operation.
-Behavior similar to the bitwise AND operation.
+비트 배타적 OR (이항 <code>~</code>) 연산.
+비트 AND 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__bnot</code>: </b>
-the bitwise NOT (unary <code>~</code>) operation.
-Behavior similar to the bitwise AND operation.
+비트 NOT (단항 <code>~</code>) 연산.
+비트 AND 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__shl</code>: </b>
-the bitwise left shift (<code>&lt;&lt;</code>) operation.
-Behavior similar to the bitwise AND operation.
+비트 왼쪽 시프트 (<code>&lt;&lt;</code>) 연산.
+비트 AND 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__shr</code>: </b>
-the bitwise right shift (<code>&gt;&gt;</code>) operation.
-Behavior similar to the bitwise AND operation.
+비트 오른쪽 시프트 (<code>&gt;&gt;</code>) 연산.
+비트 AND 연산과 유사하게 동작.
 </li>
 
 <li><b><code>__concat</code>: </b>
-the concatenation (<code>..</code>) operation.
-Behavior similar to the addition operation,
-except that Lua will try a metamethod
-if any operand is neither a string nor a number
-(which is always coercible to a string).
+접합 (<code>..</code>) 연산.
+덧셈 연산과 유사하게 동작하되,
+문자열도 아니고 (항상 문자열로 강제하는) 수도 아닌
+피연산자가 하나라도 있으면
+루아에서 메타메소드를 시도하게 된다.
 </li>
 
 <li><b><code>__len</code>: </b>
-the length (<code>#</code>) operation.
-If the object is not a string,
-Lua will try its metamethod.
-If there is a metamethod,
-Lua calls it with the object as argument,
-and the result of the call
-(always adjusted to one value)
-is the result of the operation.
-If there is no metamethod but the object is a table,
-then Lua uses the table length operation (see <a href="#3.4.7">&sect;3.4.7</a>).
-Otherwise, Lua raises an error.
+길이 (<code>#</code>) 연산.
+객체가 문자열이 아니면
+루아에서 메타메소드를 시도하게 된다.
+메타메소드가 있으면
+객체를 인자로 해서 호출하며
+호출 결과가 (언제나 한 개 값으로 조정돼서)
+연산 결과가 된다.
+메타메소드가 없지만 객체가 테이블인 경우에는
+루아에서 테이블 길이 연산을 사용한다. (<a href="#3.4.7">3.4.7절</a> 참고.)
+그 외의 경우 루아가 오류를 발생시킨다.
 </li>
 
 <li><b><code>__eq</code>: </b>
-the equal (<code>==</code>) operation.
-Behavior similar to the addition operation,
-except that Lua will try a metamethod only when the values
-being compared are either both tables or both full userdata
-and they are not primitively equal.
-The result of the call is always converted to a boolean.
+같음 (<code>==</code>) 연산.
+덧셈 연산과 유사하게 동작하되,
+비교하려는 두 값이 모두 테이블이거나 모두 userdata이고
+단순 비교로는 같지 않을 때에만
+루아에서 메타메소드를 시도하게 된다.
+호출 결과가 항상 불리언으로 변환된다.
 </li>
 
 <li><b><code>__lt</code>: </b>
-the less than (<code>&lt;</code>) operation.
-Behavior similar to the addition operation,
-except that Lua will try a metamethod only when the values
-being compared are neither both numbers nor both strings.
-The result of the call is always converted to a boolean.
+작음 (<code>&lt;</code>) 연산.
+덧셈 연산과 유사하게 동작하되,
+비교하려는 두 값이
+모두 수인 것도 아니고 모두 문자열인 것도 아닐 때만
+루아에서 메타메소드를 시도하게 된다.
+호출 결과가 항상 불리언으로 변환된다.
 </li>
 
 <li><b><code>__le</code>: </b>
-the less equal (<code>&lt;=</code>) operation.
-Unlike other operations,
-the less-equal operation can use two different events.
-First, Lua looks for the <code>__le</code> metamethod in both operands,
-like in the less than operation.
-If it cannot find such a metamethod,
-then it will try the <code>__lt</code> metamethod,
-assuming that <code>a &lt;= b</code> is equivalent to <code>not (b &lt; a)</code>.
-As with the other comparison operators,
-the result is always a boolean.
-(This use of the <code>__lt</code> event can be removed in future versions;
-it is also slower than a real <code>__le</code> metamethod.)
+작거나 같음 (<code>&lt;=</code>) 연산.
+다른 연산들과 달리
+작거나 같음 연산에서는 두 가지 이벤트를 사용할 수 있다.
+먼저 루아에서는 작음 연산과 같은 방식으로
+두 피연산자 모두에서 <code>__le</code> 메타메소드를 찾는다.
+그런 메타메소드를 찾을 수 없는 경우에는
+<code>a &lt;= b</code>가 <code>not (b &lt; a)</code>와 동등하다고 가정하고
+<code>__lt</code> 메타메소드를 시도하게 된다.
+다른 비교 연산자들처럼
+결과가 항상 불리언이다.
+(이렇게 <code>__lt</code> 이벤트를 쓰는 방식은 향후 버전에서 제거될 수 있다.
+또한 진짜 <code>__le</code> 메타메소드보다 느리다.)
 </li>
 
 <li><b><code>__index</code>: </b>
-The indexing access <code>table[key]</code>.
-This event happens when <code>table</code> is not a table or
-when <code>key</code> is not present in <code>table</code>.
-The metamethod is looked up in <code>table</code>.
+인덱스 접근 <code>table[key]</code>.
+<code>table</code>이 테이블이 아니거나
+<code>table</code> 내에 <code>key</code>가 없을 때
+이 이벤트가 일어난다.
+<code>table</code>에서 메타메소드를 찾는다.
 
 
 <p>
-Despite the name,
-the metamethod for this event can be either a function or a table.
-If it is a function,
-it is called with <code>table</code> and <code>key</code> as arguments,
-and the result of the call
-(adjusted to one value)
-is the result of the operation.
-If it is a table,
-the final result is the result of indexing this table with <code>key</code>.
-(This indexing is regular, not raw,
-and therefore can trigger another metamethod.)
+이름에도 불구하고
+이 이벤트에 대한 메타메소드는 함수일 수도 있고 테이블일 수도 있다.
+함수인 경우
+<code>table</code>과 <code>key</code>를 인자로 해서 호출하며
+호출 결과가
+(한 개 값으로 조정돼서)
+연산 결과가 된다.
+테이블인 경우
+그 테이블에 <code>key</code>를 인덱스로 쓴 결과가 최종 결과이다.
+(이 인덱스 사용은 raw가 아니라 정규 방식이며,
+따라서 또 다른 메타메소드가 촉발될 수 있다.)
 </li>
 
 <li><b><code>__newindex</code>: </b>
-The indexing assignment <code>table[key] = value</code>.
-Like the index event,
-this event happens when <code>table</code> is not a table or
-when <code>key</code> is not present in <code>table</code>.
-The metamethod is looked up in <code>table</code>.
+인덱스 할당 <code>table[key] = value</code>.
+index 이벤트에서처럼
+<code>table</code>이 테이블이 아니거나
+<code>table</code> 내에 <code>key</code>가 없을 때
+이 이벤트가 일어난다.
+<code>table</code>에서 메타메소드를 찾는다.
 
 
 <p>
-Like with indexing,
-the metamethod for this event can be either a function or a table.
-If it is a function,
-it is called with <code>table</code>, <code>key</code>, and <code>value</code> as arguments.
-If it is a table,
-Lua does an indexing assignment to this table with the same key and value.
-(This assignment is regular, not raw,
-and therefore can trigger another metamethod.)
+index에서처럼
+이 이벤트에 대한 메타메소드는 함수일 수도 있고 테이블일 수도 있다.
+함수인 경우
+<code>table</code>, <code>key</code>, <code>value</code>를 인자로 해서 호출한다.
+테이블인 경우
+같은 키와 값으로 그 테이블에 인덱스 할당을 한다.
+(이 할당은 raw가 아니라 정규 방식이며,
+따라서 또 다른 메타메소드가 촉발될 수 있다.)
 
 
 <p>
-Whenever there is a <code>__newindex</code> metamethod,
-Lua does not perform the primitive assignment.
-(If necessary,
-the metamethod itself can call <a href="#pdf-rawset"><code>rawset</code></a>
-to do the assignment.)
+<code>__newindex</code> 메타메소드가 있을 때에는
+루아가 절대 단순 할당을 수행하지 않는다.
+(필요하면
+메타메소드 자체에서 <a href="#pdf-rawset"><code>rawset</code></a>을 호출해서
+직접 할당을 할 수 있다.)
 </li>
 
 <li><b><code>__call</code>: </b>
-The call operation <code>func(args)</code>.
-This event happens when Lua tries to call a non-function value
-(that is, <code>func</code> is not a function).
-The metamethod is looked up in <code>func</code>.
-If present,
-the metamethod is called with <code>func</code> as its first argument,
-followed by the arguments of the original call (<code>args</code>).
-All results of the call
-are the result of the operation.
-(This is the only metamethod that allows multiple results.)
+호출 연산 <code>func(args)</code>.
+루아에서 함수 아닌 값을 호출하려 할 때에
+(즉 <code>func</code>가 함수가 아닐 때)
+이 이벤트가 일어난다.
+<code>func</code>에서 메타메소드를 찾는다.
+존재하는 경우
+<code>func</code>를 첫 번째 인자로 하고
+이어서 원래 호출의 인자들(<code>args</code>)이 오게 해서
+메타메소드를 호출한다.
+호출 결과 모두가 연산 결과가 된다.
+(복수 결과를 허용하는 유일한 메타메소드이다.)
 </li>
 
 </ul>
