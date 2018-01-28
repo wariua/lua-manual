@@ -105,169 +105,165 @@ C 함수 사용을 통해 광범위한 분야에 대처할 수 있도록
 
 
 
-<h1>2 &ndash; <a name="2">Basic Concepts</a></h1>
+<h1>2 &ndash; <a name="2">기본 개념</a></h1>
 
 <p>
-This section describes the basic concepts of the language.
+이 절에선 언어의 기본 개념들을 설명한다.
 
 
 
-<h2>2.1 &ndash; <a name="2.1">Values and Types</a></h2>
-
-<p>
-Lua is a <em>dynamically typed language</em>.
-This means that
-variables do not have types; only values do.
-There are no type definitions in the language.
-All values carry their own type.
-
+<h2>2.1 &ndash; <a name="2.1">값과 타입</a></h2>
 
 <p>
-All values in Lua are <em>first-class values</em>.
-This means that all values can be stored in variables,
-passed as arguments to other functions, and returned as results.
+루아는 <em>동적 타입 언어</em>이다.
+즉, 변수에는 타입이 없고 값에만 타입이 있다.
+언어 안에 타입 정의라는 것이 없다.
+모든 값들이 각자의 타입을 가지고 있다.
 
 
 <p>
-There are eight basic types in Lua:
+루아에서 모든 값들은 <em>일급 값</em>이다.
+즉, 모든 값들을 변수에 저장하고,
+다른 함수에 인자로 전달하고, 결과로 반환할 수 있다.
+
+
+<p>
+루아에는 여덟 가지 기본 타입이 있다.
 <em>nil</em>, <em>boolean</em>, <em>number</em>,
 <em>string</em>, <em>function</em>, <em>userdata</em>,
-<em>thread</em>, and <em>table</em>.
-The type <em>nil</em> has one single value, <b>nil</b>,
-whose main property is to be different from any other value;
-it usually represents the absence of a useful value.
-The type <em>boolean</em> has two values, <b>false</b> and <b>true</b>.
-Both <b>nil</b> and <b>false</b> make a condition false;
-any other value makes it true.
-The type <em>number</em> represents both
-integer numbers and real (floating-point) numbers.
-The type <em>string</em> represents immutable sequences of bytes.
+<em>thread</em>, <em>table</em>이다.
+<em>nil</em> 타입에는 값이 <b>nil</b> 하나만 있는데,
+그 값의 주된 특징은 다른 어떤 값과도 다르다는 점이다.
+일반적으로 이 값으로 유용한 값이 없음을 나타낸다.
+<em>boolean</em> 타입에는 <b>false</b>와 <b>true</b>라는
+두 값이 있다.
+<b>nil</b>과 <b>false</b>는 조건을 거짓으로 만든다.
+그 외 다른 값들은 참으로 만든다.
+<em>number</em> 타입은 정수와 실수(부동소수점 수)
+모두를 나타낸다.
+<em>string</em> 타입은 불변 바이트 열을 나타낸다.
 
-Lua is 8-bit clean:
-strings can contain any 8-bit value,
-including embedded zeros ('<code>\0</code>').
-Lua is also encoding-agnostic;
-it makes no assumptions about the contents of a string.
-
-
-<p>
-The type <em>number</em> uses two internal representations,
-or two subtypes,
-one called <em>integer</em> and the other called <em>float</em>.
-Lua has explicit rules about when each representation is used,
-but it also converts between them automatically as needed (see <a href="#3.4.3">&sect;3.4.3</a>).
-Therefore,
-the programmer may choose to mostly ignore the difference
-between integers and floats
-or to assume complete control over the representation of each number.
-Standard Lua uses 64-bit integers and double-precision (64-bit) floats,
-but you can also compile Lua so that it
-uses 32-bit integers and/or single-precision (32-bit) floats.
-The option with 32 bits for both integers and floats
-is particularly attractive
-for small machines and embedded systems.
-(See macro <code>LUA_32BITS</code> in file <code>luaconf.h</code>.)
+루아는 8비트에 완전하다.
+즉, 문자열에 어떤 8비트 값도 담을 수 있으며
+0('<code>\0</code>')을 포함시킬 수도 있다.
+루아는 또한 인코딩에 불가지론적이다.
+즉, 문자열 내용물에 대해 어떤 가정도 하지 않는다.
 
 
 <p>
-Lua can call (and manipulate) functions written in Lua and
-functions written in C (see <a href="#3.4.10">&sect;3.4.10</a>).
-Both are represented by the type <em>function</em>.
+<em>number</em> 타입에는 두 가지 내부 표현,
+즉 두 가지 서브타입이 있는데,
+하나는 <em>integer</em>이고 다른 하나는 <em>float</em>이다.
+루아에는 각 표현을 언제 쓰는가에 대한 명확한 규칙이 있지만
+필요에 따라 둘 간에 자동으로 변환을 하기도 한다. (<a href="#3.4.3">3.4.3절</a> 참고.)
+따라서 프로그래머가
+정수와 부동소수점 간 차이를 대강 무시하기로 할 수도 있고
+각 수의 표현을 완전히 통제하기로 할 수도 있다.
+표준 루아에서는 64비트 정수와 배정밀도(64비트) 부동소수점을 쓴다.
+하지만 32비트 정수 및/또는 단정밀도(32비트) 부동소수점을 쓰도록
+루아를 컴파일 할 수도 있다.
+정수와 부동소수점 모두에 32비트를 쓰는 방식은
+특히 작은 머신과 임베디드 시스템에서 매력적이다.
+(<code>luaconf.h</code> 파일의 <code>LUA_32BITS</code> 매크로 참고.)
 
 
 <p>
-The type <em>userdata</em> is provided to allow arbitrary C&nbsp;data to
-be stored in Lua variables.
-A userdata value represents a block of raw memory.
-There are two kinds of userdata:
-<em>full userdata</em>,
-which is an object with a block of memory managed by Lua,
-and <em>light userdata</em>,
-which is simply a C&nbsp;pointer value.
-Userdata has no predefined operations in Lua,
-except assignment and identity test.
-By using <em>metatables</em>,
-the programmer can define operations for full userdata values
-(see <a href="#2.4">&sect;2.4</a>).
-Userdata values cannot be created or modified in Lua,
-only through the C&nbsp;API.
-This guarantees the integrity of data owned by the host program.
+루아는 루아로 작성된 함수와 C로 작성된 함수를 호출(및 조작)할 수 있다.
+(<a href="#3.4.10">3.4.10절</a> 참고.)
+둘 모두 <em>function</em> 타입으로 나타낸다.
 
 
 <p>
-The type <em>thread</em> represents independent threads of execution
-and it is used to implement coroutines (see <a href="#2.6">&sect;2.6</a>).
-Lua threads are not related to operating-system threads.
-Lua supports coroutines on all systems,
-even those that do not support threads natively.
+<em>userdata</em> 타입은 임의의 C 데이터를 루아 변수에 저장할 수
+있도록 하기 위한 것이다.
+userdata 값은 날것 그대로의 메모리 블록을 나타낸다.
+userdata에는 두 종류가 있는데,
+<em>full userdata</em>는
+객체 메모리 블록을 루아에서 관리하는 것이고,
+<em>light userdata</em>는
+그냥 C 포인터 값이다.
+루아에서 userdata에는 할당과 동일성 검사를 제외하고
+어떤 연산도 미리 정의되어 있지 않다.
+<em>metatable</em>을 사용하면 프로그래머가
+full userdata 값에 대한 연산을 정의할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
+루아 내에서는 userdata 값을 생성하거나 변경할 수 없으며
+C API를 통해서만 가능하다.
+이는 호스트 프로그램 소유 데이터의 무결성을 보장하기 위해서이다.
 
 
 <p>
-The type <em>table</em> implements associative arrays,
-that is, arrays that can be indexed not only with numbers,
-but with any Lua value except <b>nil</b> and NaN.
-(<em>Not a Number</em> is a special value used to represent
-undefined or unrepresentable numerical results, such as <code>0/0</code>.)
-Tables can be <em>heterogeneous</em>;
-that is, they can contain values of all types (except <b>nil</b>).
-Any key with value <b>nil</b> is not considered part of the table.
-Conversely, any key that is not part of a table has
-an associated value <b>nil</b>.
+<em>thread</em> 타입은 독립적인 실행 스레드를 나타내며
+코루틴을 구현하는 데 쓴다. (<a href="#2.6">2.6절</a> 참고.)
+루아 스레드는 운영 체제 스레드와는 상관없다.
+루아는 자체 스레드를 지원하지 않는 경우를 포함한
+모든 시스템에서 코루틴을 지원한다.
 
 
 <p>
-Tables are the sole data-structuring mechanism in Lua;
-they can be used to represent ordinary arrays, lists,
-symbol tables, sets, records, graphs, trees, etc.
-To represent records, Lua uses the field name as an index.
-The language supports this representation by
-providing <code>a.name</code> as syntactic sugar for <code>a["name"]</code>.
-There are several convenient ways to create tables in Lua
-(see <a href="#3.4.9">&sect;3.4.9</a>).
+<em>table</em> 타입은 연관 배열을 구현한 것이다.
+즉, 인덱스로 정수만이 아니라 <b>nil</b>과 NaN을 제외한
+모든 루아 값을 사용할 수 있는 배열이다.
+(<em>NaN(Not a Number)</em>는 <code>0/0</code>처럼
+정의되어 있지 않거나 표현 불가능한 수치 결과를 나타내는 데
+쓰는 특별한 값이다.)
+테이블이 <em>혼성</em>일 수 있다.
+즉, (<b>nil</b>은 빼고) 모든 타입의 값들을 담을 수 있다.
+값이 <b>nil</b>인 키는 테이블에 포함되는 것으로 보지 않는다.
+역으로, 테이블에 포함되어 있지 않은 키에는 모두
+<b>nil</b> 값이 연계되어 있는 것이다.
 
 
 <p>
-Like indices,
-the values of table fields can be of any type.
-In particular,
-because functions are first-class values,
-table fields can contain functions.
-Thus tables can also carry <em>methods</em> (see <a href="#3.4.11">&sect;3.4.11</a>).
+테이블은 루아에서 유일한 데이터 구조화 장치이다.
+테이블을 이용해 평범한 배열이나 리스트, 심볼 테이블,
+집합, 레코드, 그래프, 트리 등을 표현할 수 있다.
+루아에서 레코드를 표현할 때는 필드 이름을 인덱스로 사용한다.
+언어에서 <code>a["name"]</code>에 대한 문법적 양념으로
+<code>a.name</code>을 제공하여 그 표현 방식을 지원한다.
+루아에는 테이블을 만들 수 있는 편리한 여러 방법들이 있다.
+(<a href="#3.4.9">3.4.9절</a> 참고.)
 
 
 <p>
-The indexing of tables follows
-the definition of raw equality in the language.
-The expressions <code>a[i]</code> and <code>a[j]</code>
-denote the same table element
-if and only if <code>i</code> and <code>j</code> are raw equal
-(that is, equal without metamethods).
-In particular, floats with integral values
-are equal to their respective integers
-(e.g., <code>1.0 == 1</code>).
-To avoid ambiguities,
-any float with integral value used as a key
-is converted to its respective integer.
-For instance, if you write <code>a[2.0] = true</code>,
-the actual key inserted into the table will be the
-integer <code>2</code>.
-(On the other hand,
-2 and "<code>2</code>" are different Lua values and therefore
-denote different table entries.)
+인덱스에서처럼
+테이블 필드 값에 어떤 타입도 가능하다.
+특히 함수가 일급 값이기 때문에
+함수를 테이블 필드에 담을 수 있다.
+그래서 테이블이 <em>메소드</em>를 가질 수도 있다.
+(<a href="#3.4.11">3.4.11절</a> 참고.)
 
 
 <p>
-Tables, functions, threads, and (full) userdata values are <em>objects</em>:
-variables do not actually <em>contain</em> these values,
-only <em>references</em> to them.
-Assignment, parameter passing, and function returns
-always manipulate references to such values;
-these operations do not imply any kind of copy.
+테이블 색인에서는 언어의 raw 동일 정의를 따른다.
+<code>a[i]</code>와 <code>a[j]</code>라는 식이 있을 때,
+<code>i</code>와 <code>j</code>가 raw 동일(즉 메타메소드 빼고 동일)이면,
+그리고 그 경우에만 두 식이 같은 테이블 항목을 나타낸다.
+특별히 정수 값의 부동소수점은 대응하는 정수와 동일하다.
+(가령 <code>1.0 == 1</code>이다.)
+모호함을 피하기 위해
+키로 정수 값 부동소수점을 쓰면
+대응하는 정수로 변환시킨다.
+예를 들어 <code>a[2.0] = true</code>라고 작성하면
+테이블에 들어가는 실제 키는 정수 <code>2</code>가 된다.
+(한편으로,
+2와 "<code>2</code>"는 서로 다른 루아 값이므로
+각기 다른 테이블 항목을 나타낸다.)
 
 
 <p>
-The library function <a href="#pdf-type"><code>type</code></a> returns a string describing the type
-of a given value (see <a href="#6.1">&sect;6.1</a>).
+테이블, 함수, 스레드, (full) userdata 값은 <em>객체</em>이다.
+변수가 이 값을 실제로 <em>담는</em> 게 아니라
+<em>참조</em>할 뿐이다.
+할당, 매개변수 전달, 함수 반환을 하면
+언제나 그 값의 참조를 조작하는 것이며,
+그 연산들에 어떤 종류의 복사도 포함되지 않는다.
+
+
+<p>
+라이브러리 함수 <a href="#pdf-type"><code>type</code></a>이
+주어진 값의 타입을 나타내는 문자열을 반환한다.
+(<a href="#6.1">6.1절</a> 참고.)
 
 
 
