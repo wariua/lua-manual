@@ -320,56 +320,57 @@ C 레지스트리의 특수 인덱스에 이 값을 유지한다. (<a href="#4.5
 
 
 
-<h2>2.3 &ndash; <a name="2.3">Error Handling</a></h2>
+<h2>2.3 &ndash; <a name="2.3">오류 처리</a></h2>
 
 <p>
-Because Lua is an embedded extension language,
-all Lua actions start from C&nbsp;code in the host program
-calling a function from the Lua library.
-(When you use Lua standalone,
-the <code>lua</code> application is the host program.)
-Whenever an error occurs during
-the compilation or execution of a Lua chunk,
-control returns to the host,
-which can take appropriate measures
-(such as printing an error message).
-
-
-<p>
-Lua code can explicitly generate an error by calling the
-<a href="#pdf-error"><code>error</code></a> function.
-If you need to catch errors in Lua,
-you can use <a href="#pdf-pcall"><code>pcall</code></a> or <a href="#pdf-xpcall"><code>xpcall</code></a>
-to call a given function in <em>protected mode</em>.
+루아는 내장식 확장 언어이므로
+모든 루아 동작은 호스트 프로그램의 C 코드가
+루아 라이브러리의 함수를 호출하는 것으로 시작한다.
+(독립형 루아를 사용할 때는
+<code>lua</code> 응용이 호스트 프로그램이다.)
+루아 청크를 컴파일 하거나 실행하는 도중에
+오류가 발생하면
+제어가 호스트로 되돌아간다.
+거기서 (오류 메시지 찍기 같은)
+적절한 대처를 할 수 있다.
 
 
 <p>
-Whenever there is an error,
-an <em>error object</em> (also called an <em>error message</em>)
-is propagated with information about the error.
-Lua itself only generates errors whose error object is a string,
-but programs may generate errors with
-any value as the error object.
-It is up to the Lua program or its host to handle such error objects.
+루아 코드에서 <a href="#pdf-error"><code>error</code></a> 함수를
+호출해서 명시적으로 오류를 만들어 낼 수 있다.
+루아 내에서 오류를 잡아야 하는 경우에는
+<a href="#pdf-pcall"><code>pcall</code></a>이나 <a href="#pdf-xpcall"><code>xpcall</code></a>을 사용해서
+원하는 함수를 <em>보호 모드</em>로 호출할 수 있다.
 
 
 <p>
-When you use <a href="#pdf-xpcall"><code>xpcall</code></a> or <a href="#lua_pcall"><code>lua_pcall</code></a>,
-you may give a <em>message handler</em>
-to be called in case of errors.
-This function is called with the original error object
-and returns a new error object.
-It is called before the error unwinds the stack,
-so that it can gather more information about the error,
-for instance by inspecting the stack and creating a stack traceback.
-This message handler is still protected by the protected call;
-so, an error inside the message handler
-will call the message handler again.
-If this loop goes on for too long,
-Lua breaks it and returns an appropriate message.
-(The message handler is called only for regular runtime errors.
-It is not called for memory-allocation errors
-nor for errors while running finalizers.)
+오류가 있을 때마다
+그 오류에 대한 정보를 담은
+<em>오류 객체</em>가 (<em>오류 메시지</em>라고도 함)
+전파된다.
+루아 자체에서는 오류 객체가 문자열인 오류만 생성하지만
+프로그램들에선 어떤 오류 객체 값으로도
+오류를 생성할 수 있다.
+그런 오류 객체를 처리하는 것은 그 루아 프로그램 내지 호스트의 몫이다.
+
+
+<p>
+<a href="#pdf-xpcall"><code>xpcall</code></a>이나 <a href="#lua_pcall"><code>lua_pcall</code></a>을 사용할 때
+오류 시 호출될
+<em>메시지 핸들러</em>를 줄 수 있다.
+이 함수는 원본 오류 객체로 호출되고
+새 오류 객체를 반환한다.
+오류 때문에 스택이 되감기기 전에 호출되므로
+오류에 대한 더 많은 정보를 모을 수 있다.
+예를 들어 스택을 조사하거나 스택 트레이스백을 만들 수 있다.
+이 메시지 핸들러 자체도 보호 호출의 보호를 받으며,
+그래서 메시지 핸들러 내에서 오류가 발생하면
+다시 메시지 핸들러를 부르게 된다.
+그 고리가 너무 길게 이어지면
+루아에서 끊고서 적절한 메시지를 반환한다.
+(정규 런타임 오류들에만 메시지 핸들러가 호출된다.
+메모리 할당 오류나 종료자(finalizer) 실행 중의 오류에는
+호출되지 않는다.)
 
 
 
