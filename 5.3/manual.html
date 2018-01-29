@@ -678,69 +678,68 @@ index에서처럼
 
 
 
-<h2>2.5 &ndash; <a name="2.5">Garbage Collection</a></h2>
+<h2>2.5 &ndash; <a name="2.5">쓰레기 수집</a></h2>
 
 <p>
-Lua performs automatic memory management.
-This means that
-you do not have to worry about allocating memory for new objects
-or freeing it when the objects are no longer needed.
-Lua manages memory automatically by running
-a <em>garbage collector</em> to collect all <em>dead objects</em>
-(that is, objects that are no longer accessible from Lua).
-All memory used by Lua is subject to automatic management:
-strings, tables, userdata, functions, threads, internal structures, etc.
-
-
-<p>
-Lua implements an incremental mark-and-sweep collector.
-It uses two numbers to control its garbage-collection cycles:
-the <em>garbage-collector pause</em> and
-the <em>garbage-collector step multiplier</em>.
-Both use percentage points as units
-(e.g., a value of 100 means an internal value of 1).
+루아는 자동 메모리 관리를 수행한다.
+즉, 새 객체를 위해 메모리를 할당하는 것이나
+그 객체가 더는 필요 없을 때 해제하는 것에 대해
+신경 쓸 필요가 없다.
+루아에서 <em>쓰레기 수집기</em>를 실행해
+<em>죽은 객체</em>를
+(즉 루아에서 더 이상 접근할 수 없는 객체를)
+모두 수집하는 방식으로 메모리를 자동 관리한다.
+문자열, 테이블, userdata, 함수, 스레드, 내부 구조 등,
+루아에서 사용하는 모든 메모리가 자동 관리 대상이다.
 
 
 <p>
-The garbage-collector pause
-controls how long the collector waits before starting a new cycle.
-Larger values make the collector less aggressive.
-Values smaller than 100 mean the collector will not wait to
-start a new cycle.
-A value of 200 means that the collector waits for the total memory in use
-to double before starting a new cycle.
+루아에서는 점진적 mark-and-sweep 수집기를 구현하고 있다.
+쓰레기 수집 사이클을 제어하는 두 가지 수치가 있는데,
+<em>쓰레기 수집 휴지 시간</em>과
+<em>쓰레기 수집 단계 승수</em>이다.
+둘 다 백분률 단위이다.
+(가령 100 값이 내부적으로 1 값을 뜻한다.)
 
 
 <p>
-The garbage-collector step multiplier
-controls the relative speed of the collector relative to
-memory allocation.
-Larger values make the collector more aggressive but also increase
-the size of each incremental step.
-You should not use values smaller than 100,
-because they make the collector too slow and
-can result in the collector never finishing a cycle.
-The default is 200,
-which means that the collector runs at "twice"
-the speed of memory allocation.
+쓰레기 수집 휴지 시간은
+수집기가 얼마나 오래 대기했다가 새 주기를 시작할지 제어한다.
+값이 크면 수집기가 덜 적극적이 된다.
+100보다 작은 값은 수집기가 기다리지 않고
+새 주기를 시작한다는 뜻이다.
+200 값은 총 사용 메모리가 두 배가 될 때까지
+수집기가 기다렸다가 새 주기를 시작한다는 뜻이다.
 
 
 <p>
-If you set the step multiplier to a very large number
-(larger than 10% of the maximum number of
-bytes that the program may use),
-the collector behaves like a stop-the-world collector.
-If you then set the pause to 200,
-the collector behaves as in old Lua versions,
-doing a complete collection every time Lua doubles its
-memory usage.
+쓰레기 수집 단계 승수는
+메모리 할당에 대한 수집기의 상대 속도를 제어한다.
+값이 크면 수집기가 더 적극적이 되며
+또 각 점진 단계가 더 커진다.
+100보다 작은 값은 사용하지 않는 게 좋다.
+수집기가 너무 느려지며
+수집기가 한 주기를 절대 마치지 못하게 될 수 있기 때문이다.
+기본은 200인데,
+메모리 할당 속도의 "두 배"로 수집기가 돈다는 뜻이다.
 
 
 <p>
-You can change these numbers by calling <a href="#lua_gc"><code>lua_gc</code></a> in C
-or <a href="#pdf-collectgarbage"><code>collectgarbage</code></a> in Lua.
-You can also use these functions to control
-the collector directly (e.g., stop and restart it).
+단계 승수를 아주 큰 수로
+(프로그램에서 사용할 수 있는 최대 바이트 수의 10% 이상으로)
+설정하면
+수집기가 stop-the-world 수집기처럼 동작한다.
+거기서 휴지 시간을 200으로 설정하면
+루아 이전 버전들처럼 수집기가 동작하게 된다.
+즉, 루아의 메모리 사용량이 두 배가 될 때마다
+전체 수집을 한다.
+
+
+<p>
+C에서 <a href="#lua_gc"><code>lua_gc</code></a>를 호출하거나
+루아에서 <a href="#pdf-collectgarbage"><code>collectgarbage</code></a>를 호출해서
+이 수치들을 바꿀 수 있다.
+그 함수들을 사용하면 수집기를 직접 제어(가령 정지 및 재시작)할 수도 있다.
 
 
 
