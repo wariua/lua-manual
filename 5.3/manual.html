@@ -897,83 +897,82 @@ GC 주기에서만 객체 메모리가 해제된다.
 
 
 
-<h2>2.6 &ndash; <a name="2.6">Coroutines</a></h2>
+<h2>2.6 &ndash; <a name="2.6">코루틴</a></h2>
 
 <p>
-Lua supports coroutines,
-also called <em>collaborative multithreading</em>.
-A coroutine in Lua represents an independent thread of execution.
-Unlike threads in multithread systems, however,
-a coroutine only suspends its execution by explicitly calling
-a yield function.
-
-
-<p>
-You create a coroutine by calling <a href="#pdf-coroutine.create"><code>coroutine.create</code></a>.
-Its sole argument is a function
-that is the main function of the coroutine.
-The <code>create</code> function only creates a new coroutine and
-returns a handle to it (an object of type <em>thread</em>);
-it does not start the coroutine.
+루아는 <em>협력적 멀티스레딩</em>이라고도 하는
+코루틴을 지원한다.
+루아에서 코루틴은 독립적 실행 스레드를 나타낸다.
+하지만 멀티스레드 시스템의 스레드와 달리
+코루틴은 명시적인 양보 함수 호출을 통해서만
+실행을 멈춘다.
 
 
 <p>
-You execute a coroutine by calling <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>.
-When you first call <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>,
-passing as its first argument
-a thread returned by <a href="#pdf-coroutine.create"><code>coroutine.create</code></a>,
-the coroutine starts its execution by
-calling its main function.
-Extra arguments passed to <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> are passed
-as arguments to that function.
-After the coroutine starts running,
-it runs until it terminates or <em>yields</em>.
+<a href="#pdf-coroutine.create"><code>coroutine.create</code></a>를 호출해서 코루틴을 만든다.
+유일한 인자가 함수이고 그게 코루틴의 메인 함수이다.
+<code>create</code> 함수는 새 코루틴을 만들어서
+핸들(<em>thread</em> 타입 객체)을 반환하기만 한다.
+즉, 코루틴을 시작하지는 않는다.
 
 
 <p>
-A coroutine can terminate its execution in two ways:
-normally, when its main function returns
-(explicitly or implicitly, after the last instruction);
-and abnormally, if there is an unprotected error.
-In case of normal termination,
-<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> returns <b>true</b>,
-plus any values returned by the coroutine main function.
-In case of errors, <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> returns <b>false</b>
-plus an error object.
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>을 호출해서 코루틴을 실행한다.
+<a href="#pdf-coroutine.create"><code>coroutine.create</code></a>가 반환한 스레드를
+첫 번째 인자로 해서
+처음으로 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>을 호출할 때
+코루틴이 자기 메인 함수를 호출하며 실행을 시작한다.
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>으로 전달한 추가 인자들이
+그 함수의 인자로 전달된다.
+코루틴이 실행을 시작하고 나면
+종료하거나 <em>양보(yield)</em>할 때까지 돈다.
 
 
 <p>
-A coroutine yields by calling <a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a>.
-When a coroutine yields,
-the corresponding <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> returns immediately,
-even if the yield happens inside nested function calls
-(that is, not in the main function,
-but in a function directly or indirectly called by the main function).
-In the case of a yield, <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> also returns <b>true</b>,
-plus any values passed to <a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a>.
-The next time you resume the same coroutine,
-it continues its execution from the point where it yielded,
-with the call to <a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a> returning any extra
-arguments passed to <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>.
+코루틴은 두 가지 방식으로 실행을 끝마칠 수 있다.
+메인 함수가 (명시적으로, 또는 마지막 인스트럭션 후에 암묵적으로) 반환할 때
+정상적으로 종료하거나,
+보호 안 된 오류가 있을 때 비정상적으로 종료한다.
+정상 종료하는 경우
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 <b>true</b>에 더해서
+코루틴 메인 함수가 반환한 값들이 있으면 함께 반환한다.
+오류 시 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 <b>false</b>에 더해서
+오류 객체를 반환한다.
 
 
 <p>
-Like <a href="#pdf-coroutine.create"><code>coroutine.create</code></a>,
-the <a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a> function also creates a coroutine,
-but instead of returning the coroutine itself,
-it returns a function that, when called, resumes the coroutine.
-Any arguments passed to this function
-go as extra arguments to <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>.
-<a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a> returns all the values returned by <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>,
-except the first one (the boolean error code).
-Unlike <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>,
-<a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a> does not catch errors;
-any error is propagated to the caller.
+<a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a>를 호출해서 코루틴이 양보를 한다.
+코루틴이 양보하면
+대응하는 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 즉시 반환한다.
+중첩된 함수 호출 내에서
+(즉 메인 함수 안이 아니라 메인 함수에서 직간접으로 호출한 함수 안에서)
+양보가 이뤄질 때도 마찬가지이다.
+양보하는 경우 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 <b>true</b>에 더해서
+<a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a>에 전달한 값들이 있으면 함께 반환한다.
+같은 코루틴을 다음에 재개할 때는
+양보했던 지점에서 실행이 이어지며,
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>으로 추가 전달한 인자들이 있으면
+<a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a> 호출이 반환한다.
 
 
 <p>
-As an example of how coroutines work,
-consider the following code:
+<a href="#pdf-coroutine.create"><code>coroutine.create</code></a>처럼
+<a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a> 함수도 코루틴을 만든다.
+하지만 코루틴 자체를 반환하는 것이 아니라
+함수를 반환하며, 그 함수 호출 시 코루틴이 재개된다.
+그 함수로 전달한 인자들이 있으면
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a> 추가 인자가 된다.
+<a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a>은 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 반환한 값들을
+첫 번째 값(불리언 오류 코드)만 빼고
+전부 반환한다.
+<a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>과 달리
+<a href="#pdf-coroutine.wrap"><code>coroutine.wrap</code></a>은 오류를 잡지 않는다.
+즉, 오류가 생기면 호출자에게 전파된다.
+
+
+<p>
+코루틴의 동작 방식에 대한 예로
+다음 코드를 살펴보자.
 
 <pre>
      function foo (a)
@@ -995,7 +994,7 @@ consider the following code:
      print("main", coroutine.resume(co, "x", "y"))
      print("main", coroutine.resume(co, "x", "y"))
 </pre><p>
-When you run it, it produces the following output:
+실행하면 다음 출력이 나온다.
 
 <pre>
      co-body 1       10
@@ -1009,9 +1008,9 @@ When you run it, it produces the following output:
 </pre>
 
 <p>
-You can also create and manipulate coroutines through the C API:
-see functions <a href="#lua_newthread"><code>lua_newthread</code></a>, <a href="#lua_resume"><code>lua_resume</code></a>,
-and <a href="#lua_yield"><code>lua_yield</code></a>.
+C API를 통해서도 코루틴을 생성하고 조작할 수 있다.
+함수 <a href="#lua_newthread"><code>lua_newthread</code></a>, <a href="#lua_resume"><code>lua_resume</code></a>,
+<a href="#lua_yield"><code>lua_yield</code></a>를 보라.
 
 
 
