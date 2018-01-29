@@ -743,78 +743,76 @@ C에서 <a href="#lua_gc"><code>lua_gc</code></a>를 호출하거나
 
 
 
-<h3>2.5.1 &ndash; <a name="2.5.1">Garbage-Collection Metamethods</a></h3>
+<h3>2.5.1 &ndash; <a name="2.5.1">쓰레기 수집 메타메소드</a></h3>
 
 <p>
-You can set garbage-collector metamethods for tables
-and, using the C&nbsp;API,
-for full userdata (see <a href="#2.4">&sect;2.4</a>).
-These metamethods are also called <em>finalizers</em>.
-Finalizers allow you to coordinate Lua's garbage collection
-with external resource management
-(such as closing files, network or database connections,
-or freeing your own memory).
-
-
-<p>
-For an object (table or userdata) to be finalized when collected,
-you must <em>mark</em> it for finalization.
-
-You mark an object for finalization when you set its metatable
-and the metatable has a field indexed by the string "<code>__gc</code>".
-Note that if you set a metatable without a <code>__gc</code> field
-and later create that field in the metatable,
-the object will not be marked for finalization.
+테이블에, 그리고 C API로는 full userdata에도
+쓰레기 수집 메타메소드를 설정할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
+이 메타메소드들을 <em>종료자(finalizer)</em>라고 한다.
+종료자를 이용하면 루아의 쓰레기 수집을
+(파일이나 네트워크 내지 데이터베이스 연결 닫기,
+자체 메모리 해제 같은)
+외부 자원 관리에 연계시킬 수 있다.
 
 
 <p>
-When a marked object becomes garbage,
-it is not collected immediately by the garbage collector.
-Instead, Lua puts it in a list.
-After the collection,
-Lua goes through that list.
-For each object in the list,
-it checks the object's <code>__gc</code> metamethod:
-If it is a function,
-Lua calls it with the object as its single argument;
-if the metamethod is not a function,
-Lua simply ignores it.
+수집 때 마무리 작업이 필요한 객체(테이블이나 userdata)에는
+마무리를 하라는 <em>표시</em>를 해 주어야 한다.
+
+객체에 메타테이블을 설정할 때 마무리 표시를 하게 되는데
+그 메타테이블에 문자열 "<code>__gc</code>"가 인덱스인
+필드가 있어야 한다.
+참고로 <code>__gc</code> 필드 없이 메타테이블을 설정하고서
+나중에 메타테이블에 그 필드를 만들어도
+객체에 마무리 표시가 되지 않는다.
 
 
 <p>
-At the end of each garbage-collection cycle,
-the finalizers for objects are called in
-the reverse order that the objects were marked for finalization,
-among those collected in that cycle;
-that is, the first finalizer to be called is the one associated
-with the object marked last in the program.
-The execution of each finalizer may occur at any point during
-the execution of the regular code.
+표시가 붙은 객체가 쓰레기가 될 때에는
+쓰레기 수집기가 즉시 수집하지 않는다.
+대신 루아에서 어떤 목록에 그 객체를 넣어 둔다.
+그리고 수집 후에 그 목록을 살펴본다.
+목록의 각 객체마다
+객체의 <code>__gc</code> 메타메소드를 확인한다.
+함수이면
+그 객체를 단일 인자로 해서 호출한다.
+메타메소드가 함수가 아니면
+그냥 무시한다.
 
 
 <p>
-Because the object being collected must still be used by the finalizer,
-that object (and other objects accessible only through it)
-must be <em>resurrected</em> by Lua.
-Usually, this resurrection is transient,
-and the object memory is freed in the next garbage-collection cycle.
-However, if the finalizer stores the object in some global place
-(e.g., a global variable),
-then the resurrection is permanent.
-Moreover, if the finalizer marks a finalizing object for finalization again,
-its finalizer will be called again in the next cycle where the
-object is unreachable.
-In any case,
-the object memory is freed only in a GC cycle where
-the object is unreachable and not marked for finalization.
+각 쓰레기 수집 사이클 마지막에서
+그 주기에 수집한 객체들에 대해
+마무리 표시를 한 것과 반대 순서로
+객체의 종료자를 호출한다.
+즉, 처음 호출되는 종료자는
+프로그램에서 마지막으로 표시한 객체에 연계된 종료자이다.
+종료자 실행은 정규 코드 실행 중의 어느 시점에서든
+이뤄질 수 있다.
 
 
 <p>
-When you close a state (see <a href="#lua_close"><code>lua_close</code></a>),
-Lua calls the finalizers of all objects marked for finalization,
-following the reverse order that they were marked.
-If any finalizer marks objects for collection during that phase,
-these marks have no effect.
+수집 중인 객체를 종료자에서 계속 사용해야 하기 때문에
+그 객체를 (그리고 그 객체를 통해서만 접근 가능한 다른 객체들을)
+루아에서 <em>부활</em>시켜야 한다.
+일반적으로 이 부활은 일시적이며
+다음 쓰레기 수집 주기에 그 객체 메모리가 해제된다.
+하지만 종료자에서 그 객체를 어떤 전역 위치에 (가령 전역 변수에)
+저장한다면 부활이 영구적이 된다.
+그리고 종료자에서 마무리 중인 객체에 다시 마무리 표시를 하면
+그 객체가 도달 불가능하게 되는 다음번 주기에 종료자가 다시 호출된다.
+어느 경우이든,
+객체가 도달 불가능이고 마무리 표시가 되어 있지 않은
+GC 주기에서만 객체 메모리가 해제된다.
+
+
+<p>
+상태를 닫을 때 (<a href="#lua_close"><code>lua_close</code></a> 참고)
+루아에서는 마무리 표시가 된 모든 객체들의 종료자를
+표시 반대 순서로 호출한다.
+그 단계에서 어느 종료자가 객체에 수집 표시를 해도
+그 표시에 아무 효과가 없다.
 
 
 
