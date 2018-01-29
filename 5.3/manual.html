@@ -818,78 +818,78 @@ GC 주기에서만 객체 메모리가 해제된다.
 
 
 
-<h3>2.5.2 &ndash; <a name="2.5.2">Weak Tables</a></h3>
+<h3>2.5.2 &ndash; <a name="2.5.2">약한 테이블</a></h3>
 
 <p>
-A <em>weak table</em> is a table whose elements are
-<em>weak references</em>.
-A weak reference is ignored by the garbage collector.
-In other words,
-if the only references to an object are weak references,
-then the garbage collector will collect that object.
-
-
-<p>
-A weak table can have weak keys, weak values, or both.
-A table with weak values allows the collection of its values,
-but prevents the collection of its keys.
-A table with both weak keys and weak values allows the collection of
-both keys and values.
-In any case, if either the key or the value is collected,
-the whole pair is removed from the table.
-The weakness of a table is controlled by the
-<code>__mode</code> field of its metatable.
-If the <code>__mode</code> field is a string containing the character&nbsp;'<code>k</code>',
-the keys in the table are weak.
-If <code>__mode</code> contains '<code>v</code>',
-the values in the table are weak.
+<em>약한 테이블</em>이란
+<em>약한 참조</em>가 원소인 테이블이다.
+약한 참조는 쓰레기 수집 시 무시된다.
+다시 말해
+어느 객체에 대한 참조가 약한 참조뿐이면
+쓰레기 수집기가 그 객체를 수집하게 된다.
 
 
 <p>
-A table with weak keys and strong values
-is also called an <em>ephemeron table</em>.
-In an ephemeron table,
-a value is considered reachable only if its key is reachable.
-In particular,
-if the only reference to a key comes through its value,
-the pair is removed.
+약한 테이블은 키가 약하거나 값이 약할 수도 있고,
+둘 모두 약할 수도 있다.
+값이 약한 테이블은 값이 수집되는 것은 허용하지만
+키가 수집되는 것은 막는다.
+키와 값 모두 약한 테이블은
+키와 값 모두의 수집을 허용한다.
+어느 경우이든 키나 값이 수집되면
+그 쌍이 통째로 테이블에서 제거된다.
+테이블 메타테이블의 <code>__mode</code> 필드로
+테이블의 약함 방식을 제어한다.
+<code>__mode</code> 필드가 문자 '<code>k</code>'를 담은 문자열이면
+그 테이블의 키가 약하다.
+<code>__mode</code>가 '<code>v</code>'를 담고 있으면
+그 테이블의 값이 약하다.
 
 
 <p>
-Any change in the weakness of a table may take effect only
-at the next collect cycle.
-In particular, if you change the weakness to a stronger mode,
-Lua may still collect some items from that table
-before the change takes effect.
+약한 키와 강한 값의 테이블을
+<em>하루살이 테이블</em>이라고도 한다.
+하루살이 테이블에서는
+키가 도달 가능한 경우에만 그 값이 도달 가능하다고 본다.
+특히 어느 키에 대한 유일한 참조가 그 값을 통한 것이면
+그 쌍을 제거한다.
 
 
 <p>
-Only objects that have an explicit construction
-are removed from weak tables.
-Values, such as numbers and light C&nbsp;functions,
-are not subject to garbage collection,
-and therefore are not removed from weak tables
-(unless their associated values are collected).
-Although strings are subject to garbage collection,
-they do not have an explicit construction,
-and therefore are not removed from weak tables.
+테이블의 약함 방식을 변경한 효과가
+다음 수집 주기에서야 나타날 수도 있다.
+특히 강한 방식으로 바꾸는 경우에
+변경 효과가 나타나기 전까지는
+루아에서 그 테이블의 일부 항목들을 수집할 수도 있다.
 
 
 <p>
-Resurrected objects
-(that is, objects being finalized
-and objects accessible only through objects being finalized)
-have a special behavior in weak tables.
-They are removed from weak values before running their finalizers,
-but are removed from weak keys only in the next collection
-after running their finalizers, when such objects are actually freed.
-This behavior allows the finalizer to access properties
-associated with the object through weak tables.
+명시적 생성을 하는 객체들만
+약한 테이블에서 제거된다.
+수나 경량 C 함수 같은 값들은
+쓰레기 수집 대상이 아니고,
+따라서 (연계된 값이 수집되지 않는 한)
+약한 테이블에서 제거되지 않는다.
+문자열은 쓰레기 수집의 대상이지만
+명시적 생성을 하지 않으며,
+따라서 약한 테이블에서 제거되지 않는다.
 
 
 <p>
-If a weak table is among the resurrected objects in a collection cycle,
-it may not be properly cleared until the next cycle.
+부활한 객체는
+(즉 마무리 중인 객체와
+마무리 중인 객체를 통해서만 접근 가능한 객체는)
+약한 테이블에서 특별한 방식으로 동작한다.
+약한 값에서 제거될 때는 종료자 실행 전에 제거되지만
+약한 키에서 제거될 때는 종료자 실행 후에
+그 객체가 실제로 해제되는 다음 주기에서야 제거된다.
+이런 동작 덕분에 종료자에서 약한 테이블을 통해
+객체와 연관된 자산들에 접근할 수 있다.
+
+
+<p>
+어느 수집 주기에 부활한 객체들 중에 약한 테이블이 있는 경우
+다음 주기까지 그 테이블이 제대로 사라지지 않을 수도 있다.
 
 
 
