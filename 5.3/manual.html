@@ -1037,28 +1037,26 @@ C API를 통해서도 코루틴을 생성하고 조작할 수 있다.
 
 
 
-<h2>3.1 &ndash; <a name="3.1">Lexical Conventions</a></h2>
+<h2>3.1 &ndash; <a name="3.1">어휘 규정</a></h2>
 
 <p>
-Lua is a free-form language.
-It ignores spaces (including new lines) and comments
-between lexical elements (tokens),
-except as delimiters between names and keywords.
-
-
-<p>
-<em>Names</em>
-(also called <em>identifiers</em>)
-in Lua can be any string of letters,
-digits, and underscores,
-not beginning with a digit and
-not being a reserved word.
-Identifiers are used to name variables, table fields, and labels.
+루아는 자유 형식 언어이다.
+이름 및 키워드 간 구분자일 때를 제외하면
+어휘 요소(토큰)들 사이의
+(개행 포함) 공백과 주석을 무시한다.
 
 
 <p>
-The following <em>keywords</em> are reserved
-and cannot be used as names:
+루아에서 <em>이름</em>(<em>식별자</em>라고도 함)은
+글자, 숫자, 밑줄로 된 어떤 열도 가능하되,
+숫자로 시작할 수 없고
+예약 단어가 아니어야 한다.
+변수, 테이블 필드, 레이블을 지칭하는 데 식별자를 쓴다.
+
+
+<p>
+다음 <em>키워드</em>는 예약되어 있어서
+이름으로 쓸 수 없다.
 
 
 <pre>
@@ -1069,17 +1067,17 @@ and cannot be used as names:
 </pre>
 
 <p>
-Lua is a case-sensitive language:
-<code>and</code> is a reserved word, but <code>And</code> and <code>AND</code>
-are two different, valid names.
-As a convention,
-programs should avoid creating
-names that start with an underscore followed by
-one or more uppercase letters (such as <a href="#pdf-_VERSION"><code>_VERSION</code></a>).
+루아는 대소문자를 구별하는 언어이다.
+그래서 <code>and</code>는 예약 단어지만
+<code>And</code>와 <code>AND</code>는 그와 다른 유효한 이름이다.
+관행 상
+밑줄로 시작하고 이어서 한 개 이상의 대문자가 오는
+(<a href="#pdf-_VERSION"><code>_VERSION</code></a> 같은) 이름을
+프로그램에서 만들지 않는 게 좋다.
 
 
 <p>
-The following strings denote other tokens:
+다음이 나머지 토큰들을 나타낸다.
 
 <pre>
      +     -     *     /     %     ^     #
@@ -1090,84 +1088,86 @@ The following strings denote other tokens:
 </pre>
 
 <p>
-A <em>short literal string</em>
-can be delimited by matching single or double quotes,
-and can contain the following C-like escape sequences:
-'<code>\a</code>' (bell),
-'<code>\b</code>' (backspace),
-'<code>\f</code>' (form feed),
-'<code>\n</code>' (newline),
-'<code>\r</code>' (carriage return),
-'<code>\t</code>' (horizontal tab),
-'<code>\v</code>' (vertical tab),
-'<code>\\</code>' (backslash),
-'<code>\"</code>' (quotation mark [double quote]),
-and '<code>\'</code>' (apostrophe [single quote]).
-A backslash followed by a line break
-results in a newline in the string.
-The escape sequence '<code>\z</code>' skips the following span
-of white-space characters,
-including line breaks;
-it is particularly useful to break and indent a long literal string
-into multiple lines without adding the newlines and spaces
-into the string contents.
-A short literal string cannot contain unescaped line breaks
-nor escapes not forming a valid escape sequence.
+짝이 맞는 작은따옴표나 큰따옴표로 감싸서
+<em>짧은 리터럴 문자열</em>을 만들 수 있다.
+그 문자열에
+'<code>\a</code>' (벨),
+'<code>\b</code>' (백스페이스),
+'<code>\f</code>' (폼 피드),
+'<code>\n</code>' (개행),
+'<code>\r</code>' (캐리지 리턴),
+'<code>\t</code>' (수평 탭),
+'<code>\v</code>' (수직 탭),
+'<code>\\</code>' (백슬래시),
+'<code>\"</code>' (큰따옴표),
+'<code>\'</code>' (작은따옴표)
+같은 C 스타일 이스케이프 열이 포함될 수 있다.
+백슬래시 다음에 행 바꿈이 오면
+문자열 내에서 개행이 된다.
+이스케이프 열 '<code>\z</code>'는
+행 바꿈을 포함해서
+이어지는 공백 문자 구간을 건너뛰게 한다.
+긴 리터럴 문자열을
+내용에 개행이나 공백을 더하지 않으면서
+여러 행으로 쪼개고 들여 쓰는 데
+유용하게 이용할 수 있다.
+짧은 리터럴 문자열에는
+이스케이프 안 된 줄 바꿈이나
+유효한 이스케이프 열이 아닌 이스케이프가 포함될 수 없다.
 
 
 <p>
-We can specify any byte in a short literal string by its numeric value
-(including embedded zeros).
-This can be done
-with the escape sequence <code>\x<em>XX</em></code>,
-where <em>XX</em> is a sequence of exactly two hexadecimal digits,
-or with the escape sequence <code>\<em>ddd</em></code>,
-where <em>ddd</em> is a sequence of up to three decimal digits.
-(Note that if a decimal escape sequence is to be followed by a digit,
-it must be expressed using exactly three digits.)
+짧은 리터럴 문자열 내 임의 바이트를
+숫자 값으로
+(0을 넣는 것 포함)
+지정할 수 있다.
+이스케이프 열 <code>\x<em>XX</em></code>를 쓰는데,
+여기서 <em>XX</em>는 정확히 두 개의 16진수 열이다.
+또는 이스케이프 열 <code>\<em>ddd</em></code>를 쓰는데,
+여기서 <em>ddd</em>는 세 개까지의 10진수 열이다.
+(참고로 10진 이스케이프 열에 이어서 숫자가 오는 경우에는
+정확히 세 개 숫자로 표현해야 한다.)
 
 
 <p>
-The UTF-8 encoding of a Unicode character
-can be inserted in a literal string with
-the escape sequence <code>\u{<em>XXX</em>}</code>
-(note the mandatory enclosing brackets),
-where <em>XXX</em> is a sequence of one or more hexadecimal digits
-representing the character code point.
+이스케이프 열 <code>\u{<em>XXX</em>}</code>를 이용해
+UTF-8 인코딩 한 유니코드 문자를
+리터럴 문자열에 집어넣을 수 있다.
+(감싸는 중괄호가 필수이다.)
+여기서 <em>XXX</em>는 문자 코드 포인트를 나타내는
+한 개 이상의 16진수 열이다.
 
 
 <p>
-Literal strings can also be defined using a long format
-enclosed by <em>long brackets</em>.
-We define an <em>opening long bracket of level <em>n</em></em> as an opening
-square bracket followed by <em>n</em> equal signs followed by another
-opening square bracket.
-So, an opening long bracket of level&nbsp;0 is written as <code>[[</code>, 
-an opening long bracket of level&nbsp;1 is written as <code>[=[</code>, 
-and so on.
-A <em>closing long bracket</em> is defined similarly;
-for instance,
-a closing long bracket of level&nbsp;4 is written as  <code>]====]</code>.
-A <em>long literal</em> starts with an opening long bracket of any level and
-ends at the first closing long bracket of the same level.
-It can contain any text except a closing bracket of the same level.
-Literals in this bracketed form can run for several lines,
-do not interpret any escape sequences,
-and ignore long brackets of any other level.
-Any kind of end-of-line sequence
-(carriage return, newline, carriage return followed by newline,
-or newline followed by carriage return)
-is converted to a simple newline.
+<em>긴 괄호</em>로 감싸는 긴 형식을 이용해
+리터럴 문자열을 정의할 수도 있다.
+먼저 <em><em>n</em>단계 여는 긴 괄호</em>를 정의하면,
+여는 대괄호 다음에 등호 <em>n</em>개가 오고
+다시 여는 대괄호가 오는 것이다.
+그래서 0단계인 여는 긴 괄호는 <code>[[</code>라고 쓰고
+1단계인 여는 긴 괄호는 <code>[=[</code>로 쓰는 식이다.
+<em>닫는 긴 괄호</em>도 비슷하게 정의한다.
+예를 들어 4단계인 닫는 긴 괄호는 <code>]====]</code>로 쓴다.
+<em>긴 리터럴</em>은 임의 단계의 여는 긴 괄호로 시작하고
+같은 단계의 닫는 긴 괄호로 끝난다.
+같은 단계의 닫는 괄호를 제외한 어떤 텍스트도 담을 수 있다.
+이 괄호 형태로 된 리터럴은 여러 행에 걸쳐 있을 수 있고,
+그 안에서 어떤 이스케이프 열도 해석하지 않으며,
+다른 단계의 긴 괄호를 무시한다.
+그리고 모든 종류의 행 종료 열(캐리지 리턴, 개행,
+캐리지 리턴 다음 개행, 개행 다음 캐리지 리턴)이
+그냥 개행으로 변환된다.
 
 
 <p>
-For convenience,
-when the opening long bracket is immediately followed by a newline,
-the newline is not included in the string.
-As an example, in a system using ASCII
-(in which '<code>a</code>' is coded as&nbsp;97,
-newline is coded as&nbsp;10, and '<code>1</code>' is coded as&nbsp;49),
-the five literal strings below denote the same string:
+편의를 위해
+여는 긴 괄호 바로 다음에 개행이 올 때는
+그 개행을 문자열에 포함시키지 않는다.
+예를 들어 ASCII를 쓰는
+('<code>a</code>'를 97로, 개행을 10으로,
+'<code>1</code>'을 49로 코딩 하는)
+시스템에서
+아래 다섯 가지 리터럴 문자열은 같은 문자열을 나타낸다.
 
 <pre>
      a = 'alo\n123"'
@@ -1181,37 +1181,38 @@ the five literal strings below denote the same string:
 </pre>
 
 <p>
-Any byte in a literal string not
-explicitly affected by the previous rules represents itself.
-However, Lua opens files for parsing in text mode,
-and the system file functions may have problems with
-some control characters.
-So, it is safer to represent
-non-text data as a quoted literal with
-explicit escape sequences for the non-text characters.
+명확히 위 규칙들에 해당되지 않는
+리터럴 문자열 내 바이트는 그대로 표현된다.
+하지만 루아가 텍스트 모드로 파일을 열어서 파싱 하므로
+일부 제어 문자가
+시스템 파일 함수에서 문제가 될 수도 있다.
+따라서 비텍스트 데이터를 표현할 때는
+비텍스트 문자에 대한 명확한 이스케이프 열을 담은
+따옴표 리터럴을 쓰는 것이 안전하다.
 
 
 <p>
-A <em>numeric constant</em> (or <em>numeral</em>)
-can be written with an optional fractional part
-and an optional decimal exponent,
-marked by a letter '<code>e</code>' or '<code>E</code>'.
-Lua also accepts hexadecimal constants,
-which start with <code>0x</code> or <code>0X</code>.
-Hexadecimal constants also accept an optional fractional part
-plus an optional binary exponent,
-marked by a letter '<code>p</code>' or '<code>P</code>'.
-A numeric constant with a radix point or an exponent
-denotes a float;
-otherwise,
-if its value fits in an integer,
-it denotes an integer.
-Examples of valid integer constants are
+<em>숫자 상수</em>(즉 <em>숫자</em>)를
+선택적으로 소수 부분이나
+'<code>e</code>'나 '<code>E</code>' 글자로 표시한
+10진수 지수와 함께
+쓸 수 있다.
+<code>0x</code>나 <code>0X</code>로 시작하는
+16진 상수도 받아들인다.
+16진 상수에서도 선택적으로 소수 부분과
+'<code>p</code>'나 '<code>P</code>' 글자로 표시한
+2진 지수를 받아들인다.
+소수점이나 지수가 있는 숫자 상수는
+부동소수점수를 나타낸다.
+그 외 경우,
+값이 정수 범위에 맞으면
+정수를 나타낸다.
+다음은 유효한 정수 상수의 예이다.
 
 <pre>
      3   345   0xff   0xBEBADA
 </pre><p>
-Examples of valid float constants are
+다음은 유효한 부동소수점수 상수의 예이다.
 
 <pre>
      3.0     3.1416     314.16e-2     0.31416E1     34e1
@@ -1219,14 +1220,14 @@ Examples of valid float constants are
 </pre>
 
 <p>
-A <em>comment</em> starts with a double hyphen (<code>--</code>)
-anywhere outside a string.
-If the text immediately after <code>--</code> is not an opening long bracket,
-the comment is a <em>short comment</em>,
-which runs until the end of the line.
-Otherwise, it is a <em>long comment</em>,
-which runs until the corresponding closing long bracket.
-Long comments are frequently used to disable code temporarily.
+문자열 밖 어디서든 하이픈 두 개(<code>--</code>)로
+<em>주석</em>이 시작된다.
+<code>--</code> 바로 다음 텍스트가 여는 긴 괄호가 아니면
+그 주석은 <em>짧은 주석</em>이고
+그 행 끝까지 이어진다.
+맞으면 <em>긴 주석</em>이고
+대응하는 닫는 긴 괄호까지 이어진다.
+긴 주석은 코드를 임시로 비활성화하는 데 자주 쓴다.
 
 
 
