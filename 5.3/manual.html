@@ -1371,43 +1371,46 @@ Name은 <a href="#3.1">3.1절</a>에 정의된 식별자를 나타낸다.
 
 
 
-<h3>3.3.2 &ndash; <a name="3.3.2">Chunks</a></h3>
+<h3>3.3.2 &ndash; <a name="3.3.2">청크</a></h3>
 
 <p>
-The unit of compilation of Lua is called a <em>chunk</em>.
-Syntactically,
-a chunk is simply a block:
+루아의 컴파일 단위를 <em>청크(chunk)</em>라고 부른다.
+문법적으로
+청크는 그냥 블록이다.
 
 <pre>
 	chunk ::= block
 </pre>
 
 <p>
-Lua handles a chunk as the body of an anonymous function
-with a variable number of arguments
-(see <a href="#3.4.11">&sect;3.4.11</a>).
-As such, chunks can define local variables,
-receive arguments, and return values.
-Moreover, such anonymous function is compiled as in the
-scope of an external local variable called <code>_ENV</code> (see <a href="#2.2">&sect;2.2</a>).
-The resulting function always has <code>_ENV</code> as its only upvalue,
-even if it does not use that variable.
+루아에서는 청크를
+인자가 가변인 이름 없는 함수의 몸체로 다룬다.
+(<a href="#3.4.11">3.4.11절</a> 참고.)
+그렇기에 청크에서 지역 변수를 정의할 수 있고,
+인자를 받고 값을 반환할 수 있다.
+그리고 그 익명 함수가
+<code>_ENV</code>라는 외부 지역 변수의 유효 범위 내에
+있는 것으로 컴파일 한다.
+그래서 그 함수에는 언제나 유일한 upvalue로 <code>_ENV</code>가 있다.
+(<a href="#2.2">2.2절</a> 참고.)
+그 변수를 쓰지 않을 때에도 그렇다.
 
 
 <p>
-A chunk can be stored in a file or in a string inside the host program.
-To execute a chunk,
-Lua first <em>loads</em> it,
-precompiling the chunk's code into instructions for a virtual machine,
-and then Lua executes the compiled code
-with an interpreter for the virtual machine.
+파일이나 호스트 프로그램 내 문자열에 청크를 저장할 수 있다.
+실행을 위해
+루아는 먼저 청크를 <em>적재</em>하는데,
+청크의 코드를 가상 머신 인스트럭션으로 사전 컴파일 한다.
+그러고서 컴파일 된 코드를
+가상 머신 인터프리터로 실행한다.
 
 
 <p>
-Chunks can also be precompiled into binary form;
-see program <code>luac</code> and function <a href="#pdf-string.dump"><code>string.dump</code></a> for details.
-Programs in source and compiled forms are interchangeable;
-Lua automatically detects the file type and acts accordingly (see <a href="#pdf-load"><code>load</code></a>).
+청크를 바이너리 형태로 사전 컴파일 할 수도 있다.
+자세한 내용은 <code>luac</code> 프로그램과 <a href="#pdf-string.dump"><code>string.dump</code></a> 함수를 보라.
+소스 형태 프로그램과 컴파일 형태 프로그램은 서로 대체 가능하다.
+루아가 파일 종류를 자동으로 탐지해서 그에 맞게 동작한다.
+(<a href="#pdf-load"><code>load</code></a> 참고.)
 
 
 
