@@ -1416,78 +1416,77 @@ Name은 <a href="#3.1">3.1절</a>에 정의된 식별자를 나타낸다.
 
 
 
-<h3>3.3.3 &ndash; <a name="3.3.3">Assignment</a></h3>
+<h3>3.3.3 &ndash; <a name="3.3.3">할당</a></h3>
 
 <p>
-Lua allows multiple assignments.
-Therefore, the syntax for assignment
-defines a list of variables on the left side
-and a list of expressions on the right side.
-The elements in both lists are separated by commas:
+루아에서는 다중 할당이 가능하다.
+그래서 할당 문법에서
+왼쪽에 변수 목록이 오고
+오른쪽에 식 목록이 온다.
+두 목록 모두 쉼표로 항목을 구분한다.
 
 <pre>
 	stat ::= varlist &lsquo;<b>=</b>&rsquo; explist
 	varlist ::= var {&lsquo;<b>,</b>&rsquo; var}
 	explist ::= exp {&lsquo;<b>,</b>&rsquo; exp}
 </pre><p>
-Expressions are discussed in <a href="#3.4">&sect;3.4</a>.
+식은 <a href="#3.4">3.4절</a>에서 논의한다.
 
 
 <p>
-Before the assignment,
-the list of values is <em>adjusted</em> to the length of
-the list of variables.
-If there are more values than needed,
-the excess values are thrown away.
-If there are fewer values than needed,
-the list is extended with as many  <b>nil</b>'s as needed.
-If the list of expressions ends with a function call,
-then all values returned by that call enter the list of values,
-before the adjustment
-(except when the call is enclosed in parentheses; see <a href="#3.4">&sect;3.4</a>).
+할당을 하기 전에
+변수 목록 길이에 맞춰 값 목록을 <em>조정</em>한다.
+값이 필요한 것보다 많으면
+남는 값들을 버린다.
+값이 필요한 것보다 적으면
+필요한 만큼 <b>nil</b>로 채워서 목록을 확장한다.
+식 목록이 함수 호출로 끝나는 경우에는
+그 호출이 반환한 모든 값들을
+(호출에 괄호 쳐진 경우는 예외. <a href="#3.4">3.4절</a> 참고)
+값 목록에 넣은 후
+조정한다.
 
 
 <p>
-The assignment statement first evaluates all its expressions
-and only then the assignments are performed.
-Thus the code
+할당 문에서는 먼저 모든 식들을 평가하고
+그 다음에야 할당을 수행한다.
+그래서 다음 코드가 있을 때,
 
 <pre>
      i = 3
      i, a[i] = i+1, 20
 </pre><p>
-sets <code>a[3]</code> to 20, without affecting <code>a[4]</code>
-because the <code>i</code> in <code>a[i]</code> is evaluated (to 3)
-before it is assigned&nbsp;4.
-Similarly, the line
+<code>a[3]</code>이 20으로 설정되고 <code>a[4]</code>는 영향을 받지 않는다.
+<code>a[i]</code> 안의 <code>i</code>를 (3으로) 평가한 다음에
+4로 할당하기 때문이다.
+마찬가지로 다음 행은
 
 <pre>
      x, y = y, x
 </pre><p>
-exchanges the values of <code>x</code> and <code>y</code>,
-and
+<code>x</code>와 <code>y</code>의 값을 교환한다. 그리고 다음은
 
 <pre>
      x, y, z = y, z, x
 </pre><p>
-cyclically permutes the values of <code>x</code>, <code>y</code>, and <code>z</code>.
+<code>x</code>, <code>y</code>, <code>z</code>의 값을 순환식으로 치환한다.
 
 
 <p>
-The meaning of assignments to global variables
-and table fields can be changed via metatables.
-An assignment to an indexed variable <code>t[i] = val</code> is equivalent to
-<code>settable_event(t,i,val)</code>.
-(See <a href="#2.4">&sect;2.4</a> for a complete description of the
-<code>settable_event</code> function.
-This function is not defined or callable in Lua.
-We use it here only for explanatory purposes.)
+전역 변수와 테이블 필드에 대한 할당의 의미를
+메타테이블을 통해 바꿀 수 있다.
+인덱스 된 변수에 대한 할당 <code>t[i] = val</code>은
+<code>settable_event(t,i,val)</code>와 동등하다.
+(<code>settable_event</code> 함수에 대한 완전한 설명은
+<a href="#2.4">2.4절</a>을 보라.
+이 함수는 루아에서 정의되어 있거나 호출 가능하지 않다.
+설명을 위한 것일 뿐이다.)
 
 
 <p>
-An assignment to a global name <code>x = val</code>
-is equivalent to the assignment
-<code>_ENV.x = val</code> (see <a href="#2.2">&sect;2.2</a>).
+전역 이름에 대한 할당 <code>x = val</code>은
+할당 <code>_ENV.x = val</code>과 동등하다.
+(<a href="#2.2">2.2절</a> 참고.)
 
 
 
