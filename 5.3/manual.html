@@ -1492,10 +1492,9 @@ Name은 <a href="#3.1">3.1절</a>에 정의된 식별자를 나타낸다.
 
 
 
-<h3>3.3.4 &ndash; <a name="3.3.4">Control Structures</a></h3><p>
-The control structures
-<b>if</b>, <b>while</b>, and <b>repeat</b> have the usual meaning and
-familiar syntax:
+<h3>3.3.4 &ndash; <a name="3.3.4">제어 구조</a></h3><p>
+제어 구조 <b>if</b>, <b>while</b>, <b>repeat</b>의
+문법은 익숙한 형태이고 의미도 많이 쓰는 대로이다.
 
 
 
@@ -1505,29 +1504,29 @@ familiar syntax:
 	stat ::= <b>repeat</b> block <b>until</b> exp
 	stat ::= <b>if</b> exp <b>then</b> block {<b>elseif</b> exp <b>then</b> block} [<b>else</b> block] <b>end</b>
 </pre><p>
-Lua also has a <b>for</b> statement, in two flavors (see <a href="#3.3.5">&sect;3.3.5</a>).
+루아에는 두 가지 종류의 <b>for</b> 문도 있다. (<a href="#3.3.5">3.3.5절</a> 참고.)
 
 
 <p>
-The condition expression of a
-control structure can return any value.
-Both <b>false</b> and <b>nil</b> are considered false.
-All values different from <b>nil</b> and <b>false</b> are considered true
-(in particular, the number 0 and the empty string are also true).
+제어 구조의 조건식은
+어떤 값이든 반환할 수 있다.
+<b>false</b>와 <b>nil</b>은 거짓으로 본다.
+<b>nil</b>과 <b>false</b> 외의 모든 값은 참으로 본다.
+(특히 수 0과 빈 문자열도 참이다.)
 
 
 <p>
-In the <b>repeat</b>&ndash;<b>until</b> loop,
-the inner block does not end at the <b>until</b> keyword,
-but only after the condition.
-So, the condition can refer to local variables
-declared inside the loop block.
+<b>repeat</b>&ndash;<b>until</b> 루프에서
+내부 블록은 <b>until</b> 키워드에서 끝나는 것이 아니라
+조건식 다음에서 끝난다.
+따라서 루프 블록 내에 선언된 지역 변수를
+조건에서 참조할 수 있다.
 
 
 <p>
-The <b>goto</b> statement transfers the program control to a label.
-For syntactical reasons,
-labels in Lua are considered statements too:
+<b>goto</b> 문은 레이블로 프로그램 제어를 옮긴다.
+구문 처리 상의 이유로
+루아에서는 레이블도 문으로 본다.
 
 
 
@@ -1538,50 +1537,48 @@ labels in Lua are considered statements too:
 </pre>
 
 <p>
-A label is visible in the entire block where it is defined,
-except
-inside nested blocks where a label with the same name is defined and
-inside nested functions.
-A goto may jump to any visible label as long as it does not
-enter into the scope of a local variable.
+레이블이 정의된 블록 전체에서 그 레이블이 보인다.
+단, 같은 이름 레이블을 정의한 중첩 블록 안에서나
+중첩 함수 안에서는 보이지 않는다.
+지역 변수의 유효 범위 내로 들어가는 것만 아니면
+보이는 모든 레이블로 goto 점프 할 수 있다.
 
 
 <p>
-Labels and empty statements are called <em>void statements</em>,
-as they perform no actions.
+아무 동작도 수행하지 않는
+레이블과 빈 문을 <em>void 문</em>이라고 한다.
 
 
 <p>
-The <b>break</b> statement terminates the execution of a
-<b>while</b>, <b>repeat</b>, or <b>for</b> loop,
-skipping to the next statement after the loop:
+<b>break</b> 문은
+<b>while</b>, <b>repeat</b>, <b>for</b> 루프의 실행을 끝내고
+루프 다음의 문으로 건너뛴다.
 
 
 <pre>
 	stat ::= <b>break</b>
 </pre><p>
-A <b>break</b> ends the innermost enclosing loop.
+<b>break</b>는 가장 안쪽 루프를 끝낸다.
 
 
 <p>
-The <b>return</b> statement is used to return values
-from a function or a chunk
-(which is an anonymous function).
+<b>return</b> 문을 이용해
+함수나 (익명 함수인) 청크에서 값을 반환한다.
 
-Functions can return more than one value,
-so the syntax for the <b>return</b> statement is
+함수에서 값을 여러 개 반환할 수 있으며,
+그래서 <b>return</b> 문의 문법은 다음과 같다.
 
 <pre>
 	stat ::= <b>return</b> [explist] [&lsquo;<b>;</b>&rsquo;]
 </pre>
 
 <p>
-The <b>return</b> statement can only be written
-as the last statement of a block.
-If it is really necessary to <b>return</b> in the middle of a block,
-then an explicit inner block can be used,
-as in the idiom <code>do return end</code>,
-because now <b>return</b> is the last statement in its (inner) block.
+<b>return</b> 문은
+블록 마지막 문으로만 쓸 수 있다.
+꼭 블록 중간에서 <b>return</b> 해야겠다면
+<code>do return end</code>처럼
+명확한 내부 블록을 사용할 수 있다.
+그러면 <b>return</b>이 (안쪽) 블록의 마지막 문이 된다.
 
 
 
