@@ -1734,25 +1734,25 @@ step을 1로 한다.
 
 
 
-<h3>3.3.7 &ndash; <a name="3.3.7">Local Declarations</a></h3><p>
-Local variables can be declared anywhere inside a block.
-The declaration can include an initial assignment:
+<h3>3.3.7 &ndash; <a name="3.3.7">지역 선언</a></h3><p>
+블록 내 어디에서도 지역 변수를 선언할 수 있다.
+선언에 초기 할당을 포함시킬 수 있다.
 
 <pre>
 	stat ::= <b>local</b> namelist [&lsquo;<b>=</b>&rsquo; explist]
 </pre><p>
-If present, an initial assignment has the same semantics
-of a multiple assignment (see <a href="#3.3.3">&sect;3.3.3</a>).
-Otherwise, all variables are initialized with <b>nil</b>.
+초기 할당이 있는 경우 의미론은
+다중 할당과 같다. (<a href="#3.3.3">3.3.3절</a> 참고.)
+없는 경우에는 모든 변수가 <b>nil</b>로 초기화된다.
 
 
 <p>
-A chunk is also a block (see <a href="#3.3.2">&sect;3.3.2</a>),
-and so local variables can be declared in a chunk outside any explicit block.
+청크도 블록이므로 (<a href="#3.3.2">3.3.2절</a> 참고)
+청크 안 명시적 블록 밖에서 지역 변수를 선언할 수 있다.
 
 
 <p>
-The visibility rules for local variables are explained in <a href="#3.5">&sect;3.5</a>.
+지역 변수 가시성 규칙을 <a href="#3.5">3.5절</a>에서 설명한다.
 
 
 
