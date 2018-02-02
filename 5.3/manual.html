@@ -1905,31 +1905,31 @@ vararg 함수 바로 안에서만 사용할 수 있다.
 
 
 
-<h3>3.4.2 &ndash; <a name="3.4.2">Bitwise Operators</a></h3><p>
-Lua supports the following bitwise operators:
+<h3>3.4.2 &ndash; <a name="3.4.2">비트 연산자</a></h3><p>
+루아에서 다음 비트 연산자를 지원한다.
 
 <ul>
-<li><b><code>&amp;</code>: </b>bitwise AND</li>
-<li><b><code>&#124;</code>: </b>bitwise OR</li>
-<li><b><code>~</code>: </b>bitwise exclusive OR</li>
-<li><b><code>&gt;&gt;</code>: </b>right shift</li>
-<li><b><code>&lt;&lt;</code>: </b>left shift</li>
-<li><b><code>~</code>: </b>unary bitwise NOT</li>
+<li><b><code>&amp;</code>: </b>비트 AND</li>
+<li><b><code>&#124;</code>: </b>비트 OR</li>
+<li><b><code>~</code>: </b>비트 배타적 OR</li>
+<li><b><code>&gt;&gt;</code>: </b>오른쪽 시프트</li>
+<li><b><code>&lt;&lt;</code>: </b>왼쪽 시프트</li>
+<li><b><code>~</code>: </b>단항 비트 NOT</li>
 </ul>
 
 <p>
-All bitwise operations convert its operands to integers
-(see <a href="#3.4.3">&sect;3.4.3</a>),
-operate on all bits of those integers,
-and result in an integer.
+모든 비트 연산은 피연산자를 정수로 변환하여
+(<a href="#3.4.3">3.4.3절</a> 참고)
+그 정수의 비트 전체를 조작하며
+결과가 정수이다.
 
 
 <p>
-Both right and left shifts fill the vacant bits with zeros.
-Negative displacements shift to the other direction;
-displacements with absolute values equal to or higher than
-the number of bits in an integer
-result in zero (as all bits are shifted out).
+오른쪽 시프트와 왼쪽 시프트 모두 비는 비트를 0으로 채운다.
+변위가 음수이면 반대 방향으로 시프트 한다.
+변위의 절대값이 정수의 비트 수와 같거나 그보다 크면
+(모든 비트가 시프트 되므로)
+결과가 0이다.
 
 
 
