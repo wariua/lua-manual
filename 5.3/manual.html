@@ -1848,61 +1848,60 @@ vararg 함수 바로 안에서만 사용할 수 있다.
 
 
 
-<h3>3.4.1 &ndash; <a name="3.4.1">Arithmetic Operators</a></h3><p>
-Lua supports the following arithmetic operators:
+<h3>3.4.1 &ndash; <a name="3.4.1">산술 연산자</a></h3><p>
+루아에서 다음 산술 연산자를 지원한다.
 
 <ul>
-<li><b><code>+</code>: </b>addition</li>
-<li><b><code>-</code>: </b>subtraction</li>
-<li><b><code>*</code>: </b>multiplication</li>
-<li><b><code>/</code>: </b>float division</li>
-<li><b><code>//</code>: </b>floor division</li>
-<li><b><code>%</code>: </b>modulo</li>
-<li><b><code>^</code>: </b>exponentiation</li>
-<li><b><code>-</code>: </b>unary minus</li>
+<li><b><code>+</code>: </b>덧셈</li>
+<li><b><code>-</code>: </b>뺄셈</li>
+<li><b><code>*</code>: </b>곱셈</li>
+<li><b><code>/</code>: </b>실수 나눗셈</li>
+<li><b><code>//</code>: </b>내림 나눗셈</li>
+<li><b><code>%</code>: </b>모듈로</li>
+<li><b><code>^</code>: </b>누승</li>
+<li><b><code>-</code>: </b>단항 마이너스</li>
 </ul>
 
 <p>
-With the exception of exponentiation and float division,
-the arithmetic operators work as follows:
-If both operands are integers,
-the operation is performed over integers and the result is an integer.
-Otherwise, if both operands are numbers
-or strings that can be converted to
-numbers (see <a href="#3.4.3">&sect;3.4.3</a>),
-then they are converted to floats,
-the operation is performed following the usual rules
-for floating-point arithmetic
-(usually the IEEE 754 standard),
-and the result is a float.
+누승과 실수 나눗셈을 제외하고
+산술 연산의 동작 방식은 동일하다.
+두 피연산자 모두 정수이면
+정수 연산을 수행하고 결과가 정수이다.
+그렇지 않고 두 피연산자가 수이거나
+수로 변환할 수 있는 문자열이면
+(<a href="#3.4.3">3.4.3절</a> 참고)
+부동소수점수로 변환한다.
+일반적인 부동소수점 산술 규칙(보통 IEEE 754 표준)에 따라
+연산을 수행하고 결과가 부동소수점수이다.
 
 
 <p>
-Exponentiation and float division (<code>/</code>)
-always convert their operands to floats
-and the result is always a float.
-Exponentiation uses the ISO&nbsp;C function <code>pow</code>,
-so that it works for non-integer exponents too.
+누승과 실수 나눗셈(<code>/</code>)에서는
+피연산자를 항상 부동소수점수로 변환하며
+결과가 항상 부동소수점수이다.
+누승에서는 ISO C 함수 <code>pow</code>를 사용하여
+정수 아닌 지수도 가능하다.
 
 
 <p>
-Floor division (<code>//</code>) is a division
-that rounds the quotient towards minus infinity,
-that is, the floor of the division of its operands.
+내림 나눗셈(<code>//</code>)은
+몫을 음의 무한대 쪽으로 내리는 나눗셈이다.
+즉 피연산자들로 나눗셈 한 값의 바닥(floor)이다.
 
 
 <p>
-Modulo is defined as the remainder of a division
-that rounds the quotient towards minus infinity (floor division).
+모듈로는
+몫을 음의 무한대 쪽으로 내리는 나눗셈(내림 나눗셈)의
+나머지로 정의한다.
 
 
 <p>
-In case of overflows in integer arithmetic,
-all operations <em>wrap around</em>,
-according to the usual rules of two-complement arithmetic.
-(In other words,
-they return the unique representable integer
-that is equal modulo <em>2<sup>64</sup></em> to the mathematical result.)
+정수 산술에서 넘침이 발생하는 경우 모든 연산에서
+일반적인 2의 보수 산술 규칙에 따라
+값을 <em>되돌린다</em>.
+(다시 말해
+수학적 결과의 모듈로 <em>2<sup>64</sup></em>과 같은
+표현 가능한 유일한 정수를 반환한다.)
 
 
 
