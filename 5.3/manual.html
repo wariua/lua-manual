@@ -2192,9 +2192,9 @@ nil 아닌 값의 (자연수) 인덱스이다.
 
 
 
-<h3>3.4.8 &ndash; <a name="3.4.8">Precedence</a></h3><p>
-Operator precedence in Lua follows the table below,
-from lower to higher priority:
+<h3>3.4.8 &ndash; <a name="3.4.8">우선순위</a></h3><p>
+루아의 연산자 우선순위는 아래 표를 따른다.
+우선도가 높아지는 순서이다.
 
 <pre>
      or
@@ -2207,14 +2207,14 @@ from lower to higher priority:
      ..
      +     -
      *     /     //    %
-     unary operators (not   #     -     ~)
+     단항 연산자 (not   #     -     ~)
      ^
 </pre><p>
-As usual,
-you can use parentheses to change the precedences of an expression.
-The concatenation ('<code>..</code>') and exponentiation ('<code>^</code>')
-operators are right associative.
-All other binary operators are left associative.
+언제나처럼
+괄호를 써서 식의 우선순위를 바꿀 수 있다.
+접합('<code>..</code>') 및 누승('<code>^</code>') 연산자는
+우측부터 결합이다.
+다른 이항 연산자는 모두 좌측부터 결합이다.
 
 
 
