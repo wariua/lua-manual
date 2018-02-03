@@ -2003,74 +2003,72 @@ string 라이브러리의 <code>format</code> 함수를 사용하면 된다.
 
 
 
-<h3>3.4.4 &ndash; <a name="3.4.4">Relational Operators</a></h3><p>
-Lua supports the following relational operators:
+<h3>3.4.4 &ndash; <a name="3.4.4">관계 연산자</a></h3><p>
+루아에서 다음 관계 연산자를 지원한다.
 
 <ul>
-<li><b><code>==</code>: </b>equality</li>
-<li><b><code>~=</code>: </b>inequality</li>
-<li><b><code>&lt;</code>: </b>less than</li>
-<li><b><code>&gt;</code>: </b>greater than</li>
-<li><b><code>&lt;=</code>: </b>less or equal</li>
-<li><b><code>&gt;=</code>: </b>greater or equal</li>
+<li><b><code>==</code>: </b>같음</li>
+<li><b><code>~=</code>: </b>같지 않음</li>
+<li><b><code>&lt;</code>: </b>작음</li>
+<li><b><code>&gt;</code>: </b>큼</li>
+<li><b><code>&lt;=</code>: </b>작거나 같음</li>
+<li><b><code>&gt;=</code>: </b>크거나 같음</li>
 </ul><p>
-These operators always result in <b>false</b> or <b>true</b>.
+이 연산자들은 항상 <b>false</b> 또는 <b>true</b>를 내놓는다.
 
 
 <p>
-Equality (<code>==</code>) first compares the type of its operands.
-If the types are different, then the result is <b>false</b>.
-Otherwise, the values of the operands are compared.
-Strings are compared in the obvious way.
-Numbers are equal if they denote the same mathematical value.
+같음(<code>==</code>)에서는 먼저 피연산자 타입을 비교한다.
+타입이 다르면 결과가 <b>false</b>이다.
+그렇지 않으면 피연산자들의 값을 비교한다.
+문자열은 자명한 방식으로 비교한다.
+수는 같은 수학적 값을 나타내는 경우에 서로 같다.
 
 
 <p>
-Tables, userdata, and threads
-are compared by reference:
-two objects are considered equal only if they are the same object.
-Every time you create a new object
-(a table, userdata, or thread),
-this new object is different from any previously existing object.
-Closures with the same reference are always equal.
-Closures with any detectable difference
-(different behavior, different definition) are always different.
+테이블, userdata, 스레드는
+참조로 비교한다.
+즉, 두 객체는 동일 객체인 경우에만 서로 같다고 본다.
+그래서 새 객체(테이블, userdata, 스레드)를 만들 때마다
+그 새 객체는 이전의 모든 객체와 다르게 된다.
+클로저는 참조가 같으면 항상 같다.
+탐지 가능한 차이(상이한 동작, 상이한 정의)가 있는 클로저는
+항상 서로 다르다.
 
 
 <p>
-You can change the way that Lua compares tables and userdata
-by using the "eq" metamethod (see <a href="#2.4">&sect;2.4</a>).
+"eq" 메타메소드를 이용하면 루아에서 테이블과 userdata를 비교하는 방식을
+바꿀 수 있다. (<a href="#2.4">2.4절</a> 참고.)
 
 
 <p>
-Equality comparisons do not convert strings to numbers
-or vice versa.
-Thus, <code>"0"==0</code> evaluates to <b>false</b>,
-and <code>t[0]</code> and <code>t["0"]</code> denote different
-entries in a table.
+같음 비교에서는 문자열을 수로, 또는 반대로 변환하지 않는다.
+따라서 <code>"0"==0</code>를 평가하면 <b>false</b>이고,
+<code>t[0]</code>과 <code>t["0"]</code>은
+서로 다른 테이블 항목을 나타낸다.
 
 
 <p>
-The operator <code>~=</code> is exactly the negation of equality (<code>==</code>).
+연산자 <code>~=</code>는 정확하게 같음(<code>==</code>)의 반대이다.
 
 
 <p>
-The order operators work as follows.
-If both arguments are numbers,
-then they are compared according to their mathematical values
-(regardless of their subtypes).
-Otherwise, if both arguments are strings,
-then their values are compared according to the current locale.
-Otherwise, Lua tries to call the "lt" or the "le"
-metamethod (see <a href="#2.4">&sect;2.4</a>).
-A comparison <code>a &gt; b</code> is translated to <code>b &lt; a</code>
-and <code>a &gt;= b</code> is translated to <code>b &lt;= a</code>.
+순서 연산자의 동작 방식은 이렇다.
+두 인자 모두 수이면
+(하위 타입과 상관없이)
+수학적 값에 따라 비교한다.
+아닌 경우, 두 인자 모두 문자열이면
+현재 로캘에 따라 그 값을 비교한다.
+아닌 경우, 루아에서 메타메소드 "lt"나 "le" 호출을 시도한다.
+(<a href="#2.4">2.4절</a> 참고.)
+비교식 <code>a &gt; b</code>는 <code>b &lt; a</code>로 바뀌고
+<code>a &gt;= b</code>는 <code>b &lt;= a</code>로 바뀐다.
 
 
 <p>
-Following the IEEE 754 standard,
-NaN is considered neither smaller than,
-nor equal to, nor greater than any value (including itself).
+IEEE 754 표준에 따라
+NaN은 (스스로를 포함한) 어느 값보다
+작지도, 같지도, 크지도 않다.
 
 
 
