@@ -2074,26 +2074,25 @@ NaN은 (스스로를 포함한) 어느 값보다
 
 
 
-<h3>3.4.5 &ndash; <a name="3.4.5">Logical Operators</a></h3><p>
-The logical operators in Lua are
-<b>and</b>, <b>or</b>, and <b>not</b>.
-Like the control structures (see <a href="#3.3.4">&sect;3.3.4</a>),
-all logical operators consider both <b>false</b> and <b>nil</b> as false
-and anything else as true.
+<h3>3.4.5 &ndash; <a name="3.4.5">논리 연산자</a></h3><p>
+루아의 논리 연산자는
+<b>and</b>, <b>or</b>, <b>not</b>이다.
+제어 구조와 마찬가지로 (<a href="#3.3.4">3.3.4절</a> 참고)
+논리 연산자에서는 <b>false</b>와 <b>nil</b>을 거짓으로 여기고
+그 외는 모두 참으로 여긴다.
 
 
 <p>
-The negation operator <b>not</b> always returns <b>false</b> or <b>true</b>.
-The conjunction operator <b>and</b> returns its first argument
-if this value is <b>false</b> or <b>nil</b>;
-otherwise, <b>and</b> returns its second argument.
-The disjunction operator <b>or</b> returns its first argument
-if this value is different from <b>nil</b> and <b>false</b>;
-otherwise, <b>or</b> returns its second argument.
-Both <b>and</b> and <b>or</b> use short-circuit evaluation;
-that is,
-the second operand is evaluated only if necessary.
-Here are some examples:
+부정 연산자 <b>not</b>은 항상 <b>false</b> 또는 <b>true</b>를 반환한다.
+연언 연산자 <b>and</b>는
+첫 번째 인자의 값이 <b>false</b>나 <b>nil</b>이면 그 인자를 반환한다.
+그 외 경우에 <b>and</b>는 두 번째 인자를 반환한다.
+선언 연산자 <b>or</b>는
+첫 번째 인자의 값이 <b>nil</b> 및 <b>false</b>와 다르면 그 인자를 반환한다.
+그 외 경우에 <b>or</b>는 두 번째 인자를 반환한다.
+<b>and</b>와 <b>or</b> 모두에서 단락 평가 방식을 쓴다.
+즉, 필요한 경우에만 두 번째 피연산자를 평가한다.
+몇 가지 예를 들면 다음과 같다.
 
 <pre>
      10 or 20            --&gt; 10
@@ -2105,8 +2104,8 @@ Here are some examples:
      false or nil        --&gt; nil
      10 and 20           --&gt; 20
 </pre><p>
-(In this manual,
-<code>--&gt;</code> indicates the result of the preceding expression.)
+(이 매뉴얼에서
+<code>--&gt;</code>는 앞에 있는 식의 결과를 나타낸다.)
 
 
 
