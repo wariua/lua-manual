@@ -1935,68 +1935,69 @@ vararg 함수 바로 안에서만 사용할 수 있다.
 
 
 
-<h3>3.4.3 &ndash; <a name="3.4.3">Coercions and Conversions</a></h3><p>
-Lua provides some automatic conversions between some
-types and representations at run time.
-Bitwise operators always convert float operands to integers.
-Exponentiation and float division
-always convert integer operands to floats.
-All other arithmetic operations applied to mixed numbers
-(integers and floats) convert the integer operand to a float;
-this is called the <em>usual rule</em>.
-The C API also converts both integers to floats and
-floats to integers, as needed.
-Moreover, string concatenation accepts numbers as arguments,
-besides strings.
+<h3>3.4.3 &ndash; <a name="3.4.3">타입 강제와 변환</a></h3><p>
+루아에서는 일부 타입과 표현들 간에
+런타임 자동 변환을 어느 정도 제공한다.
+비트 연산자는 항상 실수 피연산자를 정수로 변환한다.
+누승과 실수 나눗셈은
+항상 정수 피연산자를 실수로 변환한다.
+다른 모든 산술 연산은 정수와 실수가 섞인 수들에 적용하면
+정수 피연산자를 실수로 변환한다.
+이를 <em>일반 규칙</em>이라고 한다.
+C API에서도 필요에 따라 정수를 실수로, 또는
+실수를 정수로 변환한다.
+그리고 문자열 접합에서는 문자열과 더불어
+수를 인자로 받는다.
 
 
 <p>
-Lua also converts strings to numbers,
-whenever a number is expected.
+또한 수를 기대하는 곳에서는
+문자열을 수로 변환한다.
 
 
 <p>
-In a conversion from integer to float,
-if the integer value has an exact representation as a float,
-that is the result.
-Otherwise,
-the conversion gets the nearest higher or
-the nearest lower representable value.
-This kind of conversion never fails.
+정수에서 실수로 변환 시
+정수 값을 실수로 정확히 표현할 수 있으면
+그 실수 표현이 결과이다.
+그렇지 않으면
+표현 가능한 가장 가까운 위나 아래의 값으로
+변환한다.
+이 변환은 절대 실패하지 않는다.
 
 
 <p>
-The conversion from float to integer
-checks whether the float has an exact representation as an integer
-(that is, the float has an integral value and
-it is in the range of integer representation).
-If it does, that representation is the result.
-Otherwise, the conversion fails.
+실수에서 정수로 변환할 때는
+실수를 정수로 정확히 표현할 수 있는지
+(즉 실수가 정수인 값을 가지고 있고
+그 값이 정수 표현 범위 내에 있는지)
+확인한다.
+그렇다면 그 정수 표현이 결과이다.
+아니면 변환에 실패한다.
 
 
 <p>
-The conversion from strings to numbers goes as follows:
-First, the string is converted to an integer or a float,
-following its syntax and the rules of the Lua lexer.
-(The string may have also leading and trailing spaces and a sign.)
-Then, the resulting number (float or integer)
-is converted to the type (float or integer) required by the context
-(e.g., the operation that forced the conversion).
+문자열에서 수로 변환할 때는
+먼저 문자열을 그 구문과 루아 단어 분석기(lexer) 규칙에 따라
+정수나 실수로 변환한다.
+(문자열에 앞뒤 공백과 부호가 있을 수 있다.)
+그렇게 나온 수(실수 또는 정수)를
+그 맥락(가령 변환을 강제하는 연산)에서 요구하는
+타입(실수 또는 정수)으로 변환한다.
 
 
 <p>
-All conversions from strings to numbers
-accept both a dot and the current locale mark
-as the radix character.
-(The Lua lexer, however, accepts only a dot.)
+문자열에서 수로 변환 시
+소수점으로 마침표와 더불어
+현재 로캘의 표시도 받아들인다.
+(하지만 루아 단어 분석기는 마침표만 받아들인다.)
 
 
 <p>
-The conversion from numbers to strings uses a
-non-specified human-readable format.
-For complete control over how numbers are converted to strings,
-use the <code>format</code> function from the string library
-(see <a href="#pdf-string.format"><code>string.format</code></a>).
+수에서 문자열로 변환할 때는
+사람이 읽을 수 있는 명세 안 된 형식을 사용한다.
+수가 문자열로 변환되는 방식을 완전히 제어하려면
+string 라이브러리의 <code>format</code> 함수를 사용하면 된다.
+(<a href="#pdf-string.format"><code>string.format</code></a> 참고.)
 
 
 
