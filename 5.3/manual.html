@@ -2124,68 +2124,69 @@ NaN은 (스스로를 포함한) 어느 값보다
 
 
 
-<h3>3.4.7 &ndash; <a name="3.4.7">The Length Operator</a></h3>
+<h3>3.4.7 &ndash; <a name="3.4.7">길이 연산자</a></h3>
 
 <p>
-The length operator is denoted by the unary prefix operator <code>#</code>.
-
-
-<p>
-The length of a string is its number of bytes
-(that is, the usual meaning of string length when each
-character is one byte).
+길이 연산자는 단항 접두 연산자 <code>#</code>로 표시한다.
 
 
 <p>
-The length operator applied on a table
-returns a border in that table.
-A <em>border</em> in a table <code>t</code> is any natural number
-that satisfies the following condition:
+문자열의 길이는 문자열의 바이트 수이다.
+(즉, 각 문자가 한 바이트일 때
+일반적인 문자열 길이와 의미가 같다.)
+
+
+<p>
+테이블에 길이 연산자를 적용하면
+그 테이블의 경계를 반환한다.
+테이블 <code>t</code>의 <em>경계(border)</em>는
+다음 조건을 충족시키는 임의 자연수이다.
 
 <pre>
      (border == 0 or t[border] ~= nil) and t[border + 1] == nil
 </pre><p>
-In words,
-a border is any (natural) index in a table
-where a non-nil value is followed by a nil value
-(or zero, when index 1 is nil).
+다시 말해
+테이블에서 경계는 바로 다음에 nil 값이 오는
+nil 아닌 값의 (자연수) 인덱스이다.
+(인덱스 1이 nil이면 0이다.)
 
 
 <p>
-A table with exactly one border is called a <em>sequence</em>.
-For instance, the table <code>{10, 20, 30, 40, 50}</code> is a sequence,
-as it has only one border (5).
-The table <code>{10, 20, 30, nil, 50}</code> has two borders (3 and 5),
-and therefore it is not a sequence.
-The table <code>{nil, 20, 30, nil, nil, 60, nil}</code>
-has three borders (0, 3, and 6),
-so it is not a sequence, too.
-The table <code>{}</code> is a sequence with border 0.
-Note that non-natural keys do not interfere
-with whether a table is a sequence.
+경계가 딱 한 개인 테이블을 <em>열(sequence)</em>이라고 한다.
+예를 들어 테이블 <code>{10, 20, 30, 40, 50}</code>에는
+경계(5)가 하나뿐이므로 열이다.
+테이블 <code>{10, 20, 30, nil, 50}</code>에는
+경계(3과 5)가 둘이므로 열이 아니다.
+테이블 <code>{nil, 20, 30, nil, nil, 60, nil}</code>에는
+경계(0, 3, 6)가 셋이므로 역시 열이 아니다.
+테이블 <code>{}</code>는
+경계가 0인 열이다.
+참고로 자연수 아닌 키는
+테이블이 열인지 여부에 영향을 주지 않는다.
 
 
 <p>
-When <code>t</code> is a sequence,
-<code>#t</code> returns its only border,
-which corresponds to the intuitive notion of the length of the sequence.
-When <code>t</code> is not a sequence,
-<code>#t</code> can return any of its borders.
-(The exact one depends on details of
-the internal representation of the table,
-which in turn can depend on how the table was populated and
-the memory addresses of its non-numeric keys.)
+<code>t</code>가 열일 때
+<code>#t</code>는 그 유일한 경계를 반환한다.
+그 값은 열의 길이라는 직관적 개념에 대응한다.
+<code>t</code>가 열이 아닐 때
+<code>#t</code>는 그 경계들 중 아무 값이나 반환할 수 있다.
+(정확히 어느 값인지는
+테이블 내부의 세부 표현 방식에 따라 달라지는데,
+그 역시 테이블을 어떻게 채웠는지와
+수 아닌 키들의 메모리 주소에 따라 달라질 수 있다.)
 
 
 <p>
-The computation of the length of a table
-has a guaranteed worst time of <em>O(log n)</em>,
-where <em>n</em> is the largest natural key in the table.
+테이블 길이 계산의
+최악 실행 시간이 <em>O(log n)</em>라고 보장된다.
+여기서 <em>n</em>은 테이블에서 가장 큰 자연수 키이다.
 
 
 <p>
-A program can modify the behavior of the length operator for
-any value but strings through the <code>__len</code> metamethod (see <a href="#2.4">&sect;2.4</a>).
+프로그램에서 메타메소드 <code>__len</code>을 통해
+문자열을 제외한 모든 값의 길이 연산자 동작을 바꿀 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 
