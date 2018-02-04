@@ -2282,76 +2282,75 @@ nil 아닌 값의 (자연수) 인덱스이다.
 
 
 
-<h3>3.4.10 &ndash; <a name="3.4.10">Function Calls</a></h3><p>
-A function call in Lua has the following syntax:
+<h3>3.4.10 &ndash; <a name="3.4.10">함수 호출</a></h3><p>
+루아에서 함수 호출의 문법은 다음과 같다.
 
 <pre>
 	functioncall ::= prefixexp args
 </pre><p>
-In a function call,
-first prefixexp and args are evaluated.
-If the value of prefixexp has type <em>function</em>,
-then this function is called
-with the given arguments.
-Otherwise, the prefixexp "call" metamethod is called,
-having as first parameter the value of prefixexp,
-followed by the original call arguments
-(see <a href="#2.4">&sect;2.4</a>).
+함수 호출에서는
+먼저 prefixexp와 args를 평가한다.
+prefixexp의 값이 <em>function</em> 타입이면
+주어진 인자들로 그 함수를 호출한다.
+그렇지 않으면 prefixexp의 "call" 메타메소드를 호출한다.
+prefixexp의 값을 첫 번째 매개변수로 하고
+이어서 원래의 호출 인자들이 온다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 <p>
-The form
+다음 형태를 이용해 "메소드" 호출을 할 수 있다.
 
 <pre>
 	functioncall ::= prefixexp &lsquo;<b>:</b>&rsquo; Name args
 </pre><p>
-can be used to call "methods".
-A call <code>v:name(<em>args</em>)</code>
-is syntactic sugar for <code>v.name(v,<em>args</em>)</code>,
-except that <code>v</code> is evaluated only once.
+호출 식 <code>v:name(<em>args</em>)</code>는
+<code>v.name(v,<em>args</em>)</code>에 대한 문법적 양념이다.
+단, <code>v</code>를 한 번만 평가한다.
 
 
 <p>
-Arguments have the following syntax:
+인자 문법은 다음과 같다.
 
 <pre>
 	args ::= &lsquo;<b>(</b>&rsquo; [explist] &lsquo;<b>)</b>&rsquo;
 	args ::= tableconstructor
 	args ::= LiteralString
 </pre><p>
-All argument expressions are evaluated before the call.
-A call of the form <code>f{<em>fields</em>}</code> is
-syntactic sugar for <code>f({<em>fields</em>})</code>;
-that is, the argument list is a single new table.
-A call of the form <code>f'<em>string</em>'</code>
-(or <code>f"<em>string</em>"</code> or <code>f[[<em>string</em>]]</code>)
-is syntactic sugar for <code>f('<em>string</em>')</code>;
-that is, the argument list is a single literal string.
+모든 인자 식을 호출 전에 평가한다.
+<code>f{<em>fields</em>}</code> 형태 호출은
+<code>f({<em>fields</em>})</code>에 대한 문법적 양념이다.
+즉, 인자 목록이 새 테이블 한 개다.
+<code>f'<em>string</em>'</code> 형태 호출은
+(또는 <code>f"<em>string</em>"</code>이나 <code>f[[<em>string</em>]]</code>)는)
+<code>f('<em>string</em>')</code>에 대한 문법적 양념이다.
+즉, 인자 목록이 리터럴 문자열 한 개다.
 
 
 <p>
-A call of the form <code>return <em>functioncall</em></code> is called
-a <em>tail call</em>.
-Lua implements <em>proper tail calls</em>
-(or <em>proper tail recursion</em>):
-in a tail call,
-the called function reuses the stack entry of the calling function.
-Therefore, there is no limit on the number of nested tail calls that
-a program can execute.
-However, a tail call erases any debug information about the
-calling function.
-Note that a tail call only happens with a particular syntax,
-where the <b>return</b> has one single function call as argument;
-this syntax makes the calling function return exactly
-the returns of the called function.
-So, none of the following examples are tail calls:
+<code>return <em>functioncall</em></code> 형태의 호출을
+<em>꼬리 호출</em>이라고 한다.
+루아에서는 <em>진정(proper) 꼬리 호출</em>을
+(<em>진정 꼬리 재귀</em>를)
+구현한다.
+꼬리 호출에서는
+피호출 함수가 호출측 함수의 스택 항목을 재사용한다.
+따라서 프로그램에서 실행 가능한
+중첩된 꼬리 호출 횟수에 아무 제한이 없다.
+하지만 꼬리 호출은 호출측 함수에 대한 디버그 정보를 모두 지워 버린다.
+참고로 특정 구문에서만,
+즉 <b>return</b>의 인자가 함수 호출 하나뿐일 때만
+꼬리 호출이 일어난다.
+피호출 함수의 반환 결과를 호출측 함수가 그대로 반환하게
+하는 구문이다.
+따라서 다음 예는 꼬리 호출이 아니다.
 
 <pre>
-     return (f(x))        -- results adjusted to 1
+     return (f(x))        -- 결과를 1개로 조정함
      return 2 * f(x)
-     return x, f(x)       -- additional results
-     f(x); return         -- results discarded
-     return x or f(x)     -- results adjusted to 1
+     return x, f(x)       -- 결과에 추가함
+     f(x); return         -- 결과를 버림
+     return x or f(x)     -- 결과를 1개로 조정함
 </pre>
 
 
