@@ -2509,50 +2509,49 @@ vararg 식을 다른 식 내에서나
 
 
 
-<h2>3.5 &ndash; <a name="3.5">Visibility Rules</a></h2>
+<h2>3.5 &ndash; <a name="3.5">가시성 규칙</a></h2>
 
 <p>
 
-Lua is a lexically scoped language.
-The scope of a local variable begins at the first statement after
-its declaration and lasts until the last non-void statement
-of the innermost block that includes the declaration.
-Consider the following example:
+루아는 문법적(lexical) 스코프 사용 언어이다.
+지역 변수의 유효 범위는 선언 다음의 첫 번째 문에서 시작해서
+그 선언을 포함하는 가장 안쪽 블록의 void 아닌 마지막 문까지 이어진다.
+다음 예를 보자.
 
 <pre>
-     x = 10                -- global variable
-     do                    -- new block
-       local x = x         -- new 'x', with value 10
+     x = 10                -- 전역 변수
+     do                    -- 새 블록
+       local x = x         -- 값 10으로 새 'x'
        print(x)            --&gt; 10
        x = x+1
-       do                  -- another block
-         local x = x+1     -- another 'x'
+       do                  -- 또 다른 블록
+         local x = x+1     -- 또 다른 'x'
          print(x)          --&gt; 12
        end
        print(x)            --&gt; 11
      end
-     print(x)              --&gt; 10  (the global one)
+     print(x)              --&gt; 10  (전역 변수)
 </pre>
 
 <p>
-Notice that, in a declaration like <code>local x = x</code>,
-the new <code>x</code> being declared is not in scope yet,
-and so the second <code>x</code> refers to the outside variable.
+<code>local x = x</code> 같은 선언을 보면,
+아직은 선언하려는 새 <code>x</code>의 유효 범위 안이 아니므로
+두 번째 <code>x</code>가 바깥 변수를 가리키게 된다.
 
 
 <p>
-Because of the lexical scoping rules,
-local variables can be freely accessed by functions
-defined inside their scope.
-A local variable used by an inner function is called
-an <em>upvalue</em>, or <em>external local variable</em>,
-inside the inner function.
+문법적 스코프 규칙 때문에
+지역 변수의 유효 범위 내에 정의된 함수에서
+그 변수에 자유롭게 접근할 수 있다.
+안쪽 함수에서 쓰는 지역 변수를
+그 함수 안에서
+<em>upvalue</em> 내지 <em>외부 지역 변수</em>라고 한다.
 
 
 <p>
-Notice that each execution of a <b>local</b> statement
-defines new local variables.
-Consider the following example:
+<b>local</b> 문을 실행할 때마다
+새 지역 변수를 정의하게 된다.
+다음 예를 보자.
 
 <pre>
      a = {}
@@ -2562,10 +2561,11 @@ Consider the following example:
        a[i] = function () y=y+1; return x+y end
      end
 </pre><p>
-The loop creates ten closures
-(that is, ten instances of the anonymous function).
-Each of these closures uses a different <code>y</code> variable,
-while all of them share the same <code>x</code>.
+루프에서 클로저 열 개를
+(즉 익명 함수 인스턴스 열 개를)
+만든다.
+모든 클로저가 같은 <code>x</code>를 공유하면서
+각기 다른 <code>y</code> 변수를 사용한다.
 
 
 
