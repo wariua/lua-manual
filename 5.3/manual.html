@@ -2620,42 +2620,39 @@ API의 어느 항목이든
 
 
 
-<h2>4.1 &ndash; <a name="4.1">The Stack</a></h2>
+<h2>4.1 &ndash; <a name="4.1">스택</a></h2>
 
 <p>
-Lua uses a <em>virtual stack</em> to pass values to and from C.
-Each element in this stack represents a Lua value
-(<b>nil</b>, number, string, etc.).
-Functions in the API can access this stack through the
-Lua state parameter that they receive.
-
-
-<p>
-Whenever Lua calls C, the called function gets a new stack,
-which is independent of previous stacks and of stacks of
-C&nbsp;functions that are still active.
-This stack initially contains any arguments to the C&nbsp;function
-and it is where the C&nbsp;function can store temporary
-Lua values and must push its results
-to be returned to the caller (see <a href="#lua_CFunction"><code>lua_CFunction</code></a>).
+<em>가상 스택</em>을 이용해 루아와 C가 값을 주고받는다.
+이 스택의 각 항목이 루아 값(<b>nil</b>, 수, 문자열 등)을 나타낸다.
+API 함수에서는 건네받은 루아 상태 매개변수를 통해
+이 스택에 접근할 수 있다.
 
 
 <p>
-For convenience,
-most query operations in the API do not follow a strict stack discipline.
-Instead, they can refer to any element in the stack
-by using an <em>index</em>:
-A positive index represents an absolute stack position
-(starting at&nbsp;1);
-a negative index represents an offset relative to the top of the stack.
-More specifically, if the stack has <em>n</em> elements,
-then index&nbsp;1 represents the first element
-(that is, the element that was pushed onto the stack first)
-and
-index&nbsp;<em>n</em> represents the last element;
-index&nbsp;-1 also represents the last element
-(that is, the element at the&nbsp;top)
-and index <em>-n</em> represents the first element.
+루아에서 C를 호출할 때마다 피호출 함수가 새 스택을 받는다.
+이 스택은 이전의 스택들과, 그리고 아직 동작 중인 C 함수의 스택들과 독립적이다.
+처음에 이 스택은 C 함수를 위한 인자를 담는다.
+C 함수에서 여기에 임시 루아 값을 저장할 수 있으며
+호출자에게 반환할 결과를 여기 밀어넣어야 한다.
+(<a href="#lua_CFunction"><code>lua_CFunction</code></a> 참고.)
+
+
+<p>
+편의를 위해
+API의 대다수 질의 연산에서는 스택 접근 규제를 엄격하게 하지 않는다.
+<em>인덱스</em>를 이용하면
+스택 내 어느 항목이든 참조할 수 있다.
+양수 인덱스는 절대적 스택 위치를 나타내고
+(1에서 시작),
+음수 인덱스는 스택 꼭대기를 기준으로 한 위치를 나타낸다.
+구체적으로 스택에 <em>n</em>개 항목이 있을 때
+인덱스 1은 첫 번째 항목을
+(즉 스택에 가장 먼저 밀어넣은 항목을) 나타내고
+인덱스 <em>n</em>이 마지막 항목을 나타낸다.
+인덱스 -1 역시 마지막 항목을
+(즉 꼭대기의 항목을) 나타내고
+인덱스 <em>-n</em>이 첫 번째 항목을 나타낸다.
 
 
 
