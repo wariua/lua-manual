@@ -2571,53 +2571,52 @@ vararg 식을 다른 식 내에서나
 
 
 
-<h1>4 &ndash; <a name="4">The Application Program Interface</a></h1>
+<h1>4 &ndash; <a name="4">응용 프로그램 인터페이스</a></h1>
 
 <p>
 
-This section describes the C&nbsp;API for Lua, that is,
-the set of C&nbsp;functions available to the host program to communicate
-with Lua.
-All API functions and related types and constants
-are declared in the header file <a name="pdf-lua.h"><code>lua.h</code></a>.
+이 절에서는 루아의 C API를 설명한다.
+호스트 프로그램에서 루아와 의사소통하는 데 이 C 함수들을 사용할 수 있다.
+모든 API 함수와 관련 타입 및 상수들이
+헤더 파일 <a name="pdf-lua.h"><code>lua.h</code></a>에 선언되어 있다.
 
 
 <p>
-Even when we use the term "function",
-any facility in the API may be provided as a macro instead.
-Except where stated otherwise,
-all such macros use each of their arguments exactly once
-(except for the first argument, which is always a Lua state),
-and so do not generate any hidden side-effects.
+API의 어느 항목이든
+"함수"라는 용어를 쓸 때도 사실은 매크로일 수 있다.
+따로 언급하지 않으면
+그런 매크로들에서는 각 인자를 정확히 한 번만 사용하며
+(언제나 루아 상태인 첫 번째 인자는 제외)
+그래서 숨겨진 부대 효과를 전혀 만들어 내지 않는다.
 
 
 <p>
-As in most C&nbsp;libraries,
-the Lua API functions do not check their arguments for validity or consistency.
-However, you can change this behavior by compiling Lua
-with the macro <a name="pdf-LUA_USE_APICHECK"><code>LUA_USE_APICHECK</code></a> defined.
+여러 C 라이브러리들처럼
+루아 API 함수에서도 인자의 유효성이나 무모순성을 검사하지 않는다.
+하지만 매크로 <a name="pdf-LUA_USE_APICHECK"><code>LUA_USE_APICHECK</code></a>를 정의하고
+루아를 컴파일 하면 이 동작 방식을 바꿀 수 있다.
 
 
 <p>
-The Lua library is fully reentrant:
-it has no global variables.
-It keeps all information it needs in a dynamic structure,
-called the <em>Lua state</em>.
+루아 라이브러리는 완전하게 재진입 가능하다.
+즉, 전역 변수가 전혀 없다.
+필요한 정보는 모두 <em>루아 상태</em>라고 하는
+동적 구조 안에 둔다.
 
 
 <p>
-Each Lua state has one or more threads,
-which correspond to independent, cooperative lines of execution.
-The type <a href="#lua_State"><code>lua_State</code></a> (despite its name) refers to a thread.
-(Indirectly, through the thread, it also refers to the
-Lua state associated to the thread.)
+각 루아 상태에는 한 개 이상의 스레드가 있는데,
+각 스레드는 독립적인 협력적 실행 흐름에 대응한다.
+<a href="#lua_State"><code>lua_State</code></a> 타입은 (그 이름과 달리) 스레드를 가리킨다.
+(그 스레드를 통해서 스레드에 연계된 루아 상태를
+간접적으로 가리키기도 한다.)
 
 
 <p>
-A pointer to a thread must be passed as the first argument to
-every function in the library, except to <a href="#lua_newstate"><code>lua_newstate</code></a>,
-which creates a Lua state from scratch and returns a pointer
-to the <em>main thread</em> in the new state.
+라이브러리 내의 모든 함수에 첫 번째 인자로 스레드 포인터를 주어야 한다.
+<a href="#lua_newstate"><code>lua_newstate</code></a>는 예외인데,
+이 함수는 무에서부터 루아 상태를 만들어서
+새 상태의 <em>주 스레드</em>에 대한 포인터를 반환한다.
 
 
 
