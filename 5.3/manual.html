@@ -2689,52 +2689,54 @@ API의 대다수 질의 연산에서는 스택 접근 규제를 엄격하게 하
 
 
 
-<h2>4.3 &ndash; <a name="4.3">Valid and Acceptable Indices</a></h2>
+<h2>4.3 &ndash; <a name="4.3">유효 인덱스와 허용 인덱스</a></h2>
 
 <p>
-Any function in the API that receives stack indices
-works only with <em>valid indices</em> or <em>acceptable indices</em>.
-
-
-<p>
-A <em>valid index</em> is an index that refers to a
-position that stores a modifiable Lua value.
-It comprises stack indices between&nbsp;1 and the stack top
-(<code>1 &le; abs(index) &le; top</code>)
-
-plus <em>pseudo-indices</em>,
-which represent some positions that are accessible to C&nbsp;code
-but that are not in the stack.
-Pseudo-indices are used to access the registry (see <a href="#4.5">&sect;4.5</a>)
-and the upvalues of a C&nbsp;function (see <a href="#4.4">&sect;4.4</a>).
+API에서 스택 인덱스를 받는 함수는 모두
+<em>유효 인덱스</em> 또는 <em>허용 인덱스</em>로만 동작한다.
 
 
 <p>
-Functions that do not need a specific mutable position,
-but only a value (e.g., query functions),
-can be called with acceptable indices.
-An <em>acceptable index</em> can be any valid index,
-but it also can be any positive index after the stack top
-within the space allocated for the stack,
-that is, indices up to the stack size.
-(Note that 0 is never an acceptable index.)
-Except when noted otherwise,
-functions in the API work with acceptable indices.
+<em>유효 인덱스</em>란 변경 가능한 루아 값을
+저장하고 있는 위치를 가리키는 인덱스이다.
+1번에서 스택 상단까지 인덱스(<code>1 &le; abs(index) &le; top</code>)에 더해서,
+
+스택에 있지 않지만
+C 코드에서 접근 가능한 어떤 위치들을 나타내는
+<em>가상 인덱스(pseudo-index)</em>로 이뤄진다.
+레지스트리(<a href="#4.5">4.5절</a>)와
+C 함수의 upvalue(<a href="#4.4">4.4절</a>)에
+접근할 때 가상 인덱스를 쓴다.
 
 
 <p>
-Acceptable indices serve to avoid extra tests
-against the stack top when querying the stack.
-For instance, a C&nbsp;function can query its third argument
-without the need to first check whether there is a third argument,
-that is, without the need to check whether 3 is a valid index.
+명확한 변경 가능 위치가 필요한 것이 아니라
+값이 필요할 뿐인 함수(가령 질의 함수)는
+허용 인덱스로 호출할 수 있다.
+<em>허용 인덱스</em>는 어떤 유효 인덱스일 수도 있고
+스택에 할당된 공간 내의 스택 상단 너머
+어떤 양수 인덱스일 수도 있다.
+즉, 스택 크기까지의 인덱스이다.
+(0은 절대 허용 인덱스가 아니다.)
+따로 언급한 경우를 제외하고
+API의 함수들은 허용 인덱스로 동작한다.
 
 
 <p>
-For functions that can be called with acceptable indices,
-any non-valid index is treated as if it
-contains a value of a virtual type <a name="pdf-LUA_TNONE"><code>LUA_TNONE</code></a>,
-which behaves like a nil value.
+허용 인덱스는 스택 값 질의 시
+스택 상단을 확인하는 추가 검사를 피하게 해 준다.
+예를 들어 C 함수에서 세 번째 인자를 질의할 때
+세 번째 인자가 존재하는지 여부,
+즉 3이 유효 인덱스인지 여부를
+확인해 볼 필요가 없다.
+
+
+<p>
+허용 인덱스로 호출 가능한 함수들에서
+유효 인덱스 아닌 위치는
+가상 타입 <a name="pdf-LUA_TNONE"><code>LUA_TNONE</code></a>인 값을 담고 있는
+것처럼 처리한다.
+그 값은 nil 값처럼 작동한다.
 
 
 
