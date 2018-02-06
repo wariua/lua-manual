@@ -2742,30 +2742,28 @@ API의 함수들은 허용 인덱스로 동작한다.
 
 
 
-<h2>4.4 &ndash; <a name="4.4">C Closures</a></h2>
+<h2>4.4 &ndash; <a name="4.4">C 클로저</a></h2>
 
 <p>
-When a C&nbsp;function is created,
-it is possible to associate some values with it,
-thus creating a <em>C&nbsp;closure</em>
-(see <a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a>);
-these values are called <em>upvalues</em> and are
-accessible to the function whenever it is called.
+C 함수를 생성할 때
+어떤 값들을 연계시켜서
+<em>C 클로저</em>를 만드는 것이 가능하다.
+(<a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a> 참고.)
+그 값들을 <em>upvalue</em>라고 하며
+호출된 함수에서 언제나 접근 가능하다.
 
 
 <p>
-Whenever a C&nbsp;function is called,
-its upvalues are located at specific pseudo-indices.
-These pseudo-indices are produced by the macro
-<a href="#lua_upvalueindex"><code>lua_upvalueindex</code></a>.
-The first upvalue associated with a function is at index
-<code>lua_upvalueindex(1)</code>, and so on.
-Any access to <code>lua_upvalueindex(<em>n</em>)</code>,
-where <em>n</em> is greater than the number of upvalues of the
-current function
-(but not greater than 256,
-which is one plus the maximum number of upvalues in a closure),
-produces an acceptable but invalid index.
+C 함수 호출 시
+그 upvalue들은 언제나 특정 가상 인덱스에 위치하게 된다.
+그 가상 인덱스를
+매크로 <a href="#lua_upvalueindex"><code>lua_upvalueindex</code></a>로 만든다.
+어떤 함수에 연계된 첫 번째 upvalue가
+<code>lua_upvalueindex(1)</code>에 있는 식이다.
+<code>lua_upvalueindex(<em>n</em>)</code> 접근에서
+<em>n</em>이 현재 함수의 upvalue 개수보다 크면
+(하지만 클로저 upvalue 최대 개수에 1을 더한 256보다는 크지 않으면)
+허용이지만 유효하지 않은 인덱스가 나온다.
 
 
 
