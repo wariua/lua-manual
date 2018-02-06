@@ -2658,33 +2658,32 @@ API의 대다수 질의 연산에서는 스택 접근 규제를 엄격하게 하
 
 
 
-<h2>4.2 &ndash; <a name="4.2">Stack Size</a></h2>
+<h2>4.2 &ndash; <a name="4.2">스택 크기</a></h2>
 
 <p>
-When you interact with the Lua API,
-you are responsible for ensuring consistency.
-In particular,
-<em>you are responsible for controlling stack overflow</em>.
-You can use the function <a href="#lua_checkstack"><code>lua_checkstack</code></a>
-to ensure that the stack has enough space for pushing new elements.
-
-
-<p>
-Whenever Lua calls C,
-it ensures that the stack has space for
-at least <a name="pdf-LUA_MINSTACK"><code>LUA_MINSTACK</code></a> extra slots.
-<code>LUA_MINSTACK</code> is defined as 20,
-so that usually you do not have to worry about stack space
-unless your code has loops pushing elements onto the stack.
+루아 API를 다룰 때
+무모순성을 보장할 책임은 사용자에게 있다.
+특히 <em>스택 오버플로우 제어를 책임져야 한다</em>.
+함수 <a href="#lua_checkstack"><code>lua_checkstack</code></a>을 사용해서
+스택에 새 항목을 밀어 넣을 공간이 있도록 만들 수 있다.
 
 
 <p>
-When you call a Lua function
-without a fixed number of results (see <a href="#lua_call"><code>lua_call</code></a>),
-Lua ensures that the stack has enough space for all results,
-but it does not ensure any extra space.
-So, before pushing anything in the stack after such a call
-you should use <a href="#lua_checkstack"><code>lua_checkstack</code></a>.
+루아에서 C를 부를 때는 항상
+스택에 최소 <a name="pdf-LUA_MINSTACK"><code>LUA_MINSTACK</code></a>개의
+추가 슬롯이 있도록 보장한다.
+<code>LUA_MINSTACK</code>은 20으로 정의되어 있으며,
+따라서 코드에서 루프를 돌며 스택에 항목을 넣는 경우가 아니면
+일반적으로 스택 공간에 신경 쓸 필요가 없다.
+
+
+<p>
+결과 개수가 정해져 있지 않은 루아 함수를 호출할 때
+(<a href="#lua_call"><code>lua_call</code></a> 참고)
+스택에 전체 결과를 위한 공간이 있도록 루아가 보장하지만
+그 이상의 공간은 보장하지 않는다.
+따라서 그런 호출 후 스택에 뭔가를 밀어 넣기 전에는
+<a href="#lua_checkstack"><code>lua_checkstack</code></a>을 써야 할 것이다.
 
 
 
