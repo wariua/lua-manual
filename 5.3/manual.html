@@ -2769,48 +2769,51 @@ C 함수 호출 시
 
 
 
-<h2>4.5 &ndash; <a name="4.5">Registry</a></h2>
+<h2>4.5 &ndash; <a name="4.5">레지스트리</a></h2>
 
 <p>
-Lua provides a <em>registry</em>,
-a predefined table that can be used by any C&nbsp;code to
-store whatever Lua values it needs to store.
-The registry table is always located at pseudo-index
-<a name="pdf-LUA_REGISTRYINDEX"><code>LUA_REGISTRYINDEX</code></a>.
-Any C&nbsp;library can store data into this table,
-but it must take care to choose keys
-that are different from those used
-by other libraries, to avoid collisions.
-Typically, you should use as key a string containing your library name,
-or a light userdata with the address of a C&nbsp;object in your code,
-or any Lua object created by your code.
-As with variable names,
-string keys starting with an underscore followed by
-uppercase letters are reserved for Lua.
-
-
-<p>
-The integer keys in the registry are used
-by the reference mechanism (see <a href="#luaL_ref"><code>luaL_ref</code></a>)
-and by some predefined values.
-Therefore, integer keys must not be used for other purposes.
+루아에는 <em>레지스트리</em>라는
+미리 정의된 테이블이 있다.
+C 코드에서 이 테이블에
+원하는 어떤 루아 값이든 저장할 수 있다.
+레지스트리 테이블은 항상 가상 인덱스
+<a name="pdf-LUA_REGISTRYINDEX"><code>LUA_REGISTRYINDEX</code></a>에 위치한다.
+어느 C 라이브러리에서든 이 테이블에 값을 저장할 수 있되,
+충돌을 피하기 위해
+다른 라이브러리와 다른 키를
+고르도록 신경을 써야 한다.
+보통 라이브러리 이름을 담은 문자열이나
+코드 내 C 객체 주소인 light userdata,
+또는 코드에서 생성한 루아 객체를 키로 쓰면 된다.
+변수 이름에서처럼
+밑줄로 시작하고 이어서 대문자 글자들이 오는 문자열 키는
+루아 자체 용도로 예약되어 있다.
 
 
 <p>
-When you create a new Lua state,
-its registry comes with some predefined values.
-These predefined values are indexed with integer keys
-defined as constants in <code>lua.h</code>.
-The following constants are defined:
+레지스트리 내의 정수 키는
+참조 메커니즘(<a href="#luaL_ref"><code>luaL_ref</code></a>)과
+몇몇 사전 정의 값들에 쓴다.
+따라서 다른 용도에 정수 키를 사용해서는 안 된다.
+
+
+<p>
+루아 상태를 새로 생성하면
+그 레지스트리에는 몇몇 미리 정의된 값들이 있다.
+이 사전 정의 값들의 인덱스는
+<code>lua.h</code>에 상수로 정의되어 있는 정수 키이다.
+다음 상수가 정의되어 있다.
 
 <ul>
-<li><b><a name="pdf-LUA_RIDX_MAINTHREAD"><code>LUA_RIDX_MAINTHREAD</code></a>: </b> At this index the registry has
-the main thread of the state.
-(The main thread is the one created together with the state.)
+<li><b><a name="pdf-LUA_RIDX_MAINTHREAD"><code>LUA_RIDX_MAINTHREAD</code></a>: </b>
+레지스트리의 이 인덱스에는
+상태의 주 스레드가 있다.
+(주 스레드는 상태와 함께 생성된 스레드이다.)
 </li>
 
-<li><b><a name="pdf-LUA_RIDX_GLOBALS"><code>LUA_RIDX_GLOBALS</code></a>: </b> At this index the registry has
-the global environment.
+<li><b><a name="pdf-LUA_RIDX_GLOBALS"><code>LUA_RIDX_GLOBALS</code></a>: </b>
+레지스트리의 이 인덱스에는
+전역 환경이 있다.
 </li>
 </ul>
 
