@@ -3019,37 +3019,36 @@ API 호출을 거쳐서 양보하려고 할 때는 루아에서 항상 오류를
 
 
 
-<h2>4.8 &ndash; <a name="4.8">Functions and Types</a></h2>
+<h2>4.8 &ndash; <a name="4.8">함수와 타입</a></h2>
 
 <p>
-Here we list all functions and types from the C&nbsp;API in
-alphabetical order.
-Each function has an indicator like this:
+여기에 C API의 모든 함수와 타입을 알파벳 순서로 나열한다.
+각 함수에는 오른편과 같은 표지가 있다.
 <span class="apii">[-o, +p, <em>x</em>]</span>
 
 
 <p>
-The first field, <code>o</code>,
-is how many elements the function pops from the stack.
-The second field, <code>p</code>,
-is how many elements the function pushes onto the stack.
-(Any function always pushes its results after popping its arguments.)
-A field in the form <code>x|y</code> means the function can push (or pop)
-<code>x</code> or <code>y</code> elements,
-depending on the situation;
-an interrogation mark '<code>?</code>' means that
-we cannot know how many elements the function pops/pushes
-by looking only at its arguments
-(e.g., they may depend on what is on the stack).
-The third field, <code>x</code>,
-tells whether the function may raise errors:
-'<code>-</code>' means the function never raises any error;
-'<code>m</code>' means the function may raise out-of-memory errors
-and errors running a <code>__gc</code> metamethod;
-'<code>e</code>' means the function may raise any errors
-(it can run arbitrary Lua code,
-either directly or through metamethods);
-'<code>v</code>' means the function may raise an error on purpose.
+첫 번째 필드 <code>o</code>는
+함수가 스택에서 항목을 몇 개나 꺼내는가이다.
+두 번째 필드 <code>p</code>는
+함수가 스택에 항목을 몇 개나 집어넣는가이다.
+(어느 함수든 항상 인자를 꺼낸 뒤에 결과를 집어넣는다.)
+<code>x|y</code> 형태인 필드는 함수가 상황에 따라
+<code>x</code>개 또는 <code>y</code>개 항목을
+집어넣을 (꺼낼) 수 있다는 뜻이다.
+물음표 '<code>?</code>'는
+인자만 봐서는 함수가 몇 개 항목을
+꺼내는지/집어넣는지 알 수 없다는 뜻이다.
+(가령 스택 내용에 따라 달라질 수 있다.)
+세 번째 필드 <code>x</code>는
+함수가 오류를 제기할 수 있는지를 알려 준다.
+'<code>-</code>'는 함수가 절대 오류를 제기하지 않는다는 뜻이다.
+'<code>m</code>'은 함수가 메모리 부족 오류나
+<code>__gc</code> 메타메소드 실행 중 오류를 제기할 수 있다는 뜻이다.
+'<code>e</code>'는 함수가 어떤 오류도 제기할 수 있다는
+(직접 또는 메타메소드를 통해 임의의 루아 코드를 실행할 수 있다는)
+뜻이다.
+'<code>v</code>'는 함수가 의도적으로 오류를 제기할 수 있다는 뜻이다.
 
 
 
