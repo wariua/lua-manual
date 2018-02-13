@@ -3057,9 +3057,10 @@ API 호출을 거쳐서 양보하려고 할 때는 루아에서 항상 오류를
 <pre>int lua_absindex (lua_State *L, int idx);</pre>
 
 <p>
-Converts the acceptable index <code>idx</code>
-into an equivalent absolute index
-(that is, one that does not depend on the stack top).
+허용 인덱스 <code>idx</code>를
+동등한 절대 인덱스로
+(즉 스택 상단 위치와 무관한 인덱스로)
+변환한다.
 
 
 
@@ -3072,62 +3073,60 @@ into an equivalent absolute index
                              size_t nsize);</pre>
 
 <p>
-The type of the memory-allocation function used by Lua states.
-The allocator function must provide a
-functionality similar to <code>realloc</code>,
-but not exactly the same.
-Its arguments are
-<code>ud</code>, an opaque pointer passed to <a href="#lua_newstate"><code>lua_newstate</code></a>;
-<code>ptr</code>, a pointer to the block being allocated/reallocated/freed;
-<code>osize</code>, the original size of the block or some code about what
-is being allocated;
-and <code>nsize</code>, the new size of the block.
+루아 상태에서 쓰는 메모리 할당 함수의 타입.
+<code>realloc</code>과 비슷하되 완전히 같지는 않은 기능성을
+할당자 함수가 제공해야 한다.
+인자는
+<a href="#lua_newstate"><code>lua_newstate</code></a>에 전달한 불투명 포인터인 <code>ud</code>,
+할당/재할당/해제하려는 블록에 대한 포인터인 <code>ptr</code>,
+블록의 원래 크기 내지 할당하려는 것에 대한 어떤 코드인 <code>osize</code>,
+블록의 새 크기인 <code>nsize</code>이다.
 
 
 <p>
-When <code>ptr</code> is not <code>NULL</code>,
-<code>osize</code> is the size of the block pointed by <code>ptr</code>,
-that is, the size given when it was allocated or reallocated.
+<code>ptr</code>이 <code>NULL</code>이 아닐 때
+<code>osize</code>는 <code>ptr</code>이 가리키는 블록의 크기이다.
+즉, 할당이나 재할당 때 주었던 크기이다.
 
 
 <p>
-When <code>ptr</code> is <code>NULL</code>,
-<code>osize</code> encodes the kind of object that Lua is allocating.
-<code>osize</code> is any of
+<code>ptr</code>이 <code>NULL</code>일 때
+<code>osize</code>는 루아에서 할당하려는 객체의 종류를 나타낸다.
+<code>osize</code>가
 <a href="#pdf-LUA_TSTRING"><code>LUA_TSTRING</code></a>, <a href="#pdf-LUA_TTABLE"><code>LUA_TTABLE</code></a>, <a href="#pdf-LUA_TFUNCTION"><code>LUA_TFUNCTION</code></a>,
-<a href="#pdf-LUA_TUSERDATA"><code>LUA_TUSERDATA</code></a>, or <a href="#pdf-LUA_TTHREAD"><code>LUA_TTHREAD</code></a> when (and only when)
-Lua is creating a new object of that type.
-When <code>osize</code> is some other value,
-Lua is allocating memory for something else.
+<a href="#pdf-LUA_TUSERDATA"><code>LUA_TUSERDATA</code></a>, <a href="#pdf-LUA_TTHREAD"><code>LUA_TTHREAD</code></a>
+중 하나이면 루아에서 그 타입의 새 객체를 만들려는 것이다.
+<code>osize</code>가 다른 어떤 값이면
+루아에서 다른 뭔가를 위해 메모리를 할당하려는 것이다.
 
 
 <p>
-Lua assumes the following behavior from the allocator function:
+루아에서 할당자 함수에 대해 다음 동작 방식을 가정한다.
 
 
 <p>
-When <code>nsize</code> is zero,
-the allocator must behave like <code>free</code>
-and return <code>NULL</code>.
+<code>nsize</code>가 0일 때
+할당자가 <code>free</code>처럼 동작해야 하며
+<code>NULL</code>을 반환한다.
 
 
 <p>
-When <code>nsize</code> is not zero,
-the allocator must behave like <code>realloc</code>.
-The allocator returns <code>NULL</code>
-if and only if it cannot fulfill the request.
-Lua assumes that the allocator never fails when
-<code>osize &gt;= nsize</code>.
+<code>nsize</code>가 0이 아닐 때
+할당자가 <code>realloc</code>처럼 동작해야 한다.
+요청을 만족시킬 수 없는 경우, 그리고 그 경우에만
+할당자가 <code>NULL</code>을 반환한다.
+루아에서는 <code>osize &gt;= nsize</code>일 때
+할당자가 절대 실패하지 않는다고 가정한다.
 
 
 <p>
-Here is a simple implementation for the allocator function.
-It is used in the auxiliary library by <a href="#luaL_newstate"><code>luaL_newstate</code></a>.
+다음은 간단한 할당자 함수 구현이다.
+보조 라이브러리의 <a href="#luaL_newstate"><code>luaL_newstate</code></a>에서 쓰는 것이다.
 
 <pre>
      static void *l_alloc (void *ud, void *ptr, size_t osize,
                                                 size_t nsize) {
-       (void)ud;  (void)osize;  /* not used */
+       (void)ud;  (void)osize;  /* 사용 안 함 */
        if (nsize == 0) {
          free(ptr);
          return NULL;
@@ -3136,12 +3135,11 @@ It is used in the auxiliary library by <a href="#luaL_newstate"><code>luaL_newst
          return realloc(ptr, nsize);
      }
 </pre><p>
-Note that Standard&nbsp;C ensures
-that <code>free(NULL)</code> has no effect and that
-<code>realloc(NULL,size)</code> is equivalent to <code>malloc(size)</code>.
-This code assumes that <code>realloc</code> does not fail when shrinking a block.
-(Although Standard&nbsp;C does not ensure this behavior,
-it seems to be a safe assumption.)
+참고로 <code>free(NULL)</code>에 아무 효과가 없으며
+<code>realloc(NULL,size)</code>이 <code>malloc(size)</code>과 동등함을
+표준 C에서 보장한다.
+위 코드에서는 블록을 줄일 때 <code>realloc</code>이 실패하지 않는다고 가정한다.
+(표준 C에서 그런 동작 방식을 보장하지는 않지만 안전한 가정인 것 같다.)
 
 
 
@@ -3152,34 +3150,34 @@ it seems to be a safe assumption.)
 <pre>void lua_arith (lua_State *L, int op);</pre>
 
 <p>
-Performs an arithmetic or bitwise operation over the two values
-(or one, in the case of negations)
-at the top of the stack,
-with the value at the top being the second operand,
-pops these values, and pushes the result of the operation.
-The function follows the semantics of the corresponding Lua operator
-(that is, it may call metamethods).
+스택 상단에 있는 두 값에 대해
+(반수/NOT이면 한 값에 대해)
+산술 연산이나 비트 연산을 수행한다.
+상단 쪽 값이 두 번째 피연산자이며,
+값들을 꺼내고 연산 결과를 집어넣는다.
+대응하는 루아 연산자의 처리 방식을 따른다.
+(즉 메타메소드를 호출할 수도 있다.)
 
 
 <p>
-The value of <code>op</code> must be one of the following constants:
+<code>op</code> 값은 다음 상수들 중 하나여야 한다.
 
 <ul>
 
-<li><b><a name="pdf-LUA_OPADD"><code>LUA_OPADD</code></a>: </b> performs addition (<code>+</code>)</li>
-<li><b><a name="pdf-LUA_OPSUB"><code>LUA_OPSUB</code></a>: </b> performs subtraction (<code>-</code>)</li>
-<li><b><a name="pdf-LUA_OPMUL"><code>LUA_OPMUL</code></a>: </b> performs multiplication (<code>*</code>)</li>
-<li><b><a name="pdf-LUA_OPDIV"><code>LUA_OPDIV</code></a>: </b> performs float division (<code>/</code>)</li>
-<li><b><a name="pdf-LUA_OPIDIV"><code>LUA_OPIDIV</code></a>: </b> performs floor division (<code>//</code>)</li>
-<li><b><a name="pdf-LUA_OPMOD"><code>LUA_OPMOD</code></a>: </b> performs modulo (<code>%</code>)</li>
-<li><b><a name="pdf-LUA_OPPOW"><code>LUA_OPPOW</code></a>: </b> performs exponentiation (<code>^</code>)</li>
-<li><b><a name="pdf-LUA_OPUNM"><code>LUA_OPUNM</code></a>: </b> performs mathematical negation (unary <code>-</code>)</li>
-<li><b><a name="pdf-LUA_OPBNOT"><code>LUA_OPBNOT</code></a>: </b> performs bitwise NOT (<code>~</code>)</li>
-<li><b><a name="pdf-LUA_OPBAND"><code>LUA_OPBAND</code></a>: </b> performs bitwise AND (<code>&amp;</code>)</li>
-<li><b><a name="pdf-LUA_OPBOR"><code>LUA_OPBOR</code></a>: </b> performs bitwise OR (<code>|</code>)</li>
-<li><b><a name="pdf-LUA_OPBXOR"><code>LUA_OPBXOR</code></a>: </b> performs bitwise exclusive OR (<code>~</code>)</li>
-<li><b><a name="pdf-LUA_OPSHL"><code>LUA_OPSHL</code></a>: </b> performs left shift (<code>&lt;&lt;</code>)</li>
-<li><b><a name="pdf-LUA_OPSHR"><code>LUA_OPSHR</code></a>: </b> performs right shift (<code>&gt;&gt;</code>)</li>
+<li><b><a name="pdf-LUA_OPADD"><code>LUA_OPADD</code></a>: </b> 덧셈 수행 (<code>+</code>)</li>
+<li><b><a name="pdf-LUA_OPSUB"><code>LUA_OPSUB</code></a>: </b> 뺄셈 수행 (<code>-</code>)</li>
+<li><b><a name="pdf-LUA_OPMUL"><code>LUA_OPMUL</code></a>: </b> 곱셈 수행 (<code>*</code>)</li>
+<li><b><a name="pdf-LUA_OPDIV"><code>LUA_OPDIV</code></a>: </b> 실수 나눗셈 수행 (<code>/</code>)</li>
+<li><b><a name="pdf-LUA_OPIDIV"><code>LUA_OPIDIV</code></a>: </b> 내림 나눗셈 수행 (<code>//</code>)</li>
+<li><b><a name="pdf-LUA_OPMOD"><code>LUA_OPMOD</code></a>: </b> 모듈로 수행 (<code>%</code>)</li>
+<li><b><a name="pdf-LUA_OPPOW"><code>LUA_OPPOW</code></a>: </b> 누승 수행 (<code>^</code>)</li>
+<li><b><a name="pdf-LUA_OPUNM"><code>LUA_OPUNM</code></a>: </b> 반수 수행 (단항 <code>-</code>)</li>
+<li><b><a name="pdf-LUA_OPBNOT"><code>LUA_OPBNOT</code></a>: </b> 비트 NOT 수행 (<code>~</code>)</li>
+<li><b><a name="pdf-LUA_OPBAND"><code>LUA_OPBAND</code></a>: </b> 비트 AND 수행 (<code>&amp;</code>)</li>
+<li><b><a name="pdf-LUA_OPBOR"><code>LUA_OPBOR</code></a>: </b> 비트 OR 수행 (<code>|</code>)</li>
+<li><b><a name="pdf-LUA_OPBXOR"><code>LUA_OPBXOR</code></a>: </b> 비트 배타적 OR 수행 (<code>~</code>)</li>
+<li><b><a name="pdf-LUA_OPSHL"><code>LUA_OPSHL</code></a>: </b> 왼쪽 시프트 수행 (<code>&lt;&lt;</code>)</li>
+<li><b><a name="pdf-LUA_OPSHR"><code>LUA_OPSHR</code></a>: </b> 오른쪽 시프트 수행 (<code>&gt;&gt;</code>)</li>
 
 </ul>
 
@@ -3191,7 +3189,7 @@ The value of <code>op</code> must be one of the following constants:
 <pre>lua_CFunction lua_atpanic (lua_State *L, lua_CFunction panicf);</pre>
 
 <p>
-Sets a new panic function and returns the old one (see <a href="#4.6">&sect;4.6</a>).
+새 패닉 함수를 설정하고 이전 함수를 반환한다. (<a href="#4.6">4.6절</a> 참고.)
 
 
 
@@ -3202,57 +3200,56 @@ Sets a new panic function and returns the old one (see <a href="#4.6">&sect;4.6<
 <pre>void lua_call (lua_State *L, int nargs, int nresults);</pre>
 
 <p>
-Calls a function.
+함수를 호출한다.
 
 
 <p>
-To call a function you must use the following protocol:
-first, the function to be called is pushed onto the stack;
-then, the arguments to the function are pushed
-in direct order;
-that is, the first argument is pushed first.
-Finally you call <a href="#lua_call"><code>lua_call</code></a>;
-<code>nargs</code> is the number of arguments that you pushed onto the stack.
-All arguments and the function value are popped from the stack
-when the function is called.
-The function results are pushed onto the stack when the function returns.
-The number of results is adjusted to <code>nresults</code>,
-unless <code>nresults</code> is <a name="pdf-LUA_MULTRET"><code>LUA_MULTRET</code></a>.
-In this case, all results from the function are pushed;
-Lua takes care that the returned values fit into the stack space,
-but it does not ensure any extra space in the stack.
-The function results are pushed onto the stack in direct order
-(the first result is pushed first),
-so that after the call the last result is on the top of the stack.
+함수를 호출하려면 프로토콜을 따라야 한다.
+먼저 호출할 함수를 스택에 집어넣는다.
+다음으로 함수 인자들을 단순 순서로 집어넣는다.
+즉, 첫 번째 인자를 첫 번째로 집어넣는다.
+마지막으로 <a href="#lua_call"><code>lua_call</code></a>을 호출한다.
+<code>nargs</code>는 스택에 집어넣은 인자 개수이다.
+함수가 불릴 때
+인자와 함수 값 모두가 스택에서 빠진다.
+그리고 함수가 반환할 때 함수 결과가 스택에 들어간다.
+그 결과는 <code>nresults</code>개로 조정된다.
+단, <code>nresults</code>가 <a name="pdf-LUA_MULTRET"><code>LUA_MULTRET</code></a>이면
+함수 결과 모두가 들어간다.
+반환되는 값들이 스택 공간에 들어갈 수 있도록 루아에서 처리를 해 준다.
+하지만 그 이상의 어떤 스택 공간도 보장하지 않는다.
+함수 결과들은 단순 순서로 스택에 들어간다.
+(첫 번째 결과를 첫 번째로 집어넣는다.)
+그래서 호출 후에 스택 상단에 마지막 결과가 있게 된다.
 
 
 <p>
-Any error inside the called function is propagated upwards
-(with a <code>longjmp</code>).
+피호출 함수 내에서 오류가 발생하면
+(<code>longjmp</code>로) 위로 전파된다.
 
 
 <p>
-The following example shows how the host program can do the
-equivalent to this Lua code:
+이어지는 예는 다음 루아 코드와 동등한 일을 호스트 프로그램에서
+어떻게 할 수 있는지 보여 준다.
 
 <pre>
      a = f("how", t.x, 14)
 </pre><p>
-Here it is in&nbsp;C:
+다음은 C 코드이다.
 
 <pre>
-     lua_getglobal(L, "f");                  /* function to be called */
-     lua_pushliteral(L, "how");                       /* 1st argument */
-     lua_getglobal(L, "t");                    /* table to be indexed */
-     lua_getfield(L, -1, "x");        /* push result of t.x (2nd arg) */
-     lua_remove(L, -2);                  /* remove 't' from the stack */
-     lua_pushinteger(L, 14);                          /* 3rd argument */
-     lua_call(L, 3, 1);     /* call 'f' with 3 arguments and 1 result */
-     lua_setglobal(L, "a");                         /* set global 'a' */
+     lua_getglobal(L, "f");                            /* 호출할 함수 */
+     lua_pushliteral(L, "how");                         /* 1번째 인자 */
+     lua_getglobal(L, "t");                       /* 인덱싱 할 테이블 */
+     lua_getfield(L, -1, "x");      /* t.x 결과 집어넣기 (2번째 인자) */
+     lua_remove(L, -2);                          /* 스택에서 't' 제거 */
+     lua_pushinteger(L, 14);                            /* 3번째 인자 */
+     lua_call(L, 3, 1);             /* 3개 인자와 1개 결과로 'f' 호출 */
+     lua_setglobal(L, "a");                          /* 전역 'a' 설정 */
 </pre><p>
-Note that the code above is <em>balanced</em>:
-at its end, the stack is back to its original configuration.
-This is considered good programming practice.
+참고로 위 코드는 <em>균형이 맞는다</em>.
+즉, 마지막에 스택이 처음 구성으로 돌아간다.
+이렇게 하는 것은 좋은 프로그래밍 습관이다.
 
 
 
@@ -3267,8 +3264,8 @@ This is considered good programming practice.
                 lua_KFunction k);</pre>
 
 <p>
-This function behaves exactly like <a href="#lua_call"><code>lua_call</code></a>,
-but allows the called function to yield (see <a href="#4.7">&sect;4.7</a>).
+이 함수는 정확히 <a href="#lua_call"><code>lua_call</code></a>처럼 동작하되
+피호출 함수에서 양보를 할 수 있다. (<a href="#4.7">4.7절</a> 참고.)
 
 
 
@@ -3278,35 +3275,35 @@ but allows the called function to yield (see <a href="#4.7">&sect;4.7</a>).
 <pre>typedef int (*lua_CFunction) (lua_State *L);</pre>
 
 <p>
-Type for C&nbsp;functions.
+C 함수 타입.
 
 
 <p>
-In order to communicate properly with Lua,
-a C&nbsp;function must use the following protocol,
-which defines the way parameters and results are passed:
-a C&nbsp;function receives its arguments from Lua in its stack
-in direct order (the first argument is pushed first).
-So, when the function starts,
-<code>lua_gettop(L)</code> returns the number of arguments received by the function.
-The first argument (if any) is at index 1
-and its last argument is at index <code>lua_gettop(L)</code>.
-To return values to Lua, a C&nbsp;function just pushes them onto the stack,
-in direct order (the first result is pushed first),
-and returns the number of results.
-Any other value in the stack below the results will be properly
-discarded by Lua.
-Like a Lua function, a C&nbsp;function called by Lua can also return
-many results.
+C 함수가 루아와 올바로 의사소통하려면
+매개변수 및 결과 전달 방식을 규정하는
+프로토콜을 따라야 한다.
+C 함수가 루아로부터 인자를 받을 때는
+스택에서 단순 순서로 (첫 번째 인자를 첫 번째로 집어넣기) 받는다.
+그래서 함수 시작 때
+<code>lua_gettop(L)</code>을 호출하면 함수가 받은 인자 개수를 반환한다.
+첫 번째 인자가 (있다면) 1번 인덱스에 있고
+마지막 인자가 <code>lua_gettop(L)</code>번 인덱스에 있다.
+C 함수에서 루아로 값을 반환할 때는
+단순 순서로 (첫 번째 결과를 첫 번째로 집어넣기) 스택에 집어넣고
+결과 개수를 반환하면 된다.
+스택에 결과 아래에 있는 다른 값들은
+루아에서 적절히 폐기한다.
+루아 함수처럼 루아가 호출하는 C 함수도
+여러 개 결과를 반환할 수 있다.
 
 
 <p>
-As an example, the following function receives a variable number
-of numeric arguments and returns their average and their sum:
+예를 들어 다음 함수는 개수가 가변적인 수 인자들을 받아서
+평균과 합을 반환한다.
 
 <pre>
      static int foo (lua_State *L) {
-       int n = lua_gettop(L);    /* number of arguments */
+       int n = lua_gettop(L);    /* 인자 개수 */
        lua_Number sum = 0.0;
        int i;
        for (i = 1; i &lt;= n; i++) {
@@ -3316,9 +3313,9 @@ of numeric arguments and returns their average and their sum:
          }
          sum += lua_tonumber(L, i);
        }
-       lua_pushnumber(L, sum/n);        /* first result */
-       lua_pushnumber(L, sum);         /* second result */
-       return 2;                   /* number of results */
+       lua_pushnumber(L, sum/n);        /* 첫 번째 결과 */
+       lua_pushnumber(L, sum);          /* 두 번째 결과 */
+       return 2;                           /* 결과 개수 */
      }
 </pre>
 
@@ -3330,16 +3327,14 @@ of numeric arguments and returns their average and their sum:
 <pre>int lua_checkstack (lua_State *L, int n);</pre>
 
 <p>
-Ensures that the stack has space for at least <code>n</code> extra slots
-(that is, that you can safely push up to <code>n</code> values into it).
-It returns false if it cannot fulfill the request,
-either because it would cause the stack
-to be larger than a fixed maximum size
-(typically at least several thousand elements) or
-because it cannot allocate memory for the extra space.
-This function never shrinks the stack;
-if the stack already has space for the extra slots,
-it is left unchanged.
+스택에 최소 <code>n</code>개의 추가 슬롯이 있도록 만든다.
+(즉, 스택에 <code>n</code>개까지 값들을 안전하게 집어넣을 수 있게 한다.)
+스택이 고정된 최대 크기(보통 최소 수천 항목)보다 커지게 되거나
+추가 공간을 위한 메모리를 할당할 수 없어서
+요청을 만족시킬 수 없으면 거짓을 반환한다.
+이 함수는 절대 스택을 줄이지 않는다.
+즉, 스택에 추가 슬롯 공간이 이미 있으면
+변경 없이 둔다.
 
 
 
@@ -3350,14 +3345,14 @@ it is left unchanged.
 <pre>void lua_close (lua_State *L);</pre>
 
 <p>
-Destroys all objects in the given Lua state
-(calling the corresponding garbage-collection metamethods, if any)
-and frees all dynamic memory used by this state.
-On several platforms, you may not need to call this function,
-because all resources are naturally released when the host program ends.
-On the other hand, long-running programs that create multiple states,
-such as daemons or web servers,
-will probably need to close states as soon as they are not needed.
+지정한 루아 상태의 모든 객체들을
+(해당하는 쓰레기 수집 메타메소드가 있으면 호출하여) 없애고
+그 상태에서 쓰는 모든 동적 메모리를 해제한다.
+여러 플랫폼에서는 이 함수를 호출할 필요가 없을 수도 있는데,
+호스트 프로그램이 끝날 때 모든 자원이 알아서 해제되기 때문이다.
+반면 여러 상태를 만드는
+데몬이나 웹 서버 같은 장기 동작 프로그램에서는
+상태가 필요 없게 되자마자 닫아야 할 것이다.
 
 
 
@@ -3368,23 +3363,23 @@ will probably need to close states as soon as they are not needed.
 <pre>int lua_compare (lua_State *L, int index1, int index2, int op);</pre>
 
 <p>
-Compares two Lua values.
-Returns 1 if the value at index <code>index1</code> satisfies <code>op</code>
-when compared with the value at index <code>index2</code>,
-following the semantics of the corresponding Lua operator
-(that is, it may call metamethods).
-Otherwise returns&nbsp;0.
-Also returns&nbsp;0 if any of the indices is not valid.
+두 루아 값을 비교한다.
+인덱스 <code>index1</code>의 값이 인덱스 <code>index2</code>의 값과 비교하여
+<code>op</code>를 만족시키는 경우 1을 반환한다.
+비교 시 대응하는 루아 연산자의 처리 방식을 따른다.
+(즉 메타메소드를 호출할 수도 있다.)
+만족시키지 않으면 0을 반환한다.
+인덱스가 하나라도 유효하지 않을 때에도 0을 반환한다.
 
 
 <p>
-The value of <code>op</code> must be one of the following constants:
+<code>op</code> 값은 다음 상수들 중 하나여야 한다.
 
 <ul>
 
-<li><b><a name="pdf-LUA_OPEQ"><code>LUA_OPEQ</code></a>: </b> compares for equality (<code>==</code>)</li>
-<li><b><a name="pdf-LUA_OPLT"><code>LUA_OPLT</code></a>: </b> compares for less than (<code>&lt;</code>)</li>
-<li><b><a name="pdf-LUA_OPLE"><code>LUA_OPLE</code></a>: </b> compares for less or equal (<code>&lt;=</code>)</li>
+<li><b><a name="pdf-LUA_OPEQ"><code>LUA_OPEQ</code></a>: </b> 같은지 비교 (<code>==</code>)</li>
+<li><b><a name="pdf-LUA_OPLT"><code>LUA_OPLT</code></a>: </b> 작은지 비교 (<code>&lt;</code>)</li>
+<li><b><a name="pdf-LUA_OPLE"><code>LUA_OPLE</code></a>: </b> 작거나 같은지 비교 (<code>&lt;=</code>)</li>
 
 </ul>
 
@@ -3396,13 +3391,13 @@ The value of <code>op</code> must be one of the following constants:
 <pre>void lua_concat (lua_State *L, int n);</pre>
 
 <p>
-Concatenates the <code>n</code> values at the top of the stack,
-pops them, and leaves the result at the top.
-If <code>n</code>&nbsp;is&nbsp;1, the result is the single value on the stack
-(that is, the function does nothing);
-if <code>n</code> is 0, the result is the empty string.
-Concatenation is performed following the usual semantics of Lua
-(see <a href="#3.4.6">&sect;3.4.6</a>).
+스택 상단의 <code>n</code>개 값들을 접합하고,
+그 값들을 꺼내고, 결과를 상단에 둔다.
+<code>n</code>이 1이면 결과는 스택의 그 한 개 값이다.
+(즉, 함수가 아무것도 하지 않는다.)
+<code>n</code>이 0이면 결과는 빈 문자열이다.
+루아의 일반적 처리 방식에 따라 접합을 수행한다.
+(<a href="#3.4.6">3.4.6절</a> 참고.)
 
 
 
@@ -3413,10 +3408,10 @@ Concatenation is performed following the usual semantics of Lua
 <pre>void lua_copy (lua_State *L, int fromidx, int toidx);</pre>
 
 <p>
-Copies the element at index <code>fromidx</code>
-into the valid index <code>toidx</code>,
-replacing the value at that position.
-Values at other positions are not affected.
+인덱스 <code>fromidx</code>의 항목을
+유효 인덱스 <code>toidx</code>로 복사하여
+그 위치의 값을 교체한다.
+다른 위치의 값들은 영향을 받지 않는다.
 
 
 
@@ -3427,15 +3422,15 @@ Values at other positions are not affected.
 <pre>void lua_createtable (lua_State *L, int narr, int nrec);</pre>
 
 <p>
-Creates a new empty table and pushes it onto the stack.
-Parameter <code>narr</code> is a hint for how many elements the table
-will have as a sequence;
-parameter <code>nrec</code> is a hint for how many other elements
-the table will have.
-Lua may use these hints to preallocate memory for the new table.
-This preallocation is useful for performance when you know in advance
-how many elements the table will have.
-Otherwise you can use the function <a href="#lua_newtable"><code>lua_newtable</code></a>.
+빈 테이블을 새로 만들어서 스택에 집어넣는다.
+매개변수 <code>narr</code>은
+테이블에 수열로 얼마나 많은 항목이 있을지에 대한 힌트이다.
+매개변수 <code>nrec</code>는
+테이블에 기타 항목들이 얼마나 많이 있을지에 대한 힌트이다.
+루아에서 이 힌트를 이용해 새 테이블에 메모리를 미리 할당해 둘 수도 있다.
+테이블에 항목이 몇 개일지 미리 안다면
+이 사전 할당이 성능에 도움이 된다.
+아니라면 함수 <a href="#lua_newtable"><code>lua_newtable</code></a>을 쓸 수 있다.
 
 
 
@@ -3449,32 +3444,31 @@ Otherwise you can use the function <a href="#lua_newtable"><code>lua_newtable</c
                         int strip);</pre>
 
 <p>
-Dumps a function as a binary chunk.
-Receives a Lua function on the top of the stack
-and produces a binary chunk that,
-if loaded again,
-results in a function equivalent to the one dumped.
-As it produces parts of the chunk,
-<a href="#lua_dump"><code>lua_dump</code></a> calls function <code>writer</code> (see <a href="#lua_Writer"><code>lua_Writer</code></a>)
-with the given <code>data</code>
-to write them.
+함수를 이진 청크로 덤프 한다.
+스택 상단의 루아 함수를 받아서
+이진 청크를 만들어 내는데,
+그 청크를 다시 적재하면
+덤프 한 것과 동등한 함수가 된다.
+<a href="#lua_dump"><code>lua_dump</code></a>에서
+청크 부분들을 만들면서
+<code>data</code>로 함수 <code>writer</code>를 호출해
+쓰기를 한다.
 
 
 <p>
-If <code>strip</code> is true,
-the binary representation may not include all debug information
-about the function,
-to save space.
+<code>strip</code>이 참이면
+공간 절약을 위해
+함수에 대한 디버그 정보를
+이진 표현에 모두 포함시키지 않을 수도 있다.
 
 
 <p>
-The value returned is the error code returned by the last
-call to the writer;
-0&nbsp;means no errors.
+마지막 쓰기 함수 호출이 반환한 오류 코드가 반환 값이다.
+0은 오류 없음을 뜻한다.
 
 
 <p>
-This function does not pop the Lua function from the stack.
+이 함수는 스택에서 루아 함수를 꺼내지 않는다.
 
 
 
@@ -3485,11 +3479,11 @@ This function does not pop the Lua function from the stack.
 <pre>int lua_error (lua_State *L);</pre>
 
 <p>
-Generates a Lua error,
-using the value at the top of the stack as the error object.
-This function does a long jump,
-and therefore never returns
-(see <a href="#luaL_error"><code>luaL_error</code></a>).
+스택 상단의 값을 오류 객체로 사용해
+루아 오류를 발생시킨다.
+이 함수는 긴 점프를 하기 때문에
+절대 반환하지 않는다.
+(<a href="#luaL_error"><code>luaL_error</code></a> 참고.)
 
 
 
@@ -3500,62 +3494,60 @@ and therefore never returns
 <pre>int lua_gc (lua_State *L, int what, int data);</pre>
 
 <p>
-Controls the garbage collector.
+쓰레기 수집기를 제어한다.
 
 
 <p>
-This function performs several tasks,
-according to the value of the parameter <code>what</code>:
+이 함수는 매개변수 <code>what</code>의 값에 따라
+여러 가지 작업을 수행한다.
 
 <ul>
 
 <li><b><code>LUA_GCSTOP</code>: </b>
-stops the garbage collector.
+쓰레기 수집기를 멈춘다.
 </li>
 
 <li><b><code>LUA_GCRESTART</code>: </b>
-restarts the garbage collector.
+쓰레기 수집기를 재시작한다.
 </li>
 
 <li><b><code>LUA_GCCOLLECT</code>: </b>
-performs a full garbage-collection cycle.
+쓰레기 수집 주기 한 번을 수행한다.
 </li>
 
 <li><b><code>LUA_GCCOUNT</code>: </b>
-returns the current amount of memory (in Kbytes) in use by Lua.
+루아에서 현재 사용 중인 메모리의 (KB 단위) 양을 반환한다.
 </li>
 
 <li><b><code>LUA_GCCOUNTB</code>: </b>
-returns the remainder of dividing the current amount of bytes of
-memory in use by Lua by 1024.
+루아에서 현재 사용 중인 메모리의 바이트 양을 1024로 나눈 나머지를 반환한다.
 </li>
 
 <li><b><code>LUA_GCSTEP</code>: </b>
-performs an incremental step of garbage collection.
+쓰레기 수집의 점진적 단계 한 번을 수행한다.
 </li>
 
 <li><b><code>LUA_GCSETPAUSE</code>: </b>
-sets <code>data</code> as the new value
-for the <em>pause</em> of the collector (see <a href="#2.5">&sect;2.5</a>)
-and returns the previous value of the pause.
+<code>data</code>를 수집기의 <em>휴지 시간</em>(<a href="#2.5">2.5절</a>)의
+새 값으로 설정하고
+이전 휴지 시간 값을 반환한다.
 </li>
 
 <li><b><code>LUA_GCSETSTEPMUL</code>: </b>
-sets <code>data</code> as the new value for the <em>step multiplier</em> of
-the collector (see <a href="#2.5">&sect;2.5</a>)
-and returns the previous value of the step multiplier.
+<code>data</code>를 수집기의 <em>단계 승수</em>(<a href="#2.5">2.5절</a>)의
+새 값으로 설정하고
+이전 단계 승수 값을 반환한다.
 </li>
 
 <li><b><code>LUA_GCISRUNNING</code>: </b>
-returns a boolean that tells whether the collector is running
-(i.e., not stopped).
+수집기가 동작 중인지를 (즉 정지되지 않았는지를) 알려 주는 불리언을 반환한다.
 </li>
 
 </ul>
 
 <p>
-For more details about these options,
-see <a href="#pdf-collectgarbage"><code>collectgarbage</code></a>.
+이 옵션들에 대한 더 자세한 내용은
+<a href="#pdf-collectgarbage"><code>collectgarbage</code></a>를 보라.
 
 
 
@@ -3566,9 +3558,10 @@ see <a href="#pdf-collectgarbage"><code>collectgarbage</code></a>.
 <pre>lua_Alloc lua_getallocf (lua_State *L, void **ud);</pre>
 
 <p>
-Returns the memory-allocation function of a given state.
-If <code>ud</code> is not <code>NULL</code>, Lua stores in <code>*ud</code> the
-opaque pointer given when the memory-allocator function was set.
+지정한 상태의 메모리 할당 함수를 반환한다.
+<code>ud</code>가 <code>NULL</code>이 아니면
+메모리 할당자 함수 설정 때 루아에 주었던 불투명 포인터를
+<code>*ud</code>에 저장한다.
 
 
 
@@ -3579,14 +3572,15 @@ opaque pointer given when the memory-allocator function was set.
 <pre>int lua_getfield (lua_State *L, int index, const char *k);</pre>
 
 <p>
-Pushes onto the stack the value <code>t[k]</code>,
-where <code>t</code> is the value at the given index.
-As in Lua, this function may trigger a metamethod
-for the "index" event (see <a href="#2.4">&sect;2.4</a>).
+값 <code>t[k]</code>를 스택에 집어넣는다.
+<code>t</code>는 지정한 인덱스에 있는 값이다.
+루아 내에서처럼 이 함수가 "index" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -3597,21 +3591,21 @@ Returns the type of the pushed value.
 <pre>void *lua_getextraspace (lua_State *L);</pre>
 
 <p>
-Returns a pointer to a raw memory area associated with the
-given Lua state.
-The application can use this area for any purpose;
-Lua does not use it for anything.
+해당 루아 상태에 연계된
+가외 메모리 영역에 대한 포인터를 반환한다.
+응용에서 이 영역을 임의 용도에 쓸 수 있다.
+루아에서는 이 영역을 사용하지 않는다.
 
 
 <p>
-Each new thread has this area initialized with a copy
-of the area of the main thread.
+신규 스레드마다 주 스레드의 영역을 복사해서
+이 영역을 초기화 한다.
 
 
 <p>
-By default, this area has the size of a pointer to void,
-but you can recompile Lua with a different size for this area.
-(See <code>LUA_EXTRASPACE</code> in <code>luaconf.h</code>.)
+기본적으로 이 영역의 크기는 void 포인터만큼이다.
+하지만 이 영역을 다른 크기로 해서 루아를 재컴파일 할 수 있다.
+(<code>luaconf.h</code>의 <code>LUA_EXTRASPACE</code> 참고.)
 
 
 
@@ -3622,8 +3616,8 @@ but you can recompile Lua with a different size for this area.
 <pre>int lua_getglobal (lua_State *L, const char *name);</pre>
 
 <p>
-Pushes onto the stack the value of the global <code>name</code>.
-Returns the type of that value.
+전역 <code>name</code>의 값을 스택에 집어넣는다.
+그 값의 타입을 반환한다.
 
 
 
@@ -3634,14 +3628,15 @@ Returns the type of that value.
 <pre>int lua_geti (lua_State *L, int index, lua_Integer i);</pre>
 
 <p>
-Pushes onto the stack the value <code>t[i]</code>,
-where <code>t</code> is the value at the given index.
-As in Lua, this function may trigger a metamethod
-for the "index" event (see <a href="#2.4">&sect;2.4</a>).
+값 <code>t[i]</code>를 스택에 집어넣는다.
+<code>t</code>는 지정한 인덱스에 있는 값이다.
+루아 내에서처럼 이 함수가 "index" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -3652,10 +3647,10 @@ Returns the type of the pushed value.
 <pre>int lua_getmetatable (lua_State *L, int index);</pre>
 
 <p>
-If the value at the given index has a metatable,
-the function pushes that metatable onto the stack and returns&nbsp;1.
-Otherwise,
-the function returns&nbsp;0 and pushes nothing on the stack.
+지정한 인덱스에 있는 값에 메타테이블이 있으면
+그 메타테이블을 스택에 집어넣고 1을 반환한다.
+아니면
+함수가 0을 반환하고 스택에 아무것도 집어넣지 않는다.
 
 
 
@@ -3666,20 +3661,21 @@ the function returns&nbsp;0 and pushes nothing on the stack.
 <pre>int lua_gettable (lua_State *L, int index);</pre>
 
 <p>
-Pushes onto the stack the value <code>t[k]</code>,
-where <code>t</code> is the value at the given index
-and <code>k</code> is the value at the top of the stack.
+값 <code>t[k]</code>를 스택에 집어넣는다.
+<code>t</code>는 지정한 인덱스에 있는 값이고
+<code>k</code>는 스택 상단에 있는 값이다.
 
 
 <p>
-This function pops the key from the stack,
-pushing the resulting value in its place.
-As in Lua, this function may trigger a metamethod
-for the "index" event (see <a href="#2.4">&sect;2.4</a>).
+이 함수는 스택에서 키를 꺼내고
+그 자리에 결과 값을 집어넣는다.
+루아 내에서처럼 이 함수가 "index" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -3690,10 +3686,10 @@ Returns the type of the pushed value.
 <pre>int lua_gettop (lua_State *L);</pre>
 
 <p>
-Returns the index of the top element in the stack.
-Because indices start at&nbsp;1,
-this result is equal to the number of elements in the stack;
-in particular, 0&nbsp;means an empty stack.
+스택 상단 항목의 인덱스를 반환한다.
+인덱스가 1부터 시작하므로
+그 결과는 스택 내 항목 수와 같다.
+특히 0은 빈 스택을 뜻한다.
 
 
 
@@ -3704,12 +3700,12 @@ in particular, 0&nbsp;means an empty stack.
 <pre>int lua_getuservalue (lua_State *L, int index);</pre>
 
 <p>
-Pushes onto the stack the Lua value associated with the full userdata
-at the given index.
+지정한 인덱스에 있는 full userdata에 연계된 루아 값을
+스택에 집어넣는다.
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -3720,10 +3716,10 @@ Returns the type of the pushed value.
 <pre>void lua_insert (lua_State *L, int index);</pre>
 
 <p>
-Moves the top element into the given valid index,
-shifting up the elements above this index to open space.
-This function cannot be called with a pseudo-index,
-because a pseudo-index is not an actual stack position.
+상단 항목을 지정한 유효 인덱스로 옮기고
+그 인덱스 위의 항목들을 빈 공간으로 밀어 올린다.
+가상 인덱스로 이 함수를 호출할 수 없다.
+가상 인덱스는 실제 스택 위치가 아니기 때문이다.
 
 
 
@@ -3733,21 +3729,18 @@ because a pseudo-index is not an actual stack position.
 <pre>typedef ... lua_Integer;</pre>
 
 <p>
-The type of integers in Lua.
+루아 정수 타입.
 
 
 <p>
-By default this type is <code>long long</code>,
-(usually a 64-bit two-complement integer),
-but that can be changed to <code>long</code> or <code>int</code>
-(usually a 32-bit two-complement integer).
-(See <code>LUA_INT_TYPE</code> in <code>luaconf.h</code>.)
+기본적으로 이 타입은 <code>long long</code>(보통 64비트 2의 보수 정수)이다.
+하지만 <code>long</code>이나 <code>int</code>(보통 32비트 2의 보수 정수)로 바꿀 수 있다.
+(<code>luaconf.h</code>의 <code>LUA_INT_TYPE</code> 참고.)
 
 
 <p>
-Lua also defines the constants
-<a name="pdf-LUA_MININTEGER"><code>LUA_MININTEGER</code></a> and <a name="pdf-LUA_MAXINTEGER"><code>LUA_MAXINTEGER</code></a>,
-with the minimum and the maximum values that fit in this type.
+그 타입에 맞는 최솟값과 최댓값으로
+상수 <a name="pdf-LUA_MININTEGER"><code>LUA_MININTEGER</code></a>와 <a name="pdf-LUA_MAXINTEGER"><code>LUA_MAXINTEGER</code></a>를 루아에서 정의하고 있기도 하다.
 
 
 
@@ -3758,8 +3751,8 @@ with the minimum and the maximum values that fit in this type.
 <pre>int lua_isboolean (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a boolean,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 불리언이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3770,8 +3763,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_iscfunction (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a C&nbsp;function,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 C 함수이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3782,8 +3775,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_isfunction (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a function
-(either C or Lua), and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 (C 또는 루아) 함수이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3794,9 +3787,9 @@ Returns 1 if the value at the given index is a function
 <pre>int lua_isinteger (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is an integer
-(that is, the value is a number and is represented as an integer),
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 정수이면
+(즉 값이 수이고 정수로 표현되어 있으면) 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3807,8 +3800,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_islightuserdata (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a light userdata,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 light userdata이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3819,8 +3812,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_isnil (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is <b>nil</b>,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 <b>nil</b>이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3831,8 +3824,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_isnone (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the given index is not valid,
-and 0&nbsp;otherwise.
+지정한 인덱스가 유효하지 않으면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3843,9 +3836,9 @@ and 0&nbsp;otherwise.
 <pre>int lua_isnoneornil (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the given index is not valid
-or if the value at this index is <b>nil</b>,
-and 0&nbsp;otherwise.
+지정한 인덱스가 유효하지 않거나
+그 인덱스에 있는 값이 <b>nil</b>이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3856,9 +3849,9 @@ and 0&nbsp;otherwise.
 <pre>int lua_isnumber (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a number
-or a string convertible to a number,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 수이거나
+수로 변환 가능한 문자열이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3869,9 +3862,9 @@ and 0&nbsp;otherwise.
 <pre>int lua_isstring (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a string
-or a number (which is always convertible to a string),
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 문자열이거나
+(언제나 문자열로 변환 가능한) 수이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3882,8 +3875,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_istable (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a table,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 테이블이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3894,8 +3887,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_isthread (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a thread,
-and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 스레드이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3906,8 +3899,8 @@ and 0&nbsp;otherwise.
 <pre>int lua_isuserdata (lua_State *L, int index);</pre>
 
 <p>
-Returns 1 if the value at the given index is a userdata
-(either full or light), and 0&nbsp;otherwise.
+지정한 인덱스에 있는 값이 (full 또는 light) userdata이면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3918,8 +3911,8 @@ Returns 1 if the value at the given index is a userdata
 <pre>int lua_isyieldable (lua_State *L);</pre>
 
 <p>
-Returns 1 if the given coroutine can yield,
-and 0&nbsp;otherwise.
+지정한 코루틴이 양보할 수 있으면 1을 반환하고
+아니면 0을 반환한다.
 
 
 
@@ -3929,12 +3922,12 @@ and 0&nbsp;otherwise.
 <pre>typedef ... lua_KContext;</pre>
 
 <p>
-The type for continuation-function contexts.
-It must be a numeric type.
-This type is defined as <code>intptr_t</code>
-when <code>intptr_t</code> is available,
-so that it can store pointers too.
-Otherwise, it is defined as <code>ptrdiff_t</code>.
+속행 함수 문맥을 위한 타입.
+수 타입이어야 한다.
+<code>intptr_t</code>가 사용 가능하면
+<code>intptr_t</code>로 이 타입이 정의되어 있으며,
+그래서 포인터도 저장할 수 있다.
+그렇지 않으면 <code>ptrdiff_t</code>로 정의되어 있다.
 
 
 
@@ -3944,7 +3937,7 @@ Otherwise, it is defined as <code>ptrdiff_t</code>.
 <pre>typedef int (*lua_KFunction) (lua_State *L, int status, lua_KContext ctx);</pre>
 
 <p>
-Type for continuation functions (see <a href="#4.7">&sect;4.7</a>).
+속행 함수 타입. (<a href="#4.7">4.7절</a> 참고.)
 
 
 
@@ -3955,10 +3948,11 @@ Type for continuation functions (see <a href="#4.7">&sect;4.7</a>).
 <pre>void lua_len (lua_State *L, int index);</pre>
 
 <p>
-Returns the length of the value at the given index.
-It is equivalent to the '<code>#</code>' operator in Lua (see <a href="#3.4.7">&sect;3.4.7</a>) and
-may trigger a metamethod for the "length" event (see <a href="#2.4">&sect;2.4</a>).
-The result is pushed on the stack.
+지정한 인덱스에 있는 값의 길이를 반환한다.
+루아의 '<code>#</code>' 연산자(<a href="#3.4.7">3.4.7절</a>)와 동등하며
+"length" 이벤트에 대한 메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
+결과를 스택에 집어넣는다.
 
 
 
@@ -3973,66 +3967,65 @@ The result is pushed on the stack.
               const char *mode);</pre>
 
 <p>
-Loads a Lua chunk without running it.
-If there are no errors,
-<code>lua_load</code> pushes the compiled chunk as a Lua
-function on top of the stack.
-Otherwise, it pushes an error message.
+루아 청크를 적재하고 실행은 하지 않는다.
+오류가 없으면 <code>lua_load</code>에서
+청크를 루아 함수로 컴파일 하여
+스택 상단에 집어넣는다.
+아니면 오류 메시지를 집어넣는다.
 
 
 <p>
-The return values of <code>lua_load</code> are:
+<code>lua_load</code>의 반환 값은 다음과 같다.
 
 <ul>
 
-<li><b><a href="#pdf-LUA_OK"><code>LUA_OK</code></a>: </b> no errors;</li>
+<li><b><a href="#pdf-LUA_OK"><code>LUA_OK</code></a>: </b> 오류 없음</li>
 
 <li><b><a name="pdf-LUA_ERRSYNTAX"><code>LUA_ERRSYNTAX</code></a>: </b>
-syntax error during precompilation;</li>
+사전 컴파일 중 구문 오류</li>
 
 <li><b><a href="#pdf-LUA_ERRMEM"><code>LUA_ERRMEM</code></a>: </b>
-memory allocation (out-of-memory) error;</li>
+메모리 할당 오류 (메모리 부족)</li>
 
 <li><b><a href="#pdf-LUA_ERRGCMM"><code>LUA_ERRGCMM</code></a>: </b>
-error while running a <code>__gc</code> metamethod.
-(This error has no relation with the chunk being loaded.
-It is generated by the garbage collector.)
+<code>__gc</code> 메타메소드 실행 중 오류.
+(이 오류는 적재하려는 청크와 아무 관련이 없다.
+쓰레기 수집기가 만들어 내는 오류이다.)
 </li>
 
 </ul>
 
 <p>
-The <code>lua_load</code> function uses a user-supplied <code>reader</code> function
-to read the chunk (see <a href="#lua_Reader"><code>lua_Reader</code></a>).
-The <code>data</code> argument is an opaque value passed to the reader function.
+<code>lua_load</code> 함수는 사용자가 제공한 <code>reader</code> 함수를 사용해
+청크를 읽어 들인다. (<a href="#lua_Reader"><code>lua_Reader</code></a> 참고.)
+<code>data</code> 인자는 읽기 함수에게 전달하는 불투명한 값이다.
 
 
 <p>
-The <code>chunkname</code> argument gives a name to the chunk,
-which is used for error messages and in debug information (see <a href="#4.9">&sect;4.9</a>).
+<code>chunkname</code> 인자는 청크에 이름을 준다.
+오류 메시지와 디버그 정보(<a href="#4.9">4.9절</a>)에 쓰인다.
 
 
 <p>
-<code>lua_load</code> automatically detects whether the chunk is text or binary
-and loads it accordingly (see program <code>luac</code>).
-The string <code>mode</code> works as in function <a href="#pdf-load"><code>load</code></a>,
-with the addition that
-a <code>NULL</code> value is equivalent to the string "<code>bt</code>".
+청크가 텍스트인지 바이너리인지 <code>lua_load</code>에서 자동으로 탐지하여
+그에 맞게 적재한다. (<code>luac</code> 프로그램 참고.)
+문자열 <code>mode</code>는 <a href="#pdf-load"><code>load</code></a> 함수에서처럼 동작하며,
+그에 더해서 <code>NULL</code> 값이 문자열 "<code>bt</code>"와 동등하다.
 
 
 <p>
-<code>lua_load</code> uses the stack internally,
-so the reader function must always leave the stack
-unmodified when returning.
+<code>lua_load</code> 내부적으로 스택을 사용한다.
+따라서 읽기 함수에서 반환할 때는 항상
+스택이 변경 없는 상태여야 한다.
 
 
 <p>
-If the resulting function has upvalues,
-its first upvalue is set to the value of the global environment
-stored at index <code>LUA_RIDX_GLOBALS</code> in the registry (see <a href="#4.5">&sect;4.5</a>).
-When loading main chunks,
-this upvalue will be the <code>_ENV</code> variable (see <a href="#2.2">&sect;2.2</a>).
-Other upvalues are initialized with <b>nil</b>.
+결과로 나오는 함수에 upvalue가 있는 경우
+레지스트리(<a href="#4.5">4.5절</a>)의 <code>LUA_RIDX_GLOBALS</code> 인덱스에 저장된
+전역 환경의 값을 첫 번째 upvalue에 설정한다.
+메인 청크를 적재할 때는
+그 upvalue가 <code>_ENV</code> 변수가 된다. (<a href="#2.2">2.2절</a> 참고.)
+다른 upvalue들은 <b>nil</b>로 초기화 된다.
 
 
 
@@ -4043,14 +4036,13 @@ Other upvalues are initialized with <b>nil</b>.
 <pre>lua_State *lua_newstate (lua_Alloc f, void *ud);</pre>
 
 <p>
-Creates a new thread running in a new, independent state.
-Returns <code>NULL</code> if it cannot create the thread or the state
-(due to lack of memory).
-The argument <code>f</code> is the allocator function;
-Lua does all memory allocation for this state
-through this function (see <a href="#lua_Alloc"><code>lua_Alloc</code></a>).
-The second argument, <code>ud</code>, is an opaque pointer that Lua
-passes to the allocator in every call.
+새로운 독립적 상태에서 도는 새 스레드를 만든다.
+스레드나 상태를 만들 수 없으면 (메모리 부족) <code>NULL</code>을 반환한다.
+인자 <code>f</code>는 할당자 함수이다.
+루아에서 이 상태를 위한 모든 메모리 할당이 그 함수를 통해 이뤄진다.
+(<a href="#lua_Alloc"><code>lua_Alloc</code></a> 참고.)
+두 번째 인자인 <code>ud</code>는 불투명 포인터이며
+할당자 호출 때마다 전달된다.
 
 
 
@@ -4061,8 +4053,8 @@ passes to the allocator in every call.
 <pre>void lua_newtable (lua_State *L);</pre>
 
 <p>
-Creates a new empty table and pushes it onto the stack.
-It is equivalent to <code>lua_createtable(L, 0, 0)</code>.
+빈 테이블을 새로 만들어서 스택에 집어넣는다.
+<code>lua_createtable(L, 0, 0)</code>과 동등하다.
 
 
 
@@ -4073,17 +4065,15 @@ It is equivalent to <code>lua_createtable(L, 0, 0)</code>.
 <pre>lua_State *lua_newthread (lua_State *L);</pre>
 
 <p>
-Creates a new thread, pushes it on the stack,
-and returns a pointer to a <a href="#lua_State"><code>lua_State</code></a> that represents this new thread.
-The new thread returned by this function shares with the original thread
-its global environment,
-but has an independent execution stack.
+스레드를 새로 만들어서 스택에 집어넣고
+그 새 스레드를 나타내는 <a href="#lua_State"><code>lua_State</code></a> 포인터를 반환한다.
+이 함수가 반환하는 새 스레드는 원래 스레드와 전역 환경은 공유하지만
+독립적인 실행 스택이 있다.
 
 
 <p>
-There is no explicit function to close or to destroy a thread.
-Threads are subject to garbage collection,
-like any Lua object.
+스레드를 닫거나 없애는 명시적 함수가 없다.
+여느 루아 객체와 마찬가지로 스레드는 쓰레기 수집의 대상이다.
 
 
 
@@ -4094,10 +4084,10 @@ like any Lua object.
 <pre>void *lua_newuserdata (lua_State *L, size_t size);</pre>
 
 <p>
-This function allocates a new block of memory with the given size,
-pushes onto the stack a new full userdata with the block address,
-and returns this address.
-The host program can freely use this memory.
+이 함수는 지정한 크기로 메모리 블록을 새로 할당해서
+그 블록 주소로 새 full userdata를 스택에 집어넣고
+그 주소를 반환한다.
+호스트 프로그램에서 그 메모리를 마음대로 사용할 수 있다.
 
 
 
@@ -4108,41 +4098,43 @@ The host program can freely use this memory.
 <pre>int lua_next (lua_State *L, int index);</pre>
 
 <p>
-Pops a key from the stack,
-and pushes a key&ndash;value pair from the table at the given index
-(the "next" pair after the given key).
-If there are no more elements in the table,
-then <a href="#lua_next"><code>lua_next</code></a> returns 0 (and pushes nothing).
+스택에서 키를 꺼내고
+지정한 인덱스에 있는 테이블에서 가져온 키&ndash;값 쌍을
+(지정한 키 "다음"에 있는 쌍을) 스택에 집어넣는다.
+테이블에 항목이 더 없으면
+<a href="#lua_next"><code>lua_next</code></a>가 0을 반환한다.
+(그리고 아무것도 집어넣지 않는다.)
 
 
 <p>
-A typical traversal looks like this:
+보통 순회는 다음 같은 형태이다.
 
 <pre>
-     /* table is in the stack at index 't' */
-     lua_pushnil(L);  /* first key */
+     /* 스택 인덱스 't'에 테이블 있음 */
+     lua_pushnil(L);  /* 첫 번째 키 */
      while (lua_next(L, t) != 0) {
-       /* uses 'key' (at index -2) and 'value' (at index -1) */
+       /* '키'(인덱스 -2)와 '값'(인덱스 -1) 사용 */
        printf("%s - %s\n",
               lua_typename(L, lua_type(L, -2)),
               lua_typename(L, lua_type(L, -1)));
-       /* removes 'value'; keeps 'key' for next iteration */
+       /* '값' 제거. '키'는 다음 반복을 위해 유지 */
        lua_pop(L, 1);
      }
 </pre>
 
 <p>
-While traversing a table,
-do not call <a href="#lua_tolstring"><code>lua_tolstring</code></a> directly on a key,
-unless you know that the key is actually a string.
-Recall that <a href="#lua_tolstring"><code>lua_tolstring</code></a> may change
-the value at the given index;
-this confuses the next call to <a href="#lua_next"><code>lua_next</code></a>.
+테이블을 순회하는 동안에
+키가 확실히 문자열임을 아는 경우가 아니면
+키에 바로 <a href="#lua_tolstring"><code>lua_tolstring</code></a>을 호출해선 안 된다.
+<a href="#lua_tolstring"><code>lua_tolstring</code></a>이
+지정한 인덱스에 있는 값을 바꿀 수도 있기 때문에
+다음 <a href="#lua_next"><code>lua_next</code></a> 호출에
+혼란을 줄 수 있다.
 
 
 <p>
-See function <a href="#pdf-next"><code>next</code></a> for the caveats of modifying
-the table during its traversal.
+테이블 순회 중 변경에 대한 주의 사항은
+함수 <a href="#pdf-next"><code>next</code></a>를 참고하라.
 
 
 
@@ -4152,13 +4144,13 @@ the table during its traversal.
 <pre>typedef ... lua_Number;</pre>
 
 <p>
-The type of floats in Lua.
+루아 실수 타입.
 
 
 <p>
-By default this type is double,
-but that can be changed to a single float or a long double.
-(See <code>LUA_FLOAT_TYPE</code> in <code>luaconf.h</code>.)
+기본적으로 이 타입은 <code>double</code>이다.
+하지만 단정밀도 <code>float</code>이나 <code>long double</code>로 바꿀 수 있다.
+(<code>luaconf.h</code>의 <code>LUA_FLOAT_TYPE</code> 참고.)
 
 
 
@@ -4168,19 +4160,17 @@ but that can be changed to a single float or a long double.
 <pre>int lua_numbertointeger (lua_Number n, lua_Integer *p);</pre>
 
 <p>
-Converts a Lua float to a Lua integer.
-This macro assumes that <code>n</code> has an integral value.
-If that value is within the range of Lua integers,
-it is converted to an integer and assigned to <code>*p</code>.
-The macro results in a boolean indicating whether the
-conversion was successful.
-(Note that this range test can be tricky to do
-correctly without this macro,
-due to roundings.)
+루아 실수를 루아 정수로 변환한다.
+이 매크로에서는 <code>n</code>이 정수인 값을 가지고 있다고 가정한다.
+그 값이 루아 정수 범위 내에 있으면
+정수로 변환하여 <code>*p</code>에 할당한다.
+그리고 변환에 성공했는지를 나타내는 불리언을 결과로 내놓는다.
+(참고로 그 범위 검사를 이 매크로 없이 제대로 하는 것은
+올림/내림 때문에 까다로울 수 있다.)
 
 
 <p>
-This macro may evaluate its arguments more than once.
+이 매크로에서 인자를 여러 번 평가할 수도 있다.
 
 
 
@@ -4191,70 +4181,72 @@ This macro may evaluate its arguments more than once.
 <pre>int lua_pcall (lua_State *L, int nargs, int nresults, int msgh);</pre>
 
 <p>
-Calls a function in protected mode.
+보호 모드로 함수를 호출한다.
 
 
 <p>
-Both <code>nargs</code> and <code>nresults</code> have the same meaning as
-in <a href="#lua_call"><code>lua_call</code></a>.
-If there are no errors during the call,
-<a href="#lua_pcall"><code>lua_pcall</code></a> behaves exactly like <a href="#lua_call"><code>lua_call</code></a>.
-However, if there is any error,
-<a href="#lua_pcall"><code>lua_pcall</code></a> catches it,
-pushes a single value on the stack (the error object),
-and returns an error code.
-Like <a href="#lua_call"><code>lua_call</code></a>,
-<a href="#lua_pcall"><code>lua_pcall</code></a> always removes the function
-and its arguments from the stack.
+<code>nargs</code>와 <code>nresults</code>의 의미는
+<a href="#lua_call"><code>lua_call</code></a>과 같다.
+호출 중에 오류가 없으면
+<a href="#lua_pcall"><code>lua_pcall</code></a>은 정확히 <a href="#lua_call"><code>lua_call</code></a>처럼 동작한다.
+하지만 오류가 있으면
+<a href="#lua_pcall"><code>lua_pcall</code></a>이 오류를 잡아서
+스택에 값 하나(오류 객체)를 집어넣고
+오류 코드를 반환한다.
+<a href="#lua_call"><code>lua_call</code></a>처럼
+<a href="#lua_pcall"><code>lua_pcall</code></a>이 항상
+함수와 그 인자들을 스택에서 제거한다.
 
 
 <p>
-If <code>msgh</code> is 0,
-then the error object returned on the stack
-is exactly the original error object.
-Otherwise, <code>msgh</code> is the stack index of a
-<em>message handler</em>.
-(This index cannot be a pseudo-index.)
-In case of runtime errors,
-this function will be called with the error object
-and its return value will be the object
-returned on the stack by <a href="#lua_pcall"><code>lua_pcall</code></a>.
+<code>msgh</code>가 0인 경우
+스택으로 반환된 오류 객체가
+정확히 원래의 오류 객체이다.
+아닌 경우 <code>msgh</code>는
+<em>메시지 핸들러</em>의 스택 인덱스이다.
+(이 인덱스는 가상 인덱스일 수 없다.)
+런타임 오류가 발생하면
+오류 객체를 가지고 그 함수를 호출하며
+그 반환 값이
+<a href="#lua_pcall"><code>lua_pcall</code></a>이
+스택으로 반환하는 객체가 된다.
 
 
 <p>
-Typically, the message handler is used to add more debug
-information to the error object, such as a stack traceback.
-Such information cannot be gathered after the return of <a href="#lua_pcall"><code>lua_pcall</code></a>,
-since by then the stack has unwound.
+보통은 오류 객체에 스택 트레이스백 같은 디버그 정보를 추가하는 데
+메시지 핸들러를 쓴다.
+<a href="#lua_pcall"><code>lua_pcall</code></a> 반환 후에는
+스택이 이미 풀렸으므로
+그런 정보를 수집할 수 없다.
 
 
 <p>
-The <a href="#lua_pcall"><code>lua_pcall</code></a> function returns one of the following constants
-(defined in <code>lua.h</code>):
+<a href="#lua_pcall"><code>lua_pcall</code></a> 함수는
+(<code>lua.h</code>에 정의된) 다음 상수들 중 하나를 반환한다.
 
 <ul>
 
 <li><b><a name="pdf-LUA_OK"><code>LUA_OK</code></a> (0): </b>
-success.</li>
+성공.</li>
 
 <li><b><a name="pdf-LUA_ERRRUN"><code>LUA_ERRRUN</code></a>: </b>
-a runtime error.
+런타임 오류.
 </li>
 
 <li><b><a name="pdf-LUA_ERRMEM"><code>LUA_ERRMEM</code></a>: </b>
-memory allocation error.
-For such errors, Lua does not call the message handler.
+메모리 할당 오류.
+이 오류에 대해선 루아가 메시지 핸들러를 호출하지 않는다.
 </li>
 
 <li><b><a name="pdf-LUA_ERRERR"><code>LUA_ERRERR</code></a>: </b>
-error while running the message handler.
+메시지 핸들러 동작 중 오류.
 </li>
 
 <li><b><a name="pdf-LUA_ERRGCMM"><code>LUA_ERRGCMM</code></a>: </b>
-error while running a <code>__gc</code> metamethod.
-For such errors, Lua does not call the message handler
-(as this kind of error typically has no relation
-with the function being called).
+<code>__gc</code> 메타메소드 동작 중 오류.
+이 오류에 대해선 루아가 메시지 핸들러를 호출하지 않는다.
+(이런 류의 오류는 일반적으로
+호출하려는 함수와 아무 관련이 없기 때문이다.)
 </li>
 
 </ul>
@@ -4272,8 +4264,8 @@ with the function being called).
                 lua_KFunction k);</pre>
 
 <p>
-This function behaves exactly like <a href="#lua_pcall"><code>lua_pcall</code></a>,
-but allows the called function to yield (see <a href="#4.7">&sect;4.7</a>).
+이 함수는 정확히 <a href="#lua_pcall"><code>lua_pcall</code></a>처럼 동작하되
+피호출 함수에서 양보를 할 수 있다. (<a href="#4.7">4.7절</a> 참고.)
 
 
 
@@ -4284,7 +4276,7 @@ but allows the called function to yield (see <a href="#4.7">&sect;4.7</a>).
 <pre>void lua_pop (lua_State *L, int n);</pre>
 
 <p>
-Pops <code>n</code> elements from the stack.
+스택에서 <code>n</code>개 항목을 꺼낸다.
 
 
 
@@ -4295,7 +4287,7 @@ Pops <code>n</code> elements from the stack.
 <pre>void lua_pushboolean (lua_State *L, int b);</pre>
 
 <p>
-Pushes a boolean value with value <code>b</code> onto the stack.
+값이 <code>b</code>인 불리언 값을 스택에 집어넣는다.
 
 
 
@@ -4306,33 +4298,32 @@ Pushes a boolean value with value <code>b</code> onto the stack.
 <pre>void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);</pre>
 
 <p>
-Pushes a new C&nbsp;closure onto the stack.
+새 C 클로저를 스택에 집어넣는다.
 
 
 <p>
-When a C&nbsp;function is created,
-it is possible to associate some values with it,
-thus creating a C&nbsp;closure (see <a href="#4.4">&sect;4.4</a>);
-these values are then accessible to the function whenever it is called.
-To associate values with a C&nbsp;function,
-first these values must be pushed onto the stack
-(when there are multiple values, the first value is pushed first).
-Then <a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a>
-is called to create and push the C&nbsp;function onto the stack,
-with the argument <code>n</code> telling how many values will be
-associated with the function.
-<a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a> also pops these values from the stack.
+C 함수를 만들 때
+몇몇 값을 연계해서 C 클로저를 만드는 것이 가능하다.
+(<a href="#4.4">4.4절</a> 참고.)
+그러면 호출 시 그 함수에서 값들에 접근할 수 있다.
+C 함수에 값을 연계하려면
+먼저 값을 스택에 집어넣어야 한다.
+(값이 여러 개일 때는 첫 번째 값을 첫 번째로 집어넣는다.)
+그리고 <a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a>를 호출해서
+C 함수를 만들어 스택에 집어넣는데,
+인자 <code>n</code>은 그 함수에 얼마나 많은 값을 연계하려는지 알려 준다.
+<a href="#lua_pushcclosure"><code>lua_pushcclosure</code></a>는 또한 스택에서 그 값들을 꺼낸다.
 
 
 <p>
-The maximum value for <code>n</code> is 255.
+<code>n</code>의 최댓값은 255이다.
 
 
 <p>
-When <code>n</code> is zero,
-this function creates a <em>light C&nbsp;function</em>,
-which is just a pointer to the C&nbsp;function.
-In that case, it never raises a memory error.
+<code>n</code>이 0일 때
+이 함수는 <em>경량 C 함수</em>를 만드는데,
+그냥 C 함수에 대한 포인터이다.
+그 경우에는 절대 메모리 오류를 제기하지 않는다.
 
 
 
@@ -4343,16 +4334,17 @@ In that case, it never raises a memory error.
 <pre>void lua_pushcfunction (lua_State *L, lua_CFunction f);</pre>
 
 <p>
-Pushes a C&nbsp;function onto the stack.
-This function receives a pointer to a C&nbsp;function
-and pushes onto the stack a Lua value of type <code>function</code> that,
-when called, invokes the corresponding C&nbsp;function.
+C 함수를 스택에 집어넣는다.
+이 함수는 C 함수 포인터를 받아서
+<code>function</code> 타입 루아 값을 스택에 집어넣는다.
+그 값을 호출하면 대응하는 C 함수가 불린다.
 
 
 <p>
-Any function to be callable by Lua must
-follow the correct protocol to receive its parameters
-and return its results (see <a href="#lua_CFunction"><code>lua_CFunction</code></a>).
+루아에서 호출 가능해야 하는 함수는
+정확한 프로토콜에 따라 매개변수를 받고
+결과를 반환해야 한다.
+(<a href="#lua_CFunction"><code>lua_CFunction</code></a> 참고.)
 
 
 
@@ -4363,39 +4355,39 @@ and return its results (see <a href="#lua_CFunction"><code>lua_CFunction</code><
 <pre>const char *lua_pushfstring (lua_State *L, const char *fmt, ...);</pre>
 
 <p>
-Pushes onto the stack a formatted string
-and returns a pointer to this string.
-It is similar to the ISO&nbsp;C function <code>sprintf</code>,
-but has some important differences:
+형식 준 문자열을 스택에 집어넣고
+그 문자열에 대한 포인터를 반환한다.
+ISO C 함수 <code>sprintf</code>와 비슷하지만
+몇 가지 중요한 차이가 있다.
 
 <ul>
 
 <li>
-You do not have to allocate space for the result:
-the result is a Lua string and Lua takes care of memory allocation
-(and deallocation, through garbage collection).
+결과를 위한 공간을 할당해 주지 않아도 된다.
+결과는 루아 문자열이며 루아에서 메모리 할당을
+(그리고 쓰레기 수집을 통해 해제까지) 대신 해 준다.
 </li>
 
 <li>
-The conversion specifiers are quite restricted.
-There are no flags, widths, or precisions.
-The conversion specifiers can only be
-'<code>%%</code>' (inserts the character '<code>%</code>'),
-'<code>%s</code>' (inserts a zero-terminated string, with no size restrictions),
-'<code>%f</code>' (inserts a <a href="#lua_Number"><code>lua_Number</code></a>),
-'<code>%I</code>' (inserts a <a href="#lua_Integer"><code>lua_Integer</code></a>),
-'<code>%p</code>' (inserts a pointer as a hexadecimal numeral),
-'<code>%d</code>' (inserts an <code>int</code>),
-'<code>%c</code>' (inserts an <code>int</code> as a one-byte character), and
-'<code>%U</code>' (inserts a <code>long int</code> as a UTF-8 byte sequence).
+변환 지정자에 상당히 제약이 있다.
+플래그, 폭, 정밀도가 없다.
+변환 지정자로 가능한 것은
+'<code>%%</code>' (문자 '<code>%</code>' 삽입),
+'<code>%s</code>' (영 종료 문자열 삽입, 크기 제약 없음),
+'<code>%f</code>' (<a href="#lua_Number"><code>lua_Number</code></a> 삽입),
+'<code>%I</code>' (<a href="#lua_Integer"><code>lua_Integer</code></a> 삽입),
+'<code>%p</code>' (포인터를 16진수로 삽입),
+'<code>%d</code>' (<code>int</code> 삽입),
+'<code>%c</code>' (<code>int</code>를 한 바이트 문자로 삽입),
+'<code>%U</code>' (<code>long int</code>를 UTF-8 바이트 열로 삽입)이 전부이다.
 </li>
 
 </ul>
 
 <p>
-Unlike other push functions,
-this function checks for the stack space it needs,
-including the slot for its result.
+다른 집어넣기 함수들과 달리
+이 함수는 결과 저장 슬롯을 포함해
+필요한 스택 공간을 확인한다.
 
 
 
@@ -4406,7 +4398,7 @@ including the slot for its result.
 <pre>void lua_pushglobaltable (lua_State *L);</pre>
 
 <p>
-Pushes the global environment onto the stack.
+전역 환경을 스택에 집어넣는다.
 
 
 
@@ -4417,7 +4409,7 @@ Pushes the global environment onto the stack.
 <pre>void lua_pushinteger (lua_State *L, lua_Integer n);</pre>
 
 <p>
-Pushes an integer with value <code>n</code> onto the stack.
+값이 <code>n</code>인 정수를 스택에 집어넣는다.
 
 
 
@@ -4428,17 +4420,18 @@ Pushes an integer with value <code>n</code> onto the stack.
 <pre>void lua_pushlightuserdata (lua_State *L, void *p);</pre>
 
 <p>
-Pushes a light userdata onto the stack.
+light userdata를 스택에 집어넣는다.
 
 
 <p>
-Userdata represent C&nbsp;values in Lua.
-A <em>light userdata</em> represents a pointer, a <code>void*</code>.
-It is a value (like a number):
-you do not create it, it has no individual metatable,
-and it is not collected (as it was never created).
-A light userdata is equal to "any"
-light userdata with the same C&nbsp;address.
+루아에서 userdata는 C의 값을 나타낸다.
+<em>light userdata</em>는 <code>void*</code>인 포인터를 나타낸다.
+(수와 마찬가지로) 하나의 값이다.
+따로 생성하지 않고,
+개별 메타테이블이 없으며,
+(생성한 적이 없으므로) 수집하지 않는다.
+한 light userdata는 동일한 C 주소를 가진
+"모든" light userdata와 같다.
 
 
 
@@ -4449,8 +4442,8 @@ light userdata with the same C&nbsp;address.
 <pre>const char *lua_pushliteral (lua_State *L, const char *s);</pre>
 
 <p>
-This macro is equivalent to <a href="#lua_pushstring"><code>lua_pushstring</code></a>,
-but should be used only when <code>s</code> is a literal string.
+이 매크로는 <a href="#lua_pushstring"><code>lua_pushstring</code></a>과 동등하다.
+단, <code>s</code>가 리터럴 문자열일 때만 써야 한다.
 
 
 
@@ -4461,17 +4454,14 @@ but should be used only when <code>s</code> is a literal string.
 <pre>const char *lua_pushlstring (lua_State *L, const char *s, size_t len);</pre>
 
 <p>
-Pushes the string pointed to by <code>s</code> with size <code>len</code>
-onto the stack.
-Lua makes (or reuses) an internal copy of the given string,
-so the memory at <code>s</code> can be freed or reused immediately after
-the function returns.
-The string can contain any binary data,
-including embedded zeros.
+<code>s</code>가 가리키는 크기 <code>len</code>인 문자열을 스택에 집어넣는다.
+지정한 문자열의 내부 사본을 루아에서 만들기 (또는 재사용하기) 때문에
+함수 반환 후 즉시 <code>s</code>에 있는 메모리를 해제하거나 재사용할 수 있다.
+문자열에 0을 포함해 임의의 이진 데이터를 담을 수 있다.
 
 
 <p>
-Returns a pointer to the internal copy of the string.
+문자열의 내부 사본에 대한 포인터를 반환한다.
 
 
 
@@ -4482,7 +4472,7 @@ Returns a pointer to the internal copy of the string.
 <pre>void lua_pushnil (lua_State *L);</pre>
 
 <p>
-Pushes a nil value onto the stack.
+nil 값을 스택에 집어넣는다.
 
 
 
@@ -4493,7 +4483,7 @@ Pushes a nil value onto the stack.
 <pre>void lua_pushnumber (lua_State *L, lua_Number n);</pre>
 
 <p>
-Pushes a float with value <code>n</code> onto the stack.
+값이 <code>n</code>인 실수를 스택에 집어넣는다.
 
 
 
@@ -4504,19 +4494,17 @@ Pushes a float with value <code>n</code> onto the stack.
 <pre>const char *lua_pushstring (lua_State *L, const char *s);</pre>
 
 <p>
-Pushes the zero-terminated string pointed to by <code>s</code>
-onto the stack.
-Lua makes (or reuses) an internal copy of the given string,
-so the memory at <code>s</code> can be freed or reused immediately after
-the function returns.
+<code>s</code>가 가리키는 영 종료 문자열을 스택에 집어넣는다.
+지정한 문자열의 내부 사본을 루아에서 만들기 (또는 재사용하기) 때문에
+함수 반환 후 즉시 <code>s</code>에 있는 메모리를 해제하거나 재사용할 수 있다.
 
 
 <p>
-Returns a pointer to the internal copy of the string.
+문자열의 내부 사본에 대한 포인터를 반환한다.
 
 
 <p>
-If <code>s</code> is <code>NULL</code>, pushes <b>nil</b> and returns <code>NULL</code>.
+<code>s</code>가 <code>NULL</code>이면 <b>nil</b>을 집어넣고 <code>NULL</code>을 반환한다.
 
 
 
@@ -4527,8 +4515,8 @@ If <code>s</code> is <code>NULL</code>, pushes <b>nil</b> and returns <code>NULL
 <pre>int lua_pushthread (lua_State *L);</pre>
 
 <p>
-Pushes the thread represented by <code>L</code> onto the stack.
-Returns 1 if this thread is the main thread of its state.
+<code>L</code>이 나타내는 스레드를 스택에 집어넣는다.
+그 스레드가 상태의 주 스레드이면 1을 반환한다.
 
 
 
@@ -4539,8 +4527,7 @@ Returns 1 if this thread is the main thread of its state.
 <pre>void lua_pushvalue (lua_State *L, int index);</pre>
 
 <p>
-Pushes a copy of the element at the given index
-onto the stack.
+지정한 인덱스에 있는 항목의 사본을 스택에 집어넣는다.
 
 
 
@@ -4553,8 +4540,8 @@ onto the stack.
                               va_list argp);</pre>
 
 <p>
-Equivalent to <a href="#lua_pushfstring"><code>lua_pushfstring</code></a>, except that it receives a <code>va_list</code>
-instead of a variable number of arguments.
+<a href="#lua_pushfstring"><code>lua_pushfstring</code></a>과 동등하되,
+가변 개수 인자 대신 <code>va_list</code>를 받는다.
 
 
 
@@ -4565,11 +4552,11 @@ instead of a variable number of arguments.
 <pre>int lua_rawequal (lua_State *L, int index1, int index2);</pre>
 
 <p>
-Returns 1 if the two values in indices <code>index1</code> and
-<code>index2</code> are primitively equal
-(that is, without calling the <code>__eq</code> metamethod).
-Otherwise returns&nbsp;0.
-Also returns&nbsp;0 if any of the indices are not valid.
+인덱스 <code>index1</code>과 <code>index2</code>의 두 값이
+단순 비교로 (즉 <code>__eq</code> 메타메소드 호출 없이) 같으면
+1을 반환한다.
+아니면 0을 반환한다.
+인덱스가 하나라도 유효하지 않을 때에도 0을 반환한다.
 
 
 
@@ -4580,8 +4567,8 @@ Also returns&nbsp;0 if any of the indices are not valid.
 <pre>int lua_rawget (lua_State *L, int index);</pre>
 
 <p>
-Similar to <a href="#lua_gettable"><code>lua_gettable</code></a>, but does a raw access
-(i.e., without metamethods).
+<a href="#lua_gettable"><code>lua_gettable</code></a>과 유사하되,
+(메타메소드 안 쓰는) raw 접근을 한다.
 
 
 
@@ -4592,14 +4579,14 @@ Similar to <a href="#lua_gettable"><code>lua_gettable</code></a>, but does a raw
 <pre>int lua_rawgeti (lua_State *L, int index, lua_Integer n);</pre>
 
 <p>
-Pushes onto the stack the value <code>t[n]</code>,
-where <code>t</code> is the table at the given index.
-The access is raw,
-that is, it does not invoke the <code>__index</code> metamethod.
+값 <code>t[n]</code>을 스택에 집어넣는다.
+<code>t</code>는 지정한 인덱스에 있는 테이블이다.
+접근이 raw이다.
+즉, <code>__index</code> 메타메소드를 부르지 않는다.
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -4610,15 +4597,15 @@ Returns the type of the pushed value.
 <pre>int lua_rawgetp (lua_State *L, int index, const void *p);</pre>
 
 <p>
-Pushes onto the stack the value <code>t[k]</code>,
-where <code>t</code> is the table at the given index and
-<code>k</code> is the pointer <code>p</code> represented as a light userdata.
-The access is raw;
-that is, it does not invoke the <code>__index</code> metamethod.
+값 <code>t[k]</code>를 스택에 집어넣는다.
+<code>t</code>는 지정한 인덱스에 있는 테이블이고
+<code>k</code>는 포인터 <code>p</code>를 light userdata로 나타낸 것이다.
+접근이 raw이다.
+즉, <code>__index</code> 메타메소드를 부르지 않는다.
 
 
 <p>
-Returns the type of the pushed value.
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -4629,13 +4616,11 @@ Returns the type of the pushed value.
 <pre>size_t lua_rawlen (lua_State *L, int index);</pre>
 
 <p>
-Returns the raw "length" of the value at the given index:
-for strings, this is the string length;
-for tables, this is the result of the length operator ('<code>#</code>')
-with no metamethods;
-for userdata, this is the size of the block of memory allocated
-for the userdata;
-for other values, it is&nbsp;0.
+지정한 인덱스에 있는 값의 raw "길이"를 반환한다.
+문자열에서는 문자열 길이이다.
+테이블에서는 메타메소드 안 쓴 길이 연산자('<code>#</code>') 결과이다.
+userdata에서는 그 userdata를 위해 할당한 메모리 블록의 크기이다.
+다른 값들에서는 0이다.
 
 
 
@@ -4646,8 +4631,8 @@ for other values, it is&nbsp;0.
 <pre>void lua_rawset (lua_State *L, int index);</pre>
 
 <p>
-Similar to <a href="#lua_settable"><code>lua_settable</code></a>, but does a raw assignment
-(i.e., without metamethods).
+<a href="#lua_settable"><code>lua_settable</code></a>과 유사하되,
+(메타메소드 안 쓰는) raw 할당을 한다.
 
 
 
@@ -4658,15 +4643,15 @@ Similar to <a href="#lua_settable"><code>lua_settable</code></a>, but does a raw
 <pre>void lua_rawseti (lua_State *L, int index, lua_Integer i);</pre>
 
 <p>
-Does the equivalent of <code>t[i] = v</code>,
-where <code>t</code> is the table at the given index
-and <code>v</code> is the value at the top of the stack.
+<code>t[i] = v</code>와 동등한 일을 한다.
+<code>t</code>는 지정한 인덱스에 있는 테이블이고
+<code>v</code>는 스택 상단에 있는 값이다.
 
 
 <p>
-This function pops the value from the stack.
-The assignment is raw,
-that is, it does not invoke the <code>__newindex</code> metamethod.
+이 함수는 스택에서 값을 꺼낸다.
+할당이 raw이다.
+즉, <code>__newindex</code> 메타메소드를 부르지 않는다.
 
 
 
@@ -4677,16 +4662,16 @@ that is, it does not invoke the <code>__newindex</code> metamethod.
 <pre>void lua_rawsetp (lua_State *L, int index, const void *p);</pre>
 
 <p>
-Does the equivalent of <code>t[p] = v</code>,
-where <code>t</code> is the table at the given index,
-<code>p</code> is encoded as a light userdata,
-and <code>v</code> is the value at the top of the stack.
+<code>t[p] = v</code>와 동등한 일을 한다.
+<code>t</code>는 지정한 인덱스에 있는 테이블이고
+<code>p</code>는 light userdata로 표현한 것이며
+<code>v</code>는 스택 상단에 있는 값이다.
 
 
 <p>
-This function pops the value from the stack.
-The assignment is raw,
-that is, it does not invoke <code>__newindex</code> metamethod.
+이 함수는 스택에서 값을 꺼낸다.
+할당이 raw이다.
+즉, <code>__newindex</code> 메타메소드를 부르지 않는다.
 
 
 
@@ -4698,17 +4683,18 @@ that is, it does not invoke <code>__newindex</code> metamethod.
                                     size_t *size);</pre>
 
 <p>
-The reader function used by <a href="#lua_load"><code>lua_load</code></a>.
-Every time it needs another piece of the chunk,
-<a href="#lua_load"><code>lua_load</code></a> calls the reader,
-passing along its <code>data</code> parameter.
-The reader must return a pointer to a block of memory
-with a new piece of the chunk
-and set <code>size</code> to the block size.
-The block must exist until the reader function is called again.
-To signal the end of the chunk,
-the reader must return <code>NULL</code> or set <code>size</code> to zero.
-The reader function may return pieces of any size greater than zero.
+<a href="#lua_load"><code>lua_load</code></a>에서 사용하는 읽기 함수이다.
+<a href="#lua_load"><code>lua_load</code></a>에서
+청크 조각이 더 필요할 때마다
+읽기 함수를 호출하며,
+<code>data</code> 매개변수를 건네준다.
+읽기 함수에서는 새 청크 조각이 있는
+메모리 블록에 대한 포인터를 반환하고
+<code>size</code>를 블록 크기로 설정해야 한다.
+그 블록은 읽기 함수가 다시 호출될 때까지 존재해야 한다.
+읽기 함수에서 청크 끝을 알리려면
+<code>NULL</code>을 반환하거나 <code>size</code>를 0으로 설정해야 한다.
+읽기 함수는 0보다 큰 어떤 크기의 조각도 반환할 수 있다.
 
 
 
@@ -4719,8 +4705,8 @@ The reader function may return pieces of any size greater than zero.
 <pre>void lua_register (lua_State *L, const char *name, lua_CFunction f);</pre>
 
 <p>
-Sets the C&nbsp;function <code>f</code> as the new value of global <code>name</code>.
-It is defined as a macro:
+C 함수 <code>f</code>를 전역 <code>name</code>의 새 값으로 설정한다.
+매크로로 정의되어 있다.
 
 <pre>
      #define lua_register(L,n,f) \
@@ -4735,10 +4721,10 @@ It is defined as a macro:
 <pre>void lua_remove (lua_State *L, int index);</pre>
 
 <p>
-Removes the element at the given valid index,
-shifting down the elements above this index to fill the gap.
-This function cannot be called with a pseudo-index,
-because a pseudo-index is not an actual stack position.
+지정한 유효 인덱스에 있는 항목을 제거하고
+그 인덱스 위의 항목들을 밀어 내려서 구멍을 채운다.
+가상 인덱스로 이 함수를 호출할 수 없다.
+가상 인덱스는 실제 스택 위치가 아니기 때문이다.
 
 
 
@@ -4749,10 +4735,10 @@ because a pseudo-index is not an actual stack position.
 <pre>void lua_replace (lua_State *L, int index);</pre>
 
 <p>
-Moves the top element into the given valid index
-without shifting any element
-(therefore replacing the value at that given index),
-and then pops the top element.
+상단 항목을 지정한 유효 인덱스로 옮기되
+항목을 밀어 올리지 않는다.
+(그래서 그 지정 인덱스에 있는 값을 교체하게 된다.)
+그리고 그 상단 항목을 꺼낸다.
 
 
 
@@ -4763,43 +4749,41 @@ and then pops the top element.
 <pre>int lua_resume (lua_State *L, lua_State *from, int nargs);</pre>
 
 <p>
-Starts and resumes a coroutine in the given thread <code>L</code>.
+지정한 스레드 <code>L</code>에서 코루틴을 시작하고 재개한다.
 
 
 <p>
-To start a coroutine,
-you push onto the thread stack the main function plus any arguments;
-then you call <a href="#lua_resume"><code>lua_resume</code></a>,
-with <code>nargs</code> being the number of arguments.
-This call returns when the coroutine suspends or finishes its execution.
-When it returns, the stack contains all values passed to <a href="#lua_yield"><code>lua_yield</code></a>,
-or all values returned by the body function.
-<a href="#lua_resume"><code>lua_resume</code></a> returns
-<a href="#pdf-LUA_YIELD"><code>LUA_YIELD</code></a> if the coroutine yields,
-<a href="#pdf-LUA_OK"><code>LUA_OK</code></a> if the coroutine finishes its execution
-without errors,
-or an error code in case of errors (see <a href="#lua_pcall"><code>lua_pcall</code></a>).
+코루틴을 시작하려면
+메인 함수와 인자를 스레드 스택에 집어넣고서
+<code>nargs</code>를 인자 개수로 해서
+<a href="#lua_resume"><code>lua_resume</code></a>을 호출하면 된다.
+코루틴이 실행을 중지하거나 완료할 때 이 호출이 반환한다.
+반환 시 스택에는 <a href="#lua_yield"><code>lua_yield</code></a>가 건네준 모든 값이,
+또는 몸체 함수가 반환한 모든 값이 들어 있다.
+코루틴이 양보한 경우 <a href="#lua_resume"><code>lua_resume</code></a>이
+<a href="#pdf-LUA_YIELD"><code>LUA_YIELD</code></a>를 반환하고,
+코루틴이 오류 없이 실행을 마친 경우 <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>를 반환하고,
+오류가 발생한 경우 오류 코드(<a href="#lua_pcall"><code>lua_pcall</code></a> 참고)를 반환한다.
 
 
 <p>
-In case of errors,
-the stack is not unwound,
-so you can use the debug API over it.
-The error object is on the top of the stack.
+오류가 발생한 경우
+스택이 풀려 있지 않으므로
+거기에 디버그 API를 사용할 수 있다.
+스택 상단에 오류 객체가 있다.
 
 
 <p>
-To resume a coroutine,
-you remove any results from the last <a href="#lua_yield"><code>lua_yield</code></a>,
-put on its stack only the values to
-be passed as results from <code>yield</code>,
-and then call <a href="#lua_resume"><code>lua_resume</code></a>.
+코루틴을 재개하려면
+최근 <a href="#lua_yield"><code>lua_yield</code></a>의 결과가 남아 있으면 제거하고
+<code>yield</code> 결과로 전달할 값들만 스택에 둔 다음
+<a href="#lua_resume"><code>lua_resume</code></a>을 호출하면 된다.
 
 
 <p>
-The parameter <code>from</code> represents the coroutine that is resuming <code>L</code>.
-If there is no such coroutine,
-this parameter can be <code>NULL</code>.
+매개변수 <code>from</code>은 <code>L</code>을 재개하고 있는 코루틴을 나타낸다.
+그런 코루틴이 없으면
+이 매개변수가 <code>NULL</code>일 수 있다.
 
 
 
@@ -4810,16 +4794,14 @@ this parameter can be <code>NULL</code>.
 <pre>void lua_rotate (lua_State *L, int idx, int n);</pre>
 
 <p>
-Rotates the stack elements between the valid index <code>idx</code>
-and the top of the stack.
-The elements are rotated <code>n</code> positions in the direction of the top,
-for a positive <code>n</code>,
-or <code>-n</code> positions in the direction of the bottom,
-for a negative <code>n</code>.
-The absolute value of <code>n</code> must not be greater than the size
-of the slice being rotated.
-This function cannot be called with a pseudo-index,
-because a pseudo-index is not an actual stack position.
+유효 인덱스 <code>idx</code>와 스택 상단 사이의
+스택 항목들을 회전시킨다.
+양수 <code>n</code>에 대해선 상단 방향으로 <code>n</code> 위치만큼,
+음수 <code>n</code>에 대해선 하단 방향으로 <code>-n</code> 위치만큼
+항목들을 회전시킨다.
+<code>n</code>의 절대값이 회전시키려는 구간의 길이보다 크면 안 된다.
+가상 인덱스로 이 함수를 호출할 수 없다.
+가상 인덱스는 실제 스택 위치가 아니기 때문이다.
 
 
 
@@ -4830,8 +4812,8 @@ because a pseudo-index is not an actual stack position.
 <pre>void lua_setallocf (lua_State *L, lua_Alloc f, void *ud);</pre>
 
 <p>
-Changes the allocator function of a given state to <code>f</code>
-with user data <code>ud</code>.
+지정한 상태의 할당자 함수를 <code>f</code>로 바꾸고
+사용자 데이터를 <code>ud</code>로 한다.
 
 
 
@@ -4842,15 +4824,16 @@ with user data <code>ud</code>.
 <pre>void lua_setfield (lua_State *L, int index, const char *k);</pre>
 
 <p>
-Does the equivalent to <code>t[k] = v</code>,
-where <code>t</code> is the value at the given index
-and <code>v</code> is the value at the top of the stack.
+<code>t[k] = v</code>와 동등한 일을 한다.
+<code>t</code>는 지정한 인덱스에 있는 값이고
+<code>v</code>는 스택 상단에 있는 값이다.
 
 
 <p>
-This function pops the value from the stack.
-As in Lua, this function may trigger a metamethod
-for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
+이 함수는 스택에서 값을 꺼낸다.
+루아 내에서처럼 이 함수가 "newindex" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 
@@ -4861,8 +4844,8 @@ for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
 <pre>void lua_setglobal (lua_State *L, const char *name);</pre>
 
 <p>
-Pops a value from the stack and
-sets it as the new value of global <code>name</code>.
+스택에서 값을 꺼내서
+전역 <code>name</code>의 새 값으로 설정한다.
 
 
 
@@ -4873,15 +4856,16 @@ sets it as the new value of global <code>name</code>.
 <pre>void lua_seti (lua_State *L, int index, lua_Integer n);</pre>
 
 <p>
-Does the equivalent to <code>t[n] = v</code>,
-where <code>t</code> is the value at the given index
-and <code>v</code> is the value at the top of the stack.
+<code>t[n] = v</code>와 동등한 일을 한다.
+<code>t</code>는 지정한 인덱스에 있는 값이고
+<code>v</code>는 스택 상단에 있는 값이다.
 
 
 <p>
-This function pops the value from the stack.
-As in Lua, this function may trigger a metamethod
-for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
+이 함수는 스택에서 값을 꺼낸다.
+루아 내에서처럼 이 함수가 "newindex" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 
@@ -4892,8 +4876,8 @@ for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
 <pre>void lua_setmetatable (lua_State *L, int index);</pre>
 
 <p>
-Pops a table from the stack and
-sets it as the new metatable for the value at the given index.
+스택에서 테이블을 꺼내서
+지정한 인덱스에 있는 값의 새 메타테이블로 설정한다.
 
 
 
@@ -4904,16 +4888,17 @@ sets it as the new metatable for the value at the given index.
 <pre>void lua_settable (lua_State *L, int index);</pre>
 
 <p>
-Does the equivalent to <code>t[k] = v</code>,
-where <code>t</code> is the value at the given index,
-<code>v</code> is the value at the top of the stack,
-and <code>k</code> is the value just below the top.
+<code>t[k] = v</code>와 동등한 일을 한다.
+<code>t</code>는 지정한 인덱스에 있는 값이고
+<code>v</code>는 스택 상단에 있는 값이며
+<code>k</code>는 상단 바로 아래의 값이다.
 
 
 <p>
-This function pops both the key and the value from the stack.
-As in Lua, this function may trigger a metamethod
-for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
+이 함수는 스택에서 키와 값 모두를 꺼낸다.
+루아 내에서처럼 이 함수가 "newindex" 이벤트에 대한
+메타메소드를 유발할 수 있다.
+(<a href="#2.4">2.4절</a> 참고.)
 
 
 
@@ -4924,11 +4909,11 @@ for the "newindex" event (see <a href="#2.4">&sect;2.4</a>).
 <pre>void lua_settop (lua_State *L, int index);</pre>
 
 <p>
-Accepts any index, or&nbsp;0,
-and sets the stack top to this index.
-If the new top is larger than the old one,
-then the new elements are filled with <b>nil</b>.
-If <code>index</code> is&nbsp;0, then all stack elements are removed.
+임의 인덱스 또는 0을 받아서
+스택 상단 위치를 그 인덱스로 설정한다.
+새 상단이 이전보다 높으면
+새 항목들을 <b>nil</b>로 채운다.
+<code>index</code>가 0이면 스택 항목들을 모두 제거한다.
 
 
 
@@ -4939,8 +4924,8 @@ If <code>index</code> is&nbsp;0, then all stack elements are removed.
 <pre>void lua_setuservalue (lua_State *L, int index);</pre>
 
 <p>
-Pops a value from the stack and sets it as
-the new value associated to the full userdata at the given index.
+스택에서 값을 꺼내서
+지정한 인덱스에 있는 full userdata에 연계된 새 값으로 설정한다.
 
 
 
@@ -4950,17 +4935,17 @@ the new value associated to the full userdata at the given index.
 <pre>typedef struct lua_State lua_State;</pre>
 
 <p>
-An opaque structure that points to a thread and indirectly
-(through the thread) to the whole state of a Lua interpreter.
-The Lua library is fully reentrant:
-it has no global variables.
-All information about a state is accessible through this structure.
+스레드를, 그리고 (그 스레드를 통해) 간접적으로
+루아 인터프리터의 전체 상태를 가리키는 불투명 자료 구조.
+루아 라이브러리는 완전하게 재진입 가능하다.
+즉, 전역 변수가 전혀 없다.
+이 자료 구조를 통해 상태에 대한 모든 정보에 접근 가능하다.
 
 
 <p>
-A pointer to this structure must be passed as the first argument to
-every function in the library, except to <a href="#lua_newstate"><code>lua_newstate</code></a>,
-which creates a Lua state from scratch.
+라이브러리의 모든 함수에 첫 번째 인자로 이 구조에 대한 포인터를 주어야 한다.
+단, 무에서부터 루아 상태를 만드는
+<a href="#lua_newstate"><code>lua_newstate</code></a>는 예외이다.
 
 
 
@@ -4971,21 +4956,19 @@ which creates a Lua state from scratch.
 <pre>int lua_status (lua_State *L);</pre>
 
 <p>
-Returns the status of the thread <code>L</code>.
+스레드 <code>L</code>의 상태를 반환한다.
 
 
 <p>
-The status can be 0 (<a href="#pdf-LUA_OK"><code>LUA_OK</code></a>) for a normal thread,
-an error code if the thread finished the execution
-of a <a href="#lua_resume"><code>lua_resume</code></a> with an error,
-or <a name="pdf-LUA_YIELD"><code>LUA_YIELD</code></a> if the thread is suspended.
+상태는
+정상 스레드이면 0(<a href="#pdf-LUA_OK"><code>LUA_OK</code></a>),
+스레드가 <a href="#lua_resume"><code>lua_resume</code></a> 실행을 오류로 끝마쳤으면 오류 코드,
+스레드가 중지되어 있으면 <a name="pdf-LUA_YIELD"><code>LUA_YIELD</code></a>일 수 있다.
 
 
 <p>
-You can only call functions in threads with status <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>.
-You can resume threads with status <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>
-(to start a new coroutine) or <a href="#pdf-LUA_YIELD"><code>LUA_YIELD</code></a>
-(to resume a coroutine).
+상태가 <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>인 스레드에서만 함수들을 호출할 수 있다.
+상태가 <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>나 <a href="#pdf-LUA_YIELD"><code>LUA_YIELD</code></a>인 스레드를 재개할 수 있다. (각기 새 코루틴을 시작하거나 코루틴을 재개한다.)
 
 
 
@@ -4996,17 +4979,17 @@ You can resume threads with status <a href="#pdf-LUA_OK"><code>LUA_OK</code></a>
 <pre>size_t lua_stringtonumber (lua_State *L, const char *s);</pre>
 
 <p>
-Converts the zero-terminated string <code>s</code> to a number,
-pushes that number into the stack,
-and returns the total size of the string,
-that is, its length plus one.
-The conversion can result in an integer or a float,
-according to the lexical conventions of Lua (see <a href="#3.1">&sect;3.1</a>).
-The string may have leading and trailing spaces and a sign.
-If the string is not a valid numeral,
-returns 0 and pushes nothing.
-(Note that the result can be used as a boolean,
-true if the conversion succeeds.)
+영 종료 문자열 <code>s</code>를 수로 변환하고,
+그 수를 스택에 집어넣고,
+문자열의 총 크기, 즉 길이 더하기 1을 반환한다.
+변환 결과는 루아 어휘 규정에 따라
+정수나 실수가 될 수 있다.
+(<a href="#3.1">3.1절</a> 참고.)
+문자열에 전후 공백과 부호가 있을 수 있다.
+문자열이 유효한 수가 아니면
+0을 반환하며 아무것도 집어넣지 않는다.
+(따라서 결과를 불리언으로 이용할 수 있다.
+변환이 성공하면 참이다.)
 
 
 
@@ -5017,14 +5000,13 @@ true if the conversion succeeds.)
 <pre>int lua_toboolean (lua_State *L, int index);</pre>
 
 <p>
-Converts the Lua value at the given index to a C&nbsp;boolean
-value (0&nbsp;or&nbsp;1).
-Like all tests in Lua,
-<a href="#lua_toboolean"><code>lua_toboolean</code></a> returns true for any Lua value
-different from <b>false</b> and <b>nil</b>;
-otherwise it returns false.
-(If you want to accept only actual boolean values,
-use <a href="#lua_isboolean"><code>lua_isboolean</code></a> to test the value's type.)
+지정한 인덱스에 있는 루아 값을 C 불리언 값(0 또는 1)으로 변환한다.
+루아의 여느 검사처럼
+<b>false</b> 및 <b>nil</b>과 다른 루아 값에 대해선
+<a href="#lua_toboolean"><code>lua_toboolean</code></a>이 참을 반환하고
+아니면 거짓을 반환한다.
+(실제 불리언인 값만 받아들이고 싶다면
+<a href="#lua_isboolean"><code>lua_isboolean</code></a>으로 값의 타입을 검사하면 된다.)
 
 
 
@@ -5035,9 +5017,9 @@ use <a href="#lua_isboolean"><code>lua_isboolean</code></a> to test the value's 
 <pre>lua_CFunction lua_tocfunction (lua_State *L, int index);</pre>
 
 <p>
-Converts a value at the given index to a C&nbsp;function.
-That value must be a C&nbsp;function;
-otherwise, returns <code>NULL</code>.
+지정한 인덱스에 있는 값을 C 함수로 변환한다.
+그 값이 C 함수여야 한다.
+아니면 <code>NULL</code>을 반환한다.
 
 
 
@@ -5048,7 +5030,7 @@ otherwise, returns <code>NULL</code>.
 <pre>lua_Integer lua_tointeger (lua_State *L, int index);</pre>
 
 <p>
-Equivalent to <a href="#lua_tointegerx"><code>lua_tointegerx</code></a> with <code>isnum</code> equal to <code>NULL</code>.
+<code>isnum</code>이 <code>NULL</code>인 <a href="#lua_tointegerx"><code>lua_tointegerx</code></a>와 동등하다.
 
 
 
@@ -5059,17 +5041,16 @@ Equivalent to <a href="#lua_tointegerx"><code>lua_tointegerx</code></a> with <co
 <pre>lua_Integer lua_tointegerx (lua_State *L, int index, int *isnum);</pre>
 
 <p>
-Converts the Lua value at the given index
-to the signed integral type <a href="#lua_Integer"><code>lua_Integer</code></a>.
-The Lua value must be an integer,
-or a number or string convertible to an integer (see <a href="#3.4.3">&sect;3.4.3</a>);
-otherwise, <code>lua_tointegerx</code> returns&nbsp;0.
+지정한 인덱스에 있는 루아 값을 부호 있는 정수 타입
+<a href="#lua_Integer"><code>lua_Integer</code></a>로 변환한다.
+루아 값이 정수이거나 정수로 변환 가능한 수나 문자열이어야 한다.
+(<a href="#3.4.3">3.4.3절</a> 참고.)
+아니면 <code>lua_tointegerx</code>가 0을 반환한다.
 
 
 <p>
-If <code>isnum</code> is not <code>NULL</code>,
-its referent is assigned a boolean value that
-indicates whether the operation succeeded.
+<code>isnum</code>이 <code>NULL</code>이 아니면
+참조 대상에 연산 성공 여부를 나타내는 불리언 값을 할당한다.
 
 
 
@@ -5080,30 +5061,30 @@ indicates whether the operation succeeded.
 <pre>const char *lua_tolstring (lua_State *L, int index, size_t *len);</pre>
 
 <p>
-Converts the Lua value at the given index to a C&nbsp;string.
-If <code>len</code> is not <code>NULL</code>,
-it sets <code>*len</code> with the string length.
-The Lua value must be a string or a number;
-otherwise, the function returns <code>NULL</code>.
-If the value is a number,
-then <code>lua_tolstring</code> also
-<em>changes the actual value in the stack to a string</em>.
-(This change confuses <a href="#lua_next"><code>lua_next</code></a>
-when <code>lua_tolstring</code> is applied to keys during a table traversal.)
+지정한 인덱스에 있는 루아 값을 C 문자열로 변환한다.
+<code>len</code>이 <code>NULL</code>이 아니면
+<code>*len</code>을 문자열 길이로 설정한다.
+루아 값이 문자열이나 수여야 한다.
+아니면 함수가 <code>NULL</code>을 반환한다.
+값이 수인 경우
+<code>lua_tolstring</code>은
+<em>스택의 실제 값을 문자열로 바꾼다</em>.
+(테이블 순회 중 키에 <code>lua_tolstring</code>을 적용하는 경우
+이 변경이 <a href="#lua_next"><code>lua_next</code></a>에 혼란을 준다.)
 
 
 <p>
-<code>lua_tolstring</code> returns a pointer
-to a string inside the Lua state.
-This string always has a zero ('<code>\0</code>')
-after its last character (as in&nbsp;C),
-but can contain other zeros in its body.
+<code>lua_tolstring</code>은
+루아 상태 내 문자열에 대한 포인터를 반환한다.
+이 문자열에는 (C에서처럼) 항상 마지막 문자 뒤에
+영('<code>\0</code>')이 있다.
+하지만 내용 중간에도 영이 있을 수 있다.
 
 
 <p>
-Because Lua has garbage collection,
-there is no guarantee that the pointer returned by <code>lua_tolstring</code>
-will be valid after the corresponding Lua value is removed from the stack.
+루아에 쓰레기 수집기가 있기 때문에
+<code>lua_tolstring</code>이 반환한 포인터가
+해당 루아 값이 스택에서 제거된 후에 유효하리라는 보장이 없다.
 
 
 
@@ -5114,7 +5095,7 @@ will be valid after the corresponding Lua value is removed from the stack.
 <pre>lua_Number lua_tonumber (lua_State *L, int index);</pre>
 
 <p>
-Equivalent to <a href="#lua_tonumberx"><code>lua_tonumberx</code></a> with <code>isnum</code> equal to <code>NULL</code>.
+<code>isnum</code>이 <code>NULL</code>인 <a href="#lua_tonumberx"><code>lua_tonumberx</code></a>와 동등하다.
 
 
 
@@ -5125,17 +5106,16 @@ Equivalent to <a href="#lua_tonumberx"><code>lua_tonumberx</code></a> with <code
 <pre>lua_Number lua_tonumberx (lua_State *L, int index, int *isnum);</pre>
 
 <p>
-Converts the Lua value at the given index
-to the C&nbsp;type <a href="#lua_Number"><code>lua_Number</code></a> (see <a href="#lua_Number"><code>lua_Number</code></a>).
-The Lua value must be a number or a string convertible to a number
-(see <a href="#3.4.3">&sect;3.4.3</a>);
-otherwise, <a href="#lua_tonumberx"><code>lua_tonumberx</code></a> returns&nbsp;0.
+지정한 인덱스에 있는 루아 값을
+C 타입 <a href="#lua_Number"<code>lua_Number</code></a>로 변환한다.
+루아 값이 수이거나 수로 변환 가능한 문자열이어야 한다.
+(<a href="#3.4.3">3.4.3절</a> 참고.)
+아니면 <a href="#lua_tonumberx"><code>lua_tonumberx</code></a>가 0을 반환한다.
 
 
 <p>
-If <code>isnum</code> is not <code>NULL</code>,
-its referent is assigned a boolean value that
-indicates whether the operation succeeded.
+<code>isnum</code>이 <code>NULL</code>이 아니면
+참조 대상에 연산 성공 여부를 나타내는 불리언 값을 할당한다.
 
 
 
@@ -5146,16 +5126,15 @@ indicates whether the operation succeeded.
 <pre>const void *lua_topointer (lua_State *L, int index);</pre>
 
 <p>
-Converts the value at the given index to a generic
-C&nbsp;pointer (<code>void*</code>).
-The value can be a userdata, a table, a thread, or a function;
-otherwise, <code>lua_topointer</code> returns <code>NULL</code>.
-Different objects will give different pointers.
-There is no way to convert the pointer back to its original value.
+지정한 인덱스에 있는 값을 범용 C 포인터(<code>void*</code>)로 변환한다.
+그 값은 userdata, 테이블, 스레드, 함수일 수 있다.
+아니면 <code>lua_topointer</code>가 <code>NULL</code>을 반환한다.
+객체가 다르면 포인터도 서로 다르게 된다.
+포인터를 원래 값으로 역변환하는 방법은 없다.
 
 
 <p>
-Typically this function is used only for hashing and debug information.
+보통은 해싱과 디버그 정보 용도로만 이 함수를 쓴다.
 
 
 
@@ -5166,7 +5145,7 @@ Typically this function is used only for hashing and debug information.
 <pre>const char *lua_tostring (lua_State *L, int index);</pre>
 
 <p>
-Equivalent to <a href="#lua_tolstring"><code>lua_tolstring</code></a> with <code>len</code> equal to <code>NULL</code>.
+<code>len</code>이 <code>NULL</code>인 <a href="#lua_tolstring"><code>lua_tolstring</code></a>과 동등하다.
 
 
 
@@ -5177,10 +5156,10 @@ Equivalent to <a href="#lua_tolstring"><code>lua_tolstring</code></a> with <code
 <pre>lua_State *lua_tothread (lua_State *L, int index);</pre>
 
 <p>
-Converts the value at the given index to a Lua thread
-(represented as <code>lua_State*</code>).
-This value must be a thread;
-otherwise, the function returns <code>NULL</code>.
+지정한 인덱스에 있는 값을
+(<code>lua_State*</code>로 나타낸) 루아 스레드로 변환한다.
+그 값이 스레드여야 한다.
+아니면 함수가 <code>NULL</code>을 반환한다.
 
 
 
@@ -5191,11 +5170,11 @@ otherwise, the function returns <code>NULL</code>.
 <pre>void *lua_touserdata (lua_State *L, int index);</pre>
 
 <p>
-If the value at the given index is a full userdata,
-returns its block address.
-If the value is a light userdata,
-returns its pointer.
-Otherwise, returns <code>NULL</code>.
+지정한 인덱스에 있는 값이 full userdata이면
+그 블록 주소를 반환한다.
+값이 light userdata이면
+그 포인터를 반환한다.
+어느 경우도 아니면 <code>NULL</code>을 반환한다.
 
 
 
@@ -5206,10 +5185,10 @@ Otherwise, returns <code>NULL</code>.
 <pre>int lua_type (lua_State *L, int index);</pre>
 
 <p>
-Returns the type of the value in the given valid index,
-or <code>LUA_TNONE</code> for a non-valid (but acceptable) index.
-The types returned by <a href="#lua_type"><code>lua_type</code></a> are coded by the following constants
-defined in <code>lua.h</code>:
+지정한 유효 인덱스에 있는 값의 타입을 반환한다.
+유효하지 않은 (하지만 허용인) 인덱스에 대해선 <code>LUA_TNONE</code>을 반환한다.
+<a href="#lua_type"><code>lua_type</code></a>이 반환하는 타입은
+<code>lua.h</code>에 정의된 상수로 나타낸다.
 <a name="pdf-LUA_TNIL"><code>LUA_TNIL</code></a> (0),
 <a name="pdf-LUA_TNUMBER"><code>LUA_TNUMBER</code></a>,
 <a name="pdf-LUA_TBOOLEAN"><code>LUA_TBOOLEAN</code></a>,
@@ -5218,8 +5197,8 @@ defined in <code>lua.h</code>:
 <a name="pdf-LUA_TFUNCTION"><code>LUA_TFUNCTION</code></a>,
 <a name="pdf-LUA_TUSERDATA"><code>LUA_TUSERDATA</code></a>,
 <a name="pdf-LUA_TTHREAD"><code>LUA_TTHREAD</code></a>,
-and
-<a name="pdf-LUA_TLIGHTUSERDATA"><code>LUA_TLIGHTUSERDATA</code></a>.
+<a name="pdf-LUA_TLIGHTUSERDATA"><code>LUA_TLIGHTUSERDATA</code></a>
+등이다.
 
 
 
@@ -5230,8 +5209,8 @@ and
 <pre>const char *lua_typename (lua_State *L, int tp);</pre>
 
 <p>
-Returns the name of the type encoded by the value <code>tp</code>,
-which must be one the values returned by <a href="#lua_type"><code>lua_type</code></a>.
+<a href="#lua_type"><code>lua_type</code></a>이 반환하는 값들 중 하나인
+<code>tp</code> 값이 나타내는 타입의 이름을 반환한다.
 
 
 
@@ -5241,7 +5220,7 @@ which must be one the values returned by <a href="#lua_type"><code>lua_type</cod
 <pre>typedef ... lua_Unsigned;</pre>
 
 <p>
-The unsigned version of <a href="#lua_Integer"><code>lua_Integer</code></a>.
+<a href="#lua_Integer"><code>lua_Integer</code></a>의 부호 없는 버전.
 
 
 
@@ -5252,8 +5231,8 @@ The unsigned version of <a href="#lua_Integer"><code>lua_Integer</code></a>.
 <pre>int lua_upvalueindex (int i);</pre>
 
 <p>
-Returns the pseudo-index that represents the <code>i</code>-th upvalue of
-the running function (see <a href="#4.4">&sect;4.4</a>).
+동작 중인 함수의 <code>i</code>번째 upvalue를 나타내는
+가상 인덱스를 반환한다. (<a href="#4.4">4.4절</a> 참고.)
 
 
 
@@ -5264,13 +5243,12 @@ the running function (see <a href="#4.4">&sect;4.4</a>).
 <pre>const lua_Number *lua_version (lua_State *L);</pre>
 
 <p>
-Returns the address of the version number
-(a C static variable)
-stored in the Lua core.
-When called with a valid <a href="#lua_State"><code>lua_State</code></a>,
-returns the address of the version used to create that state.
-When called with <code>NULL</code>,
-returns the address of the version running the call.
+루아 코어에 (C 정적 변수로) 저장되어 있는
+버전 번호의 주소를 반환한다.
+유효한 <a href="#lua_State"><code>lua_State</code></a>로 호출 시
+그 상태를 생성하는 데 사용한 버전의 주소를 반환한다.
+<code>NULL</code>로 호출 시
+그 호출을 실행하는 버전의 주소를 반환한다.
 
 
 
@@ -5283,19 +5261,19 @@ returns the address of the version running the call.
                            void* ud);</pre>
 
 <p>
-The type of the writer function used by <a href="#lua_dump"><code>lua_dump</code></a>.
-Every time it produces another piece of chunk,
-<a href="#lua_dump"><code>lua_dump</code></a> calls the writer,
-passing along the buffer to be written (<code>p</code>),
-its size (<code>sz</code>),
-and the <code>data</code> parameter supplied to <a href="#lua_dump"><code>lua_dump</code></a>.
+<a href="#lua_dump"><code>lua_dump</code></a>에서 사용하는 쓰기 함수의 타입이다.
+<a href="#lua_dump"><code>lua_dump</code></a>에서
+청크 조각을 하나씩 만들어 낼 때마다
+쓰기 함수를 호출하며,
+기록할 버퍼(<code>p</code>)와 그 크기(<code>sz</code>),
+<a href="#lua_dump"><code>lua_dump</code></a>에 제공한
+<code>data</code> 매개변수를 건네준다.
 
 
 <p>
-The writer returns an error code:
-0&nbsp;means no errors;
-any other value means an error and stops <a href="#lua_dump"><code>lua_dump</code></a> from
-calling the writer again.
+쓰기 함수는 오류 코드를 반환한다.
+0은 오류 없음을 뜻한다.
+다른 값은 오류를 뜻하며 <a href="#lua_dump"><code>lua_dump</code></a>가 더는 쓰기 함수를 호출하지 않게 한다.
 
 
 
@@ -5306,12 +5284,12 @@ calling the writer again.
 <pre>void lua_xmove (lua_State *from, lua_State *to, int n);</pre>
 
 <p>
-Exchange values between different threads of the same state.
+한 상태의 스레드들 간에 값을 교환한다.
 
 
 <p>
-This function pops <code>n</code> values from the stack <code>from</code>,
-and pushes them onto the stack <code>to</code>.
+이 함수는 스택 <code>from</code>에서 값을 <code>n</code>개 꺼내서
+스택 <code>to</code>에 집어넣는다.
 
 
 
@@ -5322,11 +5300,11 @@ and pushes them onto the stack <code>to</code>.
 <pre>int lua_yield (lua_State *L, int nresults);</pre>
 
 <p>
-This function is equivalent to <a href="#lua_yieldk"><code>lua_yieldk</code></a>,
-but it has no continuation (see <a href="#4.7">&sect;4.7</a>).
-Therefore, when the thread resumes,
-it continues the function that called
-the function calling <code>lua_yield</code>.
+이 함수는 <a href="#lua_yieldk"><code>lua_yieldk</code></a>와 동등하되
+속행이 없다. (<a href="#4.7">4.7절</a> 참고.)
+그래서 스레드가 실행을 재개할 때,
+<code>lua_yield</code> 호출 함수를 호출한 함수에서
+실행을 이어 간다.
 
 
 
@@ -5340,51 +5318,50 @@ the function calling <code>lua_yield</code>.
                 lua_KFunction k);</pre>
 
 <p>
-Yields a coroutine (thread).
+코루틴(스레드)을 양보한다.
 
 
 <p>
-When a C&nbsp;function calls <a href="#lua_yieldk"><code>lua_yieldk</code></a>,
-the running coroutine suspends its execution,
-and the call to <a href="#lua_resume"><code>lua_resume</code></a> that started this coroutine returns.
-The parameter <code>nresults</code> is the number of values from the stack
-that will be passed as results to <a href="#lua_resume"><code>lua_resume</code></a>.
+C 함수에서 <a href="#lua_yieldk"><code>lua_yieldk</code></a>를 호출하면
+동작 중인 코루틴이 실행을 중지하며
+그 코루틴을 시작한 <a href="#lua_resume"><code>lua_resume</code></a> 호출이 반환한다.
+매개변수 <code>nresults</code>는 스택으로
+<a href="#lua_resume"><code>lua_resume</code></a>에게 결과로 전달할 값 개수이다.
 
 
 <p>
-When the coroutine is resumed again,
-Lua calls the given continuation function <code>k</code> to continue
-the execution of the C&nbsp;function that yielded (see <a href="#4.7">&sect;4.7</a>).
-This continuation function receives the same stack
-from the previous function,
-with the <code>n</code> results removed and
-replaced by the arguments passed to <a href="#lua_resume"><code>lua_resume</code></a>.
-Moreover,
-the continuation function receives the value <code>ctx</code>
-that was passed to <a href="#lua_yieldk"><code>lua_yieldk</code></a>.
+코루틴 실행을 재개할 때
+지정한 속행 함수 <code>k</code>를 루아가 호출해서
+양보를 한 C 함수의 실행을 이어 간다.
+(<a href="#4.7">4.7절</a> 참고.)
+그 속행 함수가 받는 스택은 이전 함수의 스택에서
+<code>nresults</code>개 결과가 없어지고
+<a href="#lua_resume"><code>lua_resume</code></a>이 받은 인자로 바뀐 것이다.
+또한
+<a href="#lua_yieldk"><code>lua_yieldk</code></a>에게 건네준
+<code>ctx</code> 값을 속행 함수가 받는다.
 
 
 <p>
-Usually, this function does not return;
-when the coroutine eventually resumes,
-it continues executing the continuation function.
-However, there is one special case,
-which is when this function is called
-from inside a line or a count hook (see <a href="#4.9">&sect;4.9</a>).
-In that case, <code>lua_yieldk</code> should be called with no continuation
-(probably in the form of <a href="#lua_yield"><code>lua_yield</code></a>) and no results,
-and the hook should return immediately after the call.
-Lua will yield and,
-when the coroutine resumes again,
-it will continue the normal execution
-of the (Lua) function that triggered the hook.
+일반적으로 이 함수는 반환하지 않는다.
+나중에 코루틴이 실행을 재개할 때
+속행 함수로 실행이 이어지기 때문이다.
+하지만 한 가지 특별한 경우가 있는데,
+행 훅이나 카운트 훅 (<a href="#4.9">4.9절</a> 참고) 안에서
+이 함수를 호출할 때이다.
+그 경우 속행 없이
+(아마도 <a href="#lua_yield"><code>lua_yield</code></a> 형태로),
+그리고 결과도 없이 <code>lua_yieldk</code>를 호출해야 하며
+호출 바로 다음에서 훅이 반환해야 한다.
+그러면 루아에서 양보를 하고,
+코루틴이 실행을 재개할 때
+훅을 유발했던 (루아) 함수의 실행을 정상적으로 이어 간다.
 
 
 <p>
-This function can raise an error if it is called from a thread
-with a pending C call with no continuation function,
-or it is called from a thread that is not running inside a resume
-(e.g., the main thread).
+속행 함수 없는 C 호출이 미완료 상태인 스레드에서 호출하거나
+재개에 의해 동작 중이 아닌 스레드에서 (가령 메인 스레드에서) 호출하는 경우
+이 함수가 오류를 제기할 수 있다.
 
 
 
