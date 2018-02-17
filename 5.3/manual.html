@@ -5896,51 +5896,51 @@ upvalue를 공유하는 (즉 같은 외부 지역 변수에 접근하는)
 
 
 
-<h1>5 &ndash; <a name="5">The Auxiliary Library</a></h1>
+<h1>5 &ndash; <a name="5">보조 라이브러리</a></h1>
 
 <p>
 
-The <em>auxiliary library</em> provides several convenient functions
-to interface C with Lua.
-While the basic API provides the primitive functions for all
-interactions between C and Lua,
-the auxiliary library provides higher-level functions for some
-common tasks.
+<em>보조 라이브러리</em>에는 C와 루아를 연결해 주는
+여러 편리한 함수들이 있다.
+기본 API가 C와 루아 사이의 모든 상호작용을 위한
+기반 함수를 제공한다면
+보조 라이브러리는 몇 가지 자주 있는 작업을 위한
+고수준 함수를 제공한다.
 
 
 <p>
-All functions and types from the auxiliary library
-are defined in header file <code>lauxlib.h</code> and
-have a prefix <code>luaL_</code>.
+보조 라이브러리의 모든 함수와 타입은
+헤더 파일 <code>lauxlib.h</code>에 정의되어 있으며
+앞에 <code>luaL_</code>이 붙어 있다.
 
 
 <p>
-All functions in the auxiliary library are built on
-top of the basic API,
-and so they provide nothing that cannot be done with that API.
-Nevertheless, the use of the auxiliary library ensures
-more consistency to your code.
+보조 라이브러리의 모든 함수는
+기본 API를 바탕으로 만든 것이고,
+그래서 그 API가 할 수 없는 것을 해 주지는 못한다.
+그렇지만 보조 라이브러리 사용은
+코드의 무모순성을 향상시켜 준다.
 
 
 <p>
-Several functions in the auxiliary library use internally some
-extra stack slots.
-When a function in the auxiliary library uses less than five slots,
-it does not check the stack size;
-it simply assumes that there are enough slots.
+보조 라이브러리의 여러 함수에서는
+내부적으로 스택 슬롯 몇 개를 추가로 쓴다.
+보조 라이브러리의 함수에서 슬롯을 다섯 개 미만으로 사용할 때는
+스택 크기를 확인하지 않는다.
+즉, 슬롯이 충분히 있다고 그냥 가정한다.
 
 
 <p>
-Several functions in the auxiliary library are used to
-check C&nbsp;function arguments.
-Because the error message is formatted for arguments
-(e.g., "<code>bad argument #1</code>"),
-you should not use these functions for other stack values.
+보조 라이브러리의 여러 함수들은
+C 함수 인자를 검사하는 데 쓰인다.
+오류 메시지가 인자에 맞춰져 있으므로
+(가령 "<code>bad argument #1</code>")
+다른 스택 값에는 이 함수를 사용하지 않는 게 좋다.
 
 
 <p>
-Functions called <code>luaL_check*</code>
-always raise an error if the check is not satisfied.
+이름이 <code>luaL_check*</code>인 함수들은
+검사가 통과 안 되면 항상 오류를 제기한다.
 
 
 
