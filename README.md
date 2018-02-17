@@ -8,6 +8,6 @@ https://wariua.github.io/lua-manual/5.3/
 
 https://www.lua.org/manual/
 
-시작은 했는데, 양이 많아서 끝나기 전에 5.4가 나올 것도 같습니다. 좀 더 빨리 끝났으면 싶어서 손을 보태고 싶은 분은 이슈 만들어 주시거나 PR 날려 주시면 감사하겠습니다.
+고칠 점이나 개선할 점 있으면 이슈나 PR 날려 주시면 됩니다.
 
 문성민 님이 번역한 5.0 버전 매뉴얼이 있습니다: http://bleedmin.blogspot.kr/2012/04/lua-50.html
