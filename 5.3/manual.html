@@ -7103,70 +7103,69 @@ This function is used to build a prefix for error messages.
 
 
 
-<h1>6 &ndash; <a name="6">Standard Libraries</a></h1>
+<h1>6 &ndash; <a name="6">표준 라이브러리</a></h1>
 
 <p>
-The standard Lua libraries provide useful functions
-that are implemented directly through the C&nbsp;API.
-Some of these functions provide essential services to the language
-(e.g., <a href="#pdf-type"><code>type</code></a> and <a href="#pdf-getmetatable"><code>getmetatable</code></a>);
-others provide access to "outside" services (e.g., I/O);
-and others could be implemented in Lua itself,
-but are quite useful or have critical performance requirements that
-deserve an implementation in C (e.g., <a href="#pdf-table.sort"><code>table.sort</code></a>).
+표준 루아 라이브러리들은 C API를 통해 직접 구현한
+유용한 함수들을 제공한다.
+그 함수들 중 일부는 언어에 필수적인 서비스를 제공한다.
+(예: <a href="#pdf-type"><code>type</code></a>, <a href="#pdf-getmetatable"><code>getmetatable</code></a>.)
+다른 일부는 "외부" 서비스에 접근할 수 있게 해 준다. (예: I/O.)
+또 다른 일부는 루아 자체에서 구현할 수도 있었지만
+C로 구현할 만큼 상당히 유용하거나 중요한 성능상 요구가 있다.
+(예: <a href="#pdf-table.sort"><code>table.sort</code></a>.)
 
 
 <p>
-All libraries are implemented through the official C&nbsp;API
-and are provided as separate C&nbsp;modules.
-Currently, Lua has the following standard libraries:
+모든 라이브러리들은 공식 C API를 통해 구현되어 있으며
+별도의 C 모듈로 제공된다.
+현재 루아에는 다음 표준 라이브러리가 있다.
 
 <ul>
 
-<li>basic library (<a href="#6.1">&sect;6.1</a>);</li>
+<li>기본 라이브러리 (<a href="#6.1">6.1절</a>)</li>
 
-<li>coroutine library (<a href="#6.2">&sect;6.2</a>);</li>
+<li>코루틴 라이브러리 (<a href="#6.2">6.2절</a>)</li>
 
-<li>package library (<a href="#6.3">&sect;6.3</a>);</li>
+<li>패키지 라이브러리 (<a href="#6.3">6.3절</a>)</li>
 
-<li>string manipulation (<a href="#6.4">&sect;6.4</a>);</li>
+<li>문자열 조작 (<a href="#6.4">6.4절</a>)</li>
 
-<li>basic UTF-8 support (<a href="#6.5">&sect;6.5</a>);</li>
+<li>기본적인 UTF-8 지원 (<a href="#6.5">6.5절</a>)</li>
 
-<li>table manipulation (<a href="#6.6">&sect;6.6</a>);</li>
+<li>테이블 조작 (<a href="#6.6">6.6절</a>)</li>
 
-<li>mathematical functions (<a href="#6.7">&sect;6.7</a>) (sin, log, etc.);</li>
+<li>수학 함수 (<a href="#6.7">6.7절</a>) (sin, log 등)</li>
 
-<li>input and output (<a href="#6.8">&sect;6.8</a>);</li>
+<li>입력과 출력 (<a href="#6.8">6.8절</a>)</li>
 
-<li>operating system facilities (<a href="#6.9">&sect;6.9</a>);</li>
+<li>운영 체제 기능 (<a href="#6.9">6.9절</a>)</li>
 
-<li>debug facilities (<a href="#6.10">&sect;6.10</a>).</li>
+<li>디버그 기능 (<a href="#6.10">6.10절</a>)</li>
 
 </ul><p>
-Except for the basic and the package libraries,
-each library provides all its functions as fields of a global table
-or as methods of its objects.
+기본 라이브러리와 패키지 라이브러리를 제외한 다른 라이브러리들은
+함수 전체를 전역 테이블의 필드, 즉 객체의 메소드로 제공한다.
 
 
 <p>
-To have access to these libraries,
-the C&nbsp;host program should call the <a href="#luaL_openlibs"><code>luaL_openlibs</code></a> function,
-which opens all standard libraries.
-Alternatively,
-the host program can open them individually by using
-<a href="#luaL_requiref"><code>luaL_requiref</code></a> to call
-<a name="pdf-luaopen_base"><code>luaopen_base</code></a> (for the basic library),
-<a name="pdf-luaopen_package"><code>luaopen_package</code></a> (for the package library),
-<a name="pdf-luaopen_coroutine"><code>luaopen_coroutine</code></a> (for the coroutine library),
-<a name="pdf-luaopen_string"><code>luaopen_string</code></a> (for the string library),
-<a name="pdf-luaopen_utf8"><code>luaopen_utf8</code></a> (for the UTF8 library),
-<a name="pdf-luaopen_table"><code>luaopen_table</code></a> (for the table library),
-<a name="pdf-luaopen_math"><code>luaopen_math</code></a> (for the mathematical library),
-<a name="pdf-luaopen_io"><code>luaopen_io</code></a> (for the I/O library),
-<a name="pdf-luaopen_os"><code>luaopen_os</code></a> (for the operating system library),
-and <a name="pdf-luaopen_debug"><code>luaopen_debug</code></a> (for the debug library).
-These functions are declared in <a name="pdf-lualib.h"><code>lualib.h</code></a>.
+C 호스트 프로그램에서 이 라이브러리들에 접근하려면
+<a href="#luaL_openlibs"><code>luaL_openlibs</code></a>를 호출하면 된다.
+그러면 모든 표준 라이브러리들을 연다.
+또는 개별적으로 열기 위해 호스트 프로그램에서
+<a href="#luaL_requiref"><code>luaL_requiref</code></a>를 사용해
+<a name="pdf-luaopen_base"><code>luaopen_base</code></a> (기본 라이브러리),
+<a name="pdf-luaopen_package"><code>luaopen_package</code></a> (패키지 라이브러리),
+<a name="pdf-luaopen_coroutine"><code>luaopen_coroutine</code></a> (코루틴 라이브러리),
+<a name="pdf-luaopen_string"><code>luaopen_string</code></a> (문자열 라이브러리),
+<a name="pdf-luaopen_utf8"><code>luaopen_utf8</code></a> (UTF8 라이브러리),
+<a name="pdf-luaopen_table"><code>luaopen_table</code></a> (테이블 라이브러리),
+<a name="pdf-luaopen_math"><code>luaopen_math</code></a> (수학 라이브러리),
+<a name="pdf-luaopen_io"><code>luaopen_io</code></a> (I/O 라이브러리),
+<a name="pdf-luaopen_os"><code>luaopen_os</code></a> (운영 체제 라이브러리),
+<a name="pdf-luaopen_debug"><code>luaopen_debug</code></a> (디버그 라이브러리)를
+호출할 수 있다.
+<a name="pdf-lualib.h"><code>lualib.h</code></a>에 이 함수들이 선언되어 있다.
 
 
 
