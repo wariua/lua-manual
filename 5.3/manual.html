@@ -5944,11 +5944,10 @@ C 함수 인자를 검사하는 데 쓰인다.
 
 
 
-<h2>5.1 &ndash; <a name="5.1">Functions and Types</a></h2>
+<h2>5.1 &ndash; <a name="5.1">함수와 타입</a></h2>
 
 <p>
-Here we list all functions and types from the auxiliary library
-in alphabetical order.
+여기선 보조 라이브러리의 모든 함수와 타입을 알파벳 순서로 나열한다.
 
 
 
@@ -5957,8 +5956,9 @@ in alphabetical order.
 <pre>void luaL_addchar (luaL_Buffer *B, char c);</pre>
 
 <p>
-Adds the byte <code>c</code> to the buffer <code>B</code>
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
+바이트 <code>c</code>를
+버퍼 <code>B</code>에 추가한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
 
 
 
@@ -5969,10 +5969,10 @@ Adds the byte <code>c</code> to the buffer <code>B</code>
 <pre>void luaL_addlstring (luaL_Buffer *B, const char *s, size_t l);</pre>
 
 <p>
-Adds the string pointed to by <code>s</code> with length <code>l</code> to
-the buffer <code>B</code>
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
-The string can contain embedded zeros.
+<code>s</code>가 가리키는 길이 <code>l</code>인 문자열을
+버퍼 <code>B</code>에 추가한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
+문자열 내에 영이 있을 수 있다.
 
 
 
@@ -5983,9 +5983,11 @@ The string can contain embedded zeros.
 <pre>void luaL_addsize (luaL_Buffer *B, size_t n);</pre>
 
 <p>
-Adds to the buffer <code>B</code> (see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>)
-a string of length <code>n</code> previously copied to the
-buffer area (see <a href="#luaL_prepbuffer"><code>luaL_prepbuffer</code></a>).
+버퍼 영역으로 미리 복사한
+(<a href="#luaL_prepbuffer"><code>luaL_prepbuffer</code></a> 참고)
+길이 <code>n</code>인 문자열을
+버퍼 <code>B</code>에 추가한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
 
 
 
@@ -5996,9 +5998,9 @@ buffer area (see <a href="#luaL_prepbuffer"><code>luaL_prepbuffer</code></a>).
 <pre>void luaL_addstring (luaL_Buffer *B, const char *s);</pre>
 
 <p>
-Adds the zero-terminated string pointed to by <code>s</code>
-to the buffer <code>B</code>
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
+<code>s</code>가 가리키는 영 종료 문자열을
+버퍼 <code>B</code>에 추가한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
 
 
 
@@ -6009,16 +6011,16 @@ to the buffer <code>B</code>
 <pre>void luaL_addvalue (luaL_Buffer *B);</pre>
 
 <p>
-Adds the value at the top of the stack
-to the buffer <code>B</code>
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
-Pops the value.
+스택 상단의 값을
+버퍼 <code>B</code>에 추가한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
+값을 꺼낸다.
 
 
 <p>
-This is the only function on string buffers that can (and must)
-be called with an extra element on the stack,
-which is the value to be added to the buffer.
+문자열 버퍼 함수들 중 유일하게
+스택에 따로 항목(버퍼에 추가할 값)을 두고
+호출할 수 있는 (또한 그래야 하는) 함수이다.
 
 
 
@@ -6032,8 +6034,9 @@ which is the value to be added to the buffer.
                     const char *extramsg);</pre>
 
 <p>
-Checks whether <code>cond</code> is true.
-If it is not, raises an error with a standard message (see <a href="#luaL_argerror"><code>luaL_argerror</code></a>).
+<code>cond</code>가 참인지 확인한다.
+참이 아니면 표준 메시지로 오류를 제기한다.
+(<a href="#luaL_argerror"><code>luaL_argerror</code></a> 참고.)
 
 
 
@@ -6044,15 +6047,14 @@ If it is not, raises an error with a standard message (see <a href="#luaL_argerr
 <pre>int luaL_argerror (lua_State *L, int arg, const char *extramsg);</pre>
 
 <p>
-Raises an error reporting a problem with argument <code>arg</code>
-of the C&nbsp;function that called it,
-using a standard message
-that includes <code>extramsg</code> as a comment:
+이 함수를 호출한 C 함수의 <code>arg</code> 번째 인자에 대한 문제를 보고하는
+오류를 제기한다.
+<code>extramsg</code>를 담은 다음 표준 메시지를 사용한다.
 
 <pre>
-     bad argument #<em>arg</em> to '<em>funcname</em>' (<em>extramsg</em>)
+     bad argument #<em>arg</em> to '<em>함수명</em>' (<em>extramsg</em>)
 </pre><p>
-This function never returns.
+이 함수는 절대 반환하지 않는다.
 
 
 
@@ -6062,67 +6064,65 @@ This function never returns.
 <pre>typedef struct luaL_Buffer luaL_Buffer;</pre>
 
 <p>
-Type for a <em>string buffer</em>.
+<em>문자열 버퍼</em> 타입.
 
 
 <p>
-A string buffer allows C&nbsp;code to build Lua strings piecemeal.
-Its pattern of use is as follows:
+문자열 버퍼를 이용해 C 코드에서 루아 문자열을 조금씩 만들어 나갈 수 있다.
+다음과 같은 패턴으로 사용한다.
 
 <ul>
 
-<li>First declare a variable <code>b</code> of type <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>.</li>
+<li>먼저 <a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 타입 변수 <code>b</code>를 선언한다.</li>
 
-<li>Then initialize it with a call <code>luaL_buffinit(L, &amp;b)</code>.</li>
+<li>그리고 <code>luaL_buffinit(L, &amp;b)</code> 호출로 초기화 한다.</li>
 
 <li>
-Then add string pieces to the buffer calling any of
-the <code>luaL_add*</code> functions.
+그리고 <code>luaL_add*</code> 함수를 호출해서
+버퍼에 문자열 조각들을 추가한다.
 </li>
 
 <li>
-Finish by calling <code>luaL_pushresult(&amp;b)</code>.
-This call leaves the final string on the top of the stack.
+<code>luaL_pushresult(&amp;b)</code> 호출로 마무리한다.
+그러면 스택 상단에 최종 문자열이 남는다.
 </li>
 
 </ul>
 
 <p>
-If you know beforehand the total size of the resulting string,
-you can use the buffer like this:
+결과 문자열의 전체 크기를 미리 알고 있다면
+다음과 같이 버퍼를 사용할 수 있다.
 
 <ul>
 
-<li>First declare a variable <code>b</code> of type <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>.</li>
+<li>먼저 <a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 타입 변수 <code>b</code>를 선언한다.</li>
 
-<li>Then initialize it and preallocate a space of
-size <code>sz</code> with a call <code>luaL_buffinitsize(L, &amp;b, sz)</code>.</li>
+<li>그리고 <code>luaL_buffinitsize(L, &amp;b, sz)</code> 호출로 초기화 하고
+<code>sz</code> 크기의 공간을 미리 할당한다.</li>
 
-<li>Then copy the string into that space.</li>
+<li>그리고 그 공간으로 문자열을 복사한다.</li>
 
 <li>
-Finish by calling <code>luaL_pushresultsize(&amp;b, sz)</code>,
-where <code>sz</code> is the total size of the resulting string
-copied into that space.
+<code>luaL_pushresultsize(&amp;b, sz)</code> 호출로 마무리한다.
+<code>sz</code>는 그 공간으로 복사한 결과 문자열 전체 크기이다.
 </li>
 
 </ul>
 
 <p>
-During its normal operation,
-a string buffer uses a variable number of stack slots.
-So, while using a buffer, you cannot assume that you know where
-the top of the stack is.
-You can use the stack between successive calls to buffer operations
-as long as that use is balanced;
-that is,
-when you call a buffer operation,
-the stack is at the same level
-it was immediately after the previous buffer operation.
-(The only exception to this rule is <a href="#luaL_addvalue"><code>luaL_addvalue</code></a>.)
-After calling <a href="#luaL_pushresult"><code>luaL_pushresult</code></a> the stack is back to its
-level when the buffer was initialized,
-plus the final string on its top.
+정상 동작 중에
+문자열 버퍼에서 쓰는 스택 슬롯 수가 바뀔 수 있다.
+따라서 버퍼 사용 중에는 스택 상단이 어디인지
+알고 있다고 가정할 수 없다.
+두 버퍼 연산 호출 사이에서 스택을 쓰려면
+사용이 균형이 맞아야만 가능하다.
+즉, 어떤 버퍼 연산을 호출할 때의 스택이
+이전 버퍼 연산 직후와
+같은 높이여야 한다.
+(이 규칙의 유일한 예외가 <a href="#luaL_addvalue"><code>luaL_addvalue</code></a>이다.)
+<a href="#luaL_pushresult"><code>luaL_pushresult</code></a>를 호출하면
+스택이 버퍼를 초기화 했던 때의 높이로 돌아가고
+거기에 최종 문자열이 더해진다.
 
 
 
@@ -6133,10 +6133,10 @@ plus the final string on its top.
 <pre>void luaL_buffinit (lua_State *L, luaL_Buffer *B);</pre>
 
 <p>
-Initializes a buffer <code>B</code>.
-This function does not allocate any space;
-the buffer must be declared as a variable
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
+버퍼 <code>B</code>를 초기화 한다.
+이 함수는 어떤 공간도 할당해 두지 않는다.
+버퍼가 변수로 선언되어 있어야 한다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
 
 
 
@@ -6147,8 +6147,8 @@ the buffer must be declared as a variable
 <pre>char *luaL_buffinitsize (lua_State *L, luaL_Buffer *B, size_t sz);</pre>
 
 <p>
-Equivalent to the sequence
-<a href="#luaL_buffinit"><code>luaL_buffinit</code></a>, <a href="#luaL_prepbuffsize"><code>luaL_prepbuffsize</code></a>.
+<a href="#luaL_buffinit"><code>luaL_buffinit</code></a>, <a href="#luaL_prepbuffsize"><code>luaL_prepbuffsize</code></a>
+연속 호출과 동등하다.
 
 
 
@@ -6159,17 +6159,17 @@ Equivalent to the sequence
 <pre>int luaL_callmeta (lua_State *L, int obj, const char *e);</pre>
 
 <p>
-Calls a metamethod.
+메타메소드를 호출한다.
 
 
 <p>
-If the object at index <code>obj</code> has a metatable and this
-metatable has a field <code>e</code>,
-this function calls this field passing the object as its only argument.
-In this case this function returns true and pushes onto the
-stack the value returned by the call.
-If there is no metatable or no metamethod,
-this function returns false (without pushing any value on the stack).
+인덱스 <code>obj</code>에 있는 객체에 메타메소드가 있고
+그 메타메소드에 필드 <code>e</code>가 있으면
+객체를 유일한 인자로 해서 그 필드를 호출한다.
+이 경우 함수가 참을 반환하며
+호출 반환 값을 스택 상단에 집어넣는다.
+메타테이블이 없거나 메타메소드가 없으면
+함수가 거짓을 반환한다. (스택에는 아무것도 집어넣지 않는다.)
 
 
 
@@ -6180,8 +6180,8 @@ this function returns false (without pushing any value on the stack).
 <pre>void luaL_checkany (lua_State *L, int arg);</pre>
 
 <p>
-Checks whether the function has an argument
-of any type (including <b>nil</b>) at position <code>arg</code>.
+<code>arg</code> 위치에 어느 타입이든 (<b>nil</b> 포함)
+함수 인자가 있는지 확인한다.
 
 
 
@@ -6192,9 +6192,9 @@ of any type (including <b>nil</b>) at position <code>arg</code>.
 <pre>lua_Integer luaL_checkinteger (lua_State *L, int arg);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is an integer
-(or can be converted to an integer)
-and returns this integer cast to a <a href="#lua_Integer"><code>lua_Integer</code></a>.
+<code>arg</code> 번째 함수 인자가 정수인지
+(또는 정수로 변환할 수 있는지) 확인하고
+그 정수를 <a href="#lua_Integer"><code>lua_Integer</code></a>로 캐스팅 해서 반환한다.
 
 
 
@@ -6205,15 +6205,15 @@ and returns this integer cast to a <a href="#lua_Integer"><code>lua_Integer</cod
 <pre>const char *luaL_checklstring (lua_State *L, int arg, size_t *l);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is a string
-and returns this string;
-if <code>l</code> is not <code>NULL</code> fills <code>*l</code>
-with the string's length.
+<code>arg</code> 번째 함수 인자가 문자열인지 확인하고
+그 문자열을 반환한다.
+<code>l</code>이 <code>NULL</code>이 아니면
+<code>*l</code>에 문자열 길이를 채운다.
 
 
 <p>
-This function uses <a href="#lua_tolstring"><code>lua_tolstring</code></a> to get its result,
-so all conversions and caveats of that function apply here.
+이 함수는 <a href="#lua_tolstring"><code>lua_tolstring</code></a>을 써서 결과를 얻는다.
+따라서 그 함수의 모든 변환 방식과 주의 사항이 여기에도 적용된다.
 
 
 
@@ -6224,8 +6224,8 @@ so all conversions and caveats of that function apply here.
 <pre>lua_Number luaL_checknumber (lua_State *L, int arg);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is a number
-and returns this number.
+<code>arg</code> 번째 함수 인자가 수인지 확인하고
+그 수를 반환한다.
 
 
 
@@ -6239,24 +6239,23 @@ and returns this number.
                       const char *const lst[]);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is a string and
-searches for this string in the array <code>lst</code>
-(which must be NULL-terminated).
-Returns the index in the array where the string was found.
-Raises an error if the argument is not a string or
-if the string cannot be found.
+<code>arg</code> 번째 함수 인자가 문자열인지 확인하고
+(NULL로 끝나는) <code>lst</code> 배열에서 그 문자열을 탐색한다.
+배열에서 문자열을 찾은 인덱스를 반환한다.
+인자가 문자열이 아니거나
+그 문자열을 찾을 수 없으면 오류를 제기한다.
 
 
 <p>
-If <code>def</code> is not <code>NULL</code>,
-the function uses <code>def</code> as a default value when
-there is no argument <code>arg</code> or when this argument is <b>nil</b>.
+<code>def</code>가 <code>NULL</code>이 아니면
+인자 <code>arg</code>가 없거나 그 인자가 <b>nil</b>일 때
+기본 값으로 <code>def</code>를 쓴다.
 
 
 <p>
-This is a useful function for mapping strings to C&nbsp;enums.
-(The usual convention in Lua libraries is
-to use strings instead of numbers to select options.)
+문자열을 C 열거형으로 연결하는 데 유용한 함수이다.
+(선택지를 나타내는 데 수 대신 문자열을 쓰는 것이
+루아 라이브러리들의 일반적 관행이다.)
 
 
 
@@ -6267,10 +6266,10 @@ to use strings instead of numbers to select options.)
 <pre>void luaL_checkstack (lua_State *L, int sz, const char *msg);</pre>
 
 <p>
-Grows the stack size to <code>top + sz</code> elements,
-raising an error if the stack cannot grow to that size.
-<code>msg</code> is an additional text to go into the error message
-(or <code>NULL</code> for no additional text).
+스택 크기를 <code>top + sz</code>개 항목으로 키운다.
+스택이 그 크기로 커질 수 없으면 오류를 제기한다.
+<code>msg</code>는 오류 메시지에 들어갈 추가 텍스트이다.
+(추가할 텍스트가 없으면 <code>NULL</code>.)
 
 
 
@@ -6281,13 +6280,13 @@ raising an error if the stack cannot grow to that size.
 <pre>const char *luaL_checkstring (lua_State *L, int arg);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is a string
-and returns this string.
+<code>arg</code> 번째 함수 인자가 문자열인지 확인하고
+그 문자열을 반환한다.
 
 
 <p>
-This function uses <a href="#lua_tolstring"><code>lua_tolstring</code></a> to get its result,
-so all conversions and caveats of that function apply here.
+이 함수는 <a href="#lua_tolstring"><code>lua_tolstring</code></a>을 써서 결과를 얻는다.
+따라서 그 함수의 모든 변환 방식과 주의 사항이 여기에도 적용된다.
 
 
 
@@ -6298,8 +6297,8 @@ so all conversions and caveats of that function apply here.
 <pre>void luaL_checktype (lua_State *L, int arg, int t);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> has type <code>t</code>.
-See <a href="#lua_type"><code>lua_type</code></a> for the encoding of types for <code>t</code>.
+<code>arg</code> 번째 함수 인자가 타입 <code>t</code>인지 확인한다.
+<code>t</code>의 타입 표현 방식에 대해선 <a href="#lua_type"><code>lua_type</code></a>을 보라.
 
 
 
@@ -6310,9 +6309,11 @@ See <a href="#lua_type"><code>lua_type</code></a> for the encoding of types for 
 <pre>void *luaL_checkudata (lua_State *L, int arg, const char *tname);</pre>
 
 <p>
-Checks whether the function argument <code>arg</code> is a userdata
-of the type <code>tname</code> (see <a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a>) and
-returns the userdata address (see <a href="#lua_touserdata"><code>lua_touserdata</code></a>).
+<code>arg</code> 번째 함수 인자가 타입이 <code>tname</code>인
+(<a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a> 참고)
+userdata인지 확인하고 그 userdata 주소를
+(<a href="#lua_touserdata"><code>lua_touserdata</code></a> 참고)
+반환한다.
 
 
 
@@ -6323,12 +6324,12 @@ returns the userdata address (see <a href="#lua_touserdata"><code>lua_touserdata
 <pre>void luaL_checkversion (lua_State *L);</pre>
 
 <p>
-Checks whether the core running the call,
-the core that created the Lua state,
-and the code making the call are all using the same version of Lua.
-Also checks whether the core running the call
-and the core that created the Lua state
-are using the same address space.
+호출을 실행하는 코어와
+루아 상태를 생성한 코어,
+호출을 하고 있는 코어가 모두 같은 루아 버전을 쓰고 있는지 확인한다.
+또한 호출을 실행하는 코어와
+루아 상태를 생성한 코어가
+같은 주소 공간을 쓰고 있는지도 확인한다.
 
 
 
@@ -6339,14 +6340,14 @@ are using the same address space.
 <pre>int luaL_dofile (lua_State *L, const char *filename);</pre>
 
 <p>
-Loads and runs the given file.
-It is defined as the following macro:
+지정한 파일을 적재해서 실행한다.
+다음 매크로로 정의되어 있다.
 
 <pre>
      (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0))
 </pre><p>
-It returns false if there are no errors
-or true in case of errors.
+아무 오류도 없으면 거짓을 반환하고
+오류 발생 시 참을 반환한다.
 
 
 
@@ -6357,14 +6358,14 @@ or true in case of errors.
 <pre>int luaL_dostring (lua_State *L, const char *str);</pre>
 
 <p>
-Loads and runs the given string.
-It is defined as the following macro:
+지정한 문자열을 적재해서 실행한다.
+다음 매크로로 정의되어 있다.
 
 <pre>
      (luaL_loadstring(L, str) || lua_pcall(L, 0, LUA_MULTRET, 0))
 </pre><p>
-It returns false if there are no errors
-or true in case of errors.
+아무 오류도 없으면 거짓을 반환하고
+오류 발생 시 참을 반환한다.
 
 
 
@@ -6375,19 +6376,17 @@ or true in case of errors.
 <pre>int luaL_error (lua_State *L, const char *fmt, ...);</pre>
 
 <p>
-Raises an error.
-The error message format is given by <code>fmt</code>
-plus any extra arguments,
-following the same rules of <a href="#lua_pushfstring"><code>lua_pushfstring</code></a>.
-It also adds at the beginning of the message the file name and
-the line number where the error occurred,
-if this information is available.
+오류를 제기한다.
+<code>fmt</code>와 추가 인자로 오류 메시지 형식을 받으며
+<a href="#lua_pushfstring"><code>lua_pushfstring</code></a>에서와 같은 규칙을 따른다.
+또한 오류가 발생한 파일 이름 및 행 번호에 대한 정보가 있으면
+메시지 앞쪽에 추가한다.
 
 
 <p>
-This function never returns,
-but it is an idiom to use it in C&nbsp;functions
-as <code>return luaL_error(<em>args</em>)</code>.
+이 함수는 절대 반환하지 않는다.
+하지만 C 함수에서 관용구처럼
+<code>return luaL_error(<em>args</em>)</code>라고 쓴다.
 
 
 
@@ -6398,9 +6397,9 @@ as <code>return luaL_error(<em>args</em>)</code>.
 <pre>int luaL_execresult (lua_State *L, int stat);</pre>
 
 <p>
-This function produces the return values for
-process-related functions in the standard library
-(<a href="#pdf-os.execute"><code>os.execute</code></a> and <a href="#pdf-io.close"><code>io.close</code></a>).
+표준 라이브러리의 프로세스 관련 함수들(<a href="#pdf-os.execute"><code>os.execute</code></a>,
+<a href="#pdf-io.close"><code>io.close</code></a>)을 위한
+반환 값을 만들어 낸다.
 
 
 
@@ -6411,9 +6410,9 @@ process-related functions in the standard library
 <pre>int luaL_fileresult (lua_State *L, int stat, const char *fname);</pre>
 
 <p>
-This function produces the return values for
-file-related functions in the standard library
-(<a href="#pdf-io.open"><code>io.open</code></a>, <a href="#pdf-os.rename"><code>os.rename</code></a>, <a href="#pdf-file:seek"><code>file:seek</code></a>, etc.).
+표준 라이브러리의 파일 관련 함수들(<a href="#pdf-io.open"><code>io.open</code></a>,
+<a href="#pdf-os.rename"><code>os.rename</code></a>, <a href="#pdf-file:seek"><code>file:seek</code></a> 등)을 위한
+반환 값을 만들어 낸다.
 
 
 
@@ -6424,11 +6423,11 @@ file-related functions in the standard library
 <pre>int luaL_getmetafield (lua_State *L, int obj, const char *e);</pre>
 
 <p>
-Pushes onto the stack the field <code>e</code> from the metatable
-of the object at index <code>obj</code> and returns the type of pushed value.
-If the object does not have a metatable,
-or if the metatable does not have this field,
-pushes nothing and returns <code>LUA_TNIL</code>.
+인덱스 <code>obj</code>에 있는 객체의 메타테이블의 필드 <code>e</code>를
+스택에 집어넣고 집어넣은 값의 타입을 반환한다.
+그 객체에 메타테이블이 없거나
+메타테이블에 그 필드가 없으면
+아무 것도 집어넣지 않고 <code>LUA_TNIL</code>을 반환한다.
 
 
 
@@ -6439,10 +6438,11 @@ pushes nothing and returns <code>LUA_TNIL</code>.
 <pre>int luaL_getmetatable (lua_State *L, const char *tname);</pre>
 
 <p>
-Pushes onto the stack the metatable associated with name <code>tname</code>
-in the registry (see <a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a>)
-(<b>nil</b> if there is no metatable associated with that name).
-Returns the type of the pushed value.
+레지스트리에서 이름 <code>tname</code>에 연계되어 있는
+(<a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a> 참고)
+메타테이블을 스택에 집어넣는다.
+(그 이름에 연계된 메타테이블이 없으면 <b>nil</b>을 집어넣는다.)
+집어넣은 값의 타입을 반환한다.
 
 
 
@@ -6453,12 +6453,11 @@ Returns the type of the pushed value.
 <pre>int luaL_getsubtable (lua_State *L, int idx, const char *fname);</pre>
 
 <p>
-Ensures that the value <code>t[fname]</code>,
-where <code>t</code> is the value at index <code>idx</code>,
-is a table,
-and pushes that table onto the stack.
-Returns true if it finds a previous table there
-and false if it creates a new table.
+인덱스 <code>idx</code>에 있는 값 <code>t</code>에 대해
+<code>t[fname]</code>이 테이블이게 하고서
+그 테이블을 스택에 집어넣는다.
+이전의 테이블을 찾은 경우에는 참을 반환하고
+새 테이블을 만든 경우에는 거짓을 반환한다.
 
 
 
@@ -6472,10 +6471,10 @@ and false if it creates a new table.
                        const char *r);</pre>
 
 <p>
-Creates a copy of string <code>s</code> by replacing
-any occurrence of the string <code>p</code>
-with the string <code>r</code>.
-Pushes the resulting string on the stack and returns it.
+문자열 <code>s</code>에서
+문자열 <code>p</code>를 모두
+문자열 <code>r</code>로 바꾼 사본을 만든다.
+결과 문자열을 스택에 집어넣고 그 문자열을 반환한다.
 
 
 
@@ -6486,11 +6485,10 @@ Pushes the resulting string on the stack and returns it.
 <pre>lua_Integer luaL_len (lua_State *L, int index);</pre>
 
 <p>
-Returns the "length" of the value at the given index
-as a number;
-it is equivalent to the '<code>#</code>' operator in Lua (see <a href="#3.4.7">&sect;3.4.7</a>).
-Raises an error if the result of the operation is not an integer.
-(This case only can happen through metamethods.)
+지정한 인덱스에 있는 값의 "길이"를 수로 반환한다.
+루아의 '<code>#</code>' 연산자(<a href="#3.4.7">3.4.7절</a>)와 동등하다.
+연산 결과가 정수가 아니면 오류를 제기한다.
+(메타메소드를 통해서만 그런 경우가 발생할 수 있다.)
 
 
 
@@ -6504,7 +6502,7 @@ Raises an error if the result of the operation is not an integer.
                      const char *name);</pre>
 
 <p>
-Equivalent to <a href="#luaL_loadbufferx"><code>luaL_loadbufferx</code></a> with <code>mode</code> equal to <code>NULL</code>.
+<code>mode</code>가 <code>NULL</code>인 <a href="#luaL_loadbufferx"><code>luaL_loadbufferx</code></a>와 동등하다.
 
 
 
@@ -6519,16 +6517,16 @@ Equivalent to <a href="#luaL_loadbufferx"><code>luaL_loadbufferx</code></a> with
                       const char *mode);</pre>
 
 <p>
-Loads a buffer as a Lua chunk.
-This function uses <a href="#lua_load"><code>lua_load</code></a> to load the chunk in the
-buffer pointed to by <code>buff</code> with size <code>sz</code>.
+버퍼를 루아 청크로 적재한다.
+<a href="#lua_load"><code>lua_load</code></a>를 사용해
+<code>buff</code>가 가리키는 크기 <code>sz</code>인 버퍼에 있는 청크를 적재한다.
 
 
 <p>
-This function returns the same results as <a href="#lua_load"><code>lua_load</code></a>.
-<code>name</code> is the chunk name,
-used for debug information and error messages.
-The string <code>mode</code> works as in function <a href="#lua_load"><code>lua_load</code></a>.
+이 함수는 <a href="#lua_load"><code>lua_load</code></a>와 같은 결과를 반환한다.
+<code>name</code>은 청크 이름이며
+디버그 정보와 오류 메시지에 쓰인다.
+문자열 <code>mode</code>는 <a href="#lua_load"><code>lua_load</code></a> 함수에서처럼 동작한다.
 
 
 
@@ -6539,7 +6537,7 @@ The string <code>mode</code> works as in function <a href="#lua_load"><code>lua_
 <pre>int luaL_loadfile (lua_State *L, const char *filename);</pre>
 
 <p>
-Equivalent to <a href="#luaL_loadfilex"><code>luaL_loadfilex</code></a> with <code>mode</code> equal to <code>NULL</code>.
+<code>mode</code>가 <code>NULL</code>인 <a href="#luaL_loadfilex"><code>luaL_loadfilex</code></a>와 동등하다.
 
 
 
@@ -6551,28 +6549,27 @@ Equivalent to <a href="#luaL_loadfilex"><code>luaL_loadfilex</code></a> with <co
                                             const char *mode);</pre>
 
 <p>
-Loads a file as a Lua chunk.
-This function uses <a href="#lua_load"><code>lua_load</code></a> to load the chunk in the file
-named <code>filename</code>.
-If <code>filename</code> is <code>NULL</code>,
-then it loads from the standard input.
-The first line in the file is ignored if it starts with a <code>#</code>.
+파일을 루아 청크로 적재한다.
+<a href="#lua_load"><code>lua_load</code></a>를 사용해
+이름이 <code>filename</code>인 파일에 있는 청크를 적재한다.
+<code>filename</code>이 <code>NULL</code>이면
+표준 입력을 읽어서 적재한다.
+파일 첫 행이 <code>#</code>로 시작하면 그 행을 무시한다.
 
 
 <p>
-The string <code>mode</code> works as in function <a href="#lua_load"><code>lua_load</code></a>.
+문자열 <code>mode</code>는 <a href="#lua_load"><code>lua_load</code></a> 함수에서처럼 동작한다.
 
 
 <p>
-This function returns the same results as <a href="#lua_load"><code>lua_load</code></a>,
-but it has an extra error code <a name="pdf-LUA_ERRFILE"><code>LUA_ERRFILE</code></a>
-for file-related errors
-(e.g., it cannot open or read the file).
+이 함수는 <a href="#lua_load"><code>lua_load</code></a>와 같은 결과를 반환하되,
+파일 관련 오류(가령 파일을 열거나 읽을 수 없음)에 대한
+오류 코드 <a name="pdf-LUA_ERRFILE"><code>LUA_ERRFILE</code></a>이 추가로 있다.
 
 
 <p>
-As <a href="#lua_load"><code>lua_load</code></a>, this function only loads the chunk;
-it does not run it.
+<a href="#lua_load"><code>lua_load</code></a>처럼 이 함수는 청크 적재만 하고
+실행은 하지 않는다.
 
 
 
@@ -6583,18 +6580,18 @@ it does not run it.
 <pre>int luaL_loadstring (lua_State *L, const char *s);</pre>
 
 <p>
-Loads a string as a Lua chunk.
-This function uses <a href="#lua_load"><code>lua_load</code></a> to load the chunk in
-the zero-terminated string <code>s</code>.
+문자열을 루아 청크로 적재한다.
+<a href="#lua_load"><code>lua_load</code></a>를 사용해
+영 종료 문자열 <code>s</code>에 있는 청크를 적재한다.
 
 
 <p>
-This function returns the same results as <a href="#lua_load"><code>lua_load</code></a>.
+이 함수는 <a href="#lua_load"><code>lua_load</code></a>와 같은 결과를 반환한다.
 
 
 <p>
-Also as <a href="#lua_load"><code>lua_load</code></a>, this function only loads the chunk;
-it does not run it.
+또한 <a href="#lua_load"><code>lua_load</code></a>처럼 이 함수는 청크 적재만 하고
+실행은 하지 않는다.
 
 
 
@@ -6605,18 +6602,18 @@ it does not run it.
 <pre>void luaL_newlib (lua_State *L, const luaL_Reg l[]);</pre>
 
 <p>
-Creates a new table and registers there
-the functions in list <code>l</code>.
+새 테이블을 만들어서
+목록 <code>l</code>의 함수들을 거기 등록한다.
 
 
 <p>
-It is implemented as the following macro:
+다음 매크로로 구현되어 있다.
 
 <pre>
      (luaL_newlibtable(L,l), luaL_setfuncs(L,l,0))
 </pre><p>
-The array <code>l</code> must be the actual array,
-not a pointer to it.
+배열 <code>l</code>이 배열 포인터가 아니라
+실제 배열이어야 한다.
 
 
 
@@ -6627,17 +6624,17 @@ not a pointer to it.
 <pre>void luaL_newlibtable (lua_State *L, const luaL_Reg l[]);</pre>
 
 <p>
-Creates a new table with a size optimized
-to store all entries in the array <code>l</code>
-(but does not actually store them).
-It is intended to be used in conjunction with <a href="#luaL_setfuncs"><code>luaL_setfuncs</code></a>
-(see <a href="#luaL_newlib"><code>luaL_newlib</code></a>).
+배열 <code>l</code>의 전체 항목을 저장하기에 최적인 크기로
+새 테이블을 만든다.
+(실제로 저장하지는 않는다.)
+<a href="#luaL_setfuncs"><code>luaL_setfuncs</code></a>와 함께 쓰기 위한 것이다.
+(<a href="#luaL_newlib"><code>luaL_newlib</code></a> 참고.)
 
 
 <p>
-It is implemented as a macro.
-The array <code>l</code> must be the actual array,
-not a pointer to it.
+매크로로 구현되어 있다.
+배열 <code>l</code>이 배열 포인터가 아니라
+실제 배열이어야 한다.
 
 
 
@@ -6648,19 +6645,19 @@ not a pointer to it.
 <pre>int luaL_newmetatable (lua_State *L, const char *tname);</pre>
 
 <p>
-If the registry already has the key <code>tname</code>,
-returns 0.
-Otherwise,
-creates a new table to be used as a metatable for userdata,
-adds to this new table the pair <code>__name = tname</code>,
-adds to the registry the pair <code>[tname] = new table</code>,
-and returns 1.
-(The entry <code>__name</code> is used by some error-reporting functions.)
+레지스트리에 키 <code>tname</code>이 이미 있으면
+0을 반환한다.
+아니면
+userdata의 메타테이블로 쓸 새 테이블을 만들고,
+그 테이블에 <code>__name = tname</code> 쌍을 추가하고,
+레지스트리에 <code>[tname] = 새 테이블</code> 쌍을 추가하고,
+1을 반환한다.
+(몇몇 오류 보고 함수에서 <code>__name</code> 항목을 이용한다.)
 
 
 <p>
-In both cases pushes onto the stack the final value associated
-with <code>tname</code> in the registry.
+두 경우 모두 레지스트리에서 <code>tname</code>에 연계된
+최종 값을 스택에 집어넣는다.
 
 
 
@@ -6671,17 +6668,16 @@ with <code>tname</code> in the registry.
 <pre>lua_State *luaL_newstate (void);</pre>
 
 <p>
-Creates a new Lua state.
-It calls <a href="#lua_newstate"><code>lua_newstate</code></a> with an
-allocator based on the standard&nbsp;C <code>realloc</code> function
-and then sets a panic function (see <a href="#4.6">&sect;4.6</a>) that prints
-an error message to the standard error output in case of fatal
-errors.
+새 루아 상태를 만든다.
+표준 C <code>realloc</code> 함수 기반 할당자로
+<a href="#lua_newstate"><code>lua_newstate</code></a>를 호출하고서,
+치명적 오류 시 표준 오류 출력에 오류 메시지를 찍는
+패닉 함수(<a href="#4.6">4.6절</a>)를 설정한다.
 
 
 <p>
-Returns the new state,
-or <code>NULL</code> if there is a memory allocation error.
+새 상태를 반환한다.
+메모리 할당 오류 발생 시 <code>NULL</code>을 반환한다.
 
 
 
@@ -6692,7 +6688,7 @@ or <code>NULL</code> if there is a memory allocation error.
 <pre>void luaL_openlibs (lua_State *L);</pre>
 
 <p>
-Opens all standard Lua libraries into the given state.
+지정한 상태 안에서 표준 루아 라이브러리 모두를 연다.
 
 
 
@@ -6703,17 +6699,16 @@ Opens all standard Lua libraries into the given state.
 <pre>T luaL_opt (L, func, arg, dflt);</pre>
 
 <p>
-This macro is defined as follows:
+이 매크로는 다음과 같이 정의되어 있다.
 
 <pre>
      (lua_isnoneornil(L,(arg)) ? (dflt) : func(L,(arg)))
 </pre><p>
-In words, if the argument <code>arg</code> is nil or absent,
-the macro results in the default <code>dflt</code>.
-Otherwise, it results in the result of calling <code>func</code>
-with the state <code>L</code> and the argument index <code>arg</code> as
-parameters.
-Note that it evaluates the expression <code>dflt</code> only if needed.
+말로 하자면, <code>arg</code> 번째 인자가 nil이거나 존재하지 않으면
+기본 값 <code>dflt</code>가 매크로 결과가 된다.
+아니면 상태 <code>L</code>과 인자 인덱스 <code>arg</code>를
+매개변수로 해서 <code>func</code>를 호출한 결과를 내놓는다.
+식 <code>dflt</code>를 필요시에만 평가한다는 점에 유의하라.
 
 
 
@@ -6726,12 +6721,12 @@ Note that it evaluates the expression <code>dflt</code> only if needed.
                              lua_Integer d);</pre>
 
 <p>
-If the function argument <code>arg</code> is an integer
-(or convertible to an integer),
-returns this integer.
-If this argument is absent or is <b>nil</b>,
-returns <code>d</code>.
-Otherwise, raises an error.
+<code>arg</code> 번째 함수 인자가 정수이면
+(또는 정수로 변환 가능하면)
+그 정수를 반환한다.
+그 인자가 존재하지 않거나 <b>nil</b>이면
+<code>d</code>를 반환한다.
+그 외 경우 오류를 제기한다.
 
 
 
@@ -6745,24 +6740,24 @@ Otherwise, raises an error.
                              size_t *l);</pre>
 
 <p>
-If the function argument <code>arg</code> is a string,
-returns this string.
-If this argument is absent or is <b>nil</b>,
-returns <code>d</code>.
-Otherwise, raises an error.
+<code>arg</code> 번째 함수 인자가 문자열이면
+그 문자열을 반환한다.
+그 인자가 존재하지 않거나 <b>nil</b>이면
+<code>d</code>를 반환한다.
+그 외 경우 오류를 제기한다.
 
 
 <p>
-If <code>l</code> is not <code>NULL</code>,
-fills the position <code>*l</code> with the result's length.
-If the result is <code>NULL</code>
-(only possible when returning <code>d</code> and <code>d == NULL</code>),
-its length is considered zero.
+<code>l</code>이 <code>NULL</code>이 아니면
+<code>*l</code> 위치에 결과의 길이를 채운다.
+결과가 <code>NULL</code>이면
+(<code>d</code>를 반환하는데 <code>d == NULL</code>일 때만 가능)
+길이가 0이라고 본다.
 
 
 <p>
-This function uses <a href="#lua_tolstring"><code>lua_tolstring</code></a> to get its result,
-so all conversions and caveats of that function apply here.
+이 함수는 <a href="#lua_tolstring"><code>lua_tolstring</code></a>을 써서 결과를 얻는다.
+따라서 그 함수의 모든 변환 방식과 주의 사항이 여기에도 적용된다.
 
 
 
@@ -6773,11 +6768,11 @@ so all conversions and caveats of that function apply here.
 <pre>lua_Number luaL_optnumber (lua_State *L, int arg, lua_Number d);</pre>
 
 <p>
-If the function argument <code>arg</code> is a number,
-returns this number.
-If this argument is absent or is <b>nil</b>,
-returns <code>d</code>.
-Otherwise, raises an error.
+<code>arg</code> 번째 함수 인자가 수이면
+그 수를 반환한다.
+그 인자가 존재하지 않거나 <b>nil</b>이면
+<code>d</code>를 반환한다.
+그 외 경우 오류를 제기한다.
 
 
 
@@ -6790,11 +6785,11 @@ Otherwise, raises an error.
                             const char *d);</pre>
 
 <p>
-If the function argument <code>arg</code> is a string,
-returns this string.
-If this argument is absent or is <b>nil</b>,
-returns <code>d</code>.
-Otherwise, raises an error.
+<code>arg</code> 번째 함수 인자가 문자열이면
+그 문자열을 반환한다.
+그 인자가 존재하지 않거나 <b>nil</b>이면
+<code>d</code>를 반환한다.
+그 외 경우 오류를 제기한다.
 
 
 
@@ -6805,8 +6800,8 @@ Otherwise, raises an error.
 <pre>char *luaL_prepbuffer (luaL_Buffer *B);</pre>
 
 <p>
-Equivalent to <a href="#luaL_prepbuffsize"><code>luaL_prepbuffsize</code></a>
-with the predefined size <a name="pdf-LUAL_BUFFERSIZE"><code>LUAL_BUFFERSIZE</code></a>.
+미리 정의된 크기 <a name="pdf-LUAL_BUFFERSIZE"><code>LUAL_BUFFERSIZE</code></a>를 쓰는
+<a href="#luaL_prepbuffsize"><code>luaL_prepbuffsize</code></a>와 동등하다.
 
 
 
@@ -6817,12 +6812,12 @@ with the predefined size <a name="pdf-LUAL_BUFFERSIZE"><code>LUAL_BUFFERSIZE</co
 <pre>char *luaL_prepbuffsize (luaL_Buffer *B, size_t sz);</pre>
 
 <p>
-Returns an address to a space of size <code>sz</code>
-where you can copy a string to be added to buffer <code>B</code>
-(see <a href="#luaL_Buffer"><code>luaL_Buffer</code></a>).
-After copying the string into this space you must call
-<a href="#luaL_addsize"><code>luaL_addsize</code></a> with the size of the string to actually add
-it to the buffer.
+크기가 <code>sz</code>인 공간의 주소를 반환한다.
+그리로 문자열을 복사해서 버퍼 <code>B</code>에 추가시킬 수 있다.
+(<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
+그 공간에 문자열을 복사한 후에
+문자열 크기로 <a href="#luaL_addsize"><code>luaL_addsize</code></a>를 호출해야
+실제로 버퍼에 추가된다.
 
 
 
@@ -6833,8 +6828,8 @@ it to the buffer.
 <pre>void luaL_pushresult (luaL_Buffer *B);</pre>
 
 <p>
-Finishes the use of buffer <code>B</code> leaving the final string on
-the top of the stack.
+버퍼 <code>B</code> 사용을 끝마치고 최종 문자열을
+스택 상단에 둔다.
 
 
 
@@ -6845,7 +6840,7 @@ the top of the stack.
 <pre>void luaL_pushresultsize (luaL_Buffer *B, size_t sz);</pre>
 
 <p>
-Equivalent to the sequence <a href="#luaL_addsize"><code>luaL_addsize</code></a>, <a href="#luaL_pushresult"><code>luaL_pushresult</code></a>.
+<a href="#luaL_addsize"><code>luaL_addsize</code></a>, <a href="#luaL_pushresult"><code>luaL_pushresult</code></a> 연속 호출과 동등하다.
 
 
 
@@ -6856,25 +6851,25 @@ Equivalent to the sequence <a href="#luaL_addsize"><code>luaL_addsize</code></a>
 <pre>int luaL_ref (lua_State *L, int t);</pre>
 
 <p>
-Creates and returns a <em>reference</em>,
-in the table at index <code>t</code>,
-for the object at the top of the stack (and pops the object).
+스택 상단에 있는 객체에 대한 <em>참조</em>를
+인덱스 <code>t</code>에 있는 테이블에 만들고
+그 참조를 반환한다.
+(그리고 그 객체를 꺼낸다.)
 
 
 <p>
-A reference is a unique integer key.
-As long as you do not manually add integer keys into table <code>t</code>,
-<a href="#luaL_ref"><code>luaL_ref</code></a> ensures the uniqueness of the key it returns.
-You can retrieve an object referred by reference <code>r</code>
-by calling <code>lua_rawgeti(L, t, r)</code>.
-Function <a href="#luaL_unref"><code>luaL_unref</code></a> frees a reference and its associated object.
+참조는 유일무이한 정수 키이다.
+테이블 <code>t</code>에 직접 정수 키를 추가하지 않는 한
+<a href="#luaL_ref"><code>luaL_ref</code></a>는 반환하는 키의 유일성을 보장한다.
+<code>lua_rawgeti(L, t, r)</code> 호출로
+참조 <code>r</code>이 가리키는 객체를 가져올 수 있다.
+<a href="#luaL_unref"><code>luaL_unref</code></a> 함수로 참조 및 연관 객체를 해제한다.
 
 
 <p>
-If the object at the top of the stack is <b>nil</b>,
-<a href="#luaL_ref"><code>luaL_ref</code></a> returns the constant <a name="pdf-LUA_REFNIL"><code>LUA_REFNIL</code></a>.
-The constant <a name="pdf-LUA_NOREF"><code>LUA_NOREF</code></a> is guaranteed to be different
-from any reference returned by <a href="#luaL_ref"><code>luaL_ref</code></a>.
+스택 상단의 객체가 <b>nil</b>이면
+<a href="#luaL_ref"><code>luaL_ref</code></a>는 상수 <a name="pdf-LUA_REFNIL"><code>LUA_REFNIL</code></a>을 반환한다.
+상수 <a name="pdf-LUA_NOREF"><code>LUA_NOREF</code></a>는 <a href="#luaL_ref"><code>luaL_ref</code></a>가 반환하는 어떤 참조와도 다르다고 보장된다.
 
 
 
@@ -6887,12 +6882,13 @@ from any reference returned by <a href="#luaL_ref"><code>luaL_ref</code></a>.
 } luaL_Reg;</pre>
 
 <p>
-Type for arrays of functions to be registered by
-<a href="#luaL_setfuncs"><code>luaL_setfuncs</code></a>.
-<code>name</code> is the function name and <code>func</code> is a pointer to
-the function.
-Any array of <a href="#luaL_Reg"><code>luaL_Reg</code></a> must end with a sentinel entry
-in which both <code>name</code> and <code>func</code> are <code>NULL</code>.
+<a href="#luaL_setfuncs"><code>luaL_setfuncs</code></a>로
+등록할 함수 배열을 위한 타입.
+<code>name</code>은 함수 이름이고
+<code>func</code>는 함수 포인터이다.
+<a href="#luaL_Reg"><code>luaL_Reg</code></a>의 배열은
+<code>name</code>과 <code>func</code>가 모두 <code>NULL</code>인
+경계 항목으로 끝나야 한다.
 
 
 
@@ -6904,19 +6900,19 @@ in which both <code>name</code> and <code>func</code> are <code>NULL</code>.
                     lua_CFunction openf, int glb);</pre>
 
 <p>
-If <code>modname</code> is not already present in <a href="#pdf-package.loaded"><code>package.loaded</code></a>,
-calls function <code>openf</code> with string <code>modname</code> as an argument
-and sets the call result in <code>package.loaded[modname]</code>,
-as if that function has been called through <a href="#pdf-require"><code>require</code></a>.
+<a href="#pdf-package.loaded"><code>package.loaded</code></a>에 <code>modname</code>이 이미 있지 않으면
+문자열 <code>modname</code>을 인자로 해서 <code>openf</code> 함수를 호출한다.
+그리고 그 함수가 <a href="#pdf-require"><code>require</code></a>를 통해 호출된 것처럼
+호출 결과를 <code>package.loaded[modname]</code>에 설정한다.
 
 
 <p>
-If <code>glb</code> is true,
-also stores the module into global <code>modname</code>.
+<code>glb</code>가 참이면
+전역 <code>modname</code>에도 모듈을 저장한다.
 
 
 <p>
-Leaves a copy of the module on the stack.
+모듈의 사본을 스택에 둔다.
 
 
 
@@ -6927,17 +6923,17 @@ Leaves a copy of the module on the stack.
 <pre>void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup);</pre>
 
 <p>
-Registers all functions in the array <code>l</code>
-(see <a href="#luaL_Reg"><code>luaL_Reg</code></a>) into the table on the top of the stack
-(below optional upvalues, see next).
+배열 <code>l</code>의 모든 함수들을
+(<a href="#luaL_Reg"><code>luaL_Reg</code></a> 참고)
+스택 상단에 있는 (위에 upvalue가 있을 수도 있음. 이어지는 내용 참고)
+테이블에 등록한다.
 
 
 <p>
-When <code>nup</code> is not zero,
-all functions are created sharing <code>nup</code> upvalues,
-which must be previously pushed on the stack
-on top of the library table.
-These values are popped from the stack after the registration.
+<code>nup</code>가 0이 아니면
+<code>nup</code>개 upvalue를 공유하게 해서 모든 함수를 생성한다.
+그 upvalue들을 스택에서 라이브러리 테이블 위에 미리 집어넣어야 한다.
+등록 후 스택에서 그 값들이 빠진다.
 
 
 
@@ -6948,9 +6944,10 @@ These values are popped from the stack after the registration.
 <pre>void luaL_setmetatable (lua_State *L, const char *tname);</pre>
 
 <p>
-Sets the metatable of the object at the top of the stack
-as the metatable associated with name <code>tname</code>
-in the registry (see <a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a>).
+스택 상단에 있는 객체의 메타테이블을
+레지스트리에서 이름 <code>tname</code>에 연계된
+메타테이블로 설정한다.
+(<a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a> 참고.)
 
 
 
@@ -6963,32 +6960,31 @@ in the registry (see <a href="#luaL_newmetatable"><code>luaL_newmetatable</code>
 } luaL_Stream;</pre>
 
 <p>
-The standard representation for file handles,
-which is used by the standard I/O library.
+표준 I/O 라이브러리에서 사용하는
+파일 핸들 표준 표현 방식이다.
 
 
 <p>
-A file handle is implemented as a full userdata,
-with a metatable called <code>LUA_FILEHANDLE</code>
-(where <code>LUA_FILEHANDLE</code> is a macro with the actual metatable's name).
-The metatable is created by the I/O library
-(see <a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a>).
+파일 핸들은 <code>LUA_FILEHANDLE</code>이라는 메타테이블을 가진
+full userdata로 구현되어 있다.
+(<code>LUA_FILEHANDLE</code>은 실제 메타테이블 이름을 나타내는 매크로이다.)
+I/O 라이브러리에서 그 메타테이블을 만든다.
+(<a href="#luaL_newmetatable"><code>luaL_newmetatable</code></a> 참고.)
 
 
 <p>
-This userdata must start with the structure <code>luaL_Stream</code>;
-it can contain other data after this initial structure.
-Field <code>f</code> points to the corresponding C stream
-(or it can be <code>NULL</code> to indicate an incompletely created handle).
-Field <code>closef</code> points to a Lua function
-that will be called to close the stream
-when the handle is closed or collected;
-this function receives the file handle as its sole argument and
-must return either <b>true</b> (in case of success)
-or <b>nil</b> plus an error message (in case of error).
-Once Lua calls this field,
-it changes the field value to <code>NULL</code>
-to signal that the handle is closed.
+그 userdata는 시작 부분이 <code>luaL_Stream</code> 구조체여야 한다.
+그 초반 구조 뒤에 다른 데이터를 담을 수 있다.
+필드 <code>f</code>는 대응하는 C 스트림에 대한 포인터이다.
+(또는 생성 미완료 핸들을 나타내는 <code>NULL</code>일 수 있다.)
+필드 <code>closef</code>는 핸들이 닫히거나 수집될 때
+호출되어 스트림을 닫아 줄 루아 함수를 가리킨다.
+이 함수는 파일 핸들을 유일한 인자로 받으며
+(성공 시) <b>true</b> 또는
+(오류 시) <b>nil</b>과 오류 메시지를 반환해야 한다.
+이 필드를 호출한 다음
+루아에서 필드 값을 <code>NULL</code>로 바꾸어
+핸들이 닫혔음을 표시한다.
 
 
 
@@ -6999,9 +6995,8 @@ to signal that the handle is closed.
 <pre>void *luaL_testudata (lua_State *L, int arg, const char *tname);</pre>
 
 <p>
-This function works like <a href="#luaL_checkudata"><code>luaL_checkudata</code></a>,
-except that, when the test fails,
-it returns <code>NULL</code> instead of raising an error.
+이 함수는 <a href="#luaL_checkudata"><code>luaL_checkudata</code></a>처럼 동작하되,
+검사 실패 시 오류를 제기하는 대신 <code>NULL</code>을 반환한다.
 
 
 
@@ -7012,19 +7007,17 @@ it returns <code>NULL</code> instead of raising an error.
 <pre>const char *luaL_tolstring (lua_State *L, int idx, size_t *len);</pre>
 
 <p>
-Converts any Lua value at the given index to a C&nbsp;string
-in a reasonable format.
-The resulting string is pushed onto the stack and also
-returned by the function.
-If <code>len</code> is not <code>NULL</code>,
-the function also sets <code>*len</code> with the string length.
+지정한 인덱스에 있는 어떤 루아 값이든
+적당한 형식의 C 문자열로 변환한다.
+결과 문자열을 스택에 집어넣고 반환도 한다.
+또한 <code>len</code>이 <code>NULL</code>이 아니면
+<code>*len</code>을 문자열 길이로 설정한다.
 
 
 <p>
-If the value has a metatable with a <code>__tostring</code> field,
-then <code>luaL_tolstring</code> calls the corresponding metamethod
-with the value as argument,
-and uses the result of the call as its result.
+그 값에 메타테이블이 있고 <code>__tostring</code> 필드가 있으면
+<code>luaL_tolstring</code>에서 값을 인자로 해서 해당 메타메소드를 호출하여
+호출 결과를 자기 결과로 쓴다.
 
 
 
@@ -7036,11 +7029,11 @@ and uses the result of the call as its result.
                      int level);</pre>
 
 <p>
-Creates and pushes a traceback of the stack <code>L1</code>.
-If <code>msg</code> is not <code>NULL</code> it is appended
-at the beginning of the traceback.
-The <code>level</code> parameter tells at which level
-to start the traceback.
+스택 <code>L1</code>의 트레이스백을 만들어서 집어넣는다.
+<code>msg</code>가 <code>NULL</code>이 아니면
+트레이스백 앞쪽에 덧붙인다.
+<code>level</code> 매개변수는 어느 단계에서
+트레이스백을 시작할지 알려 준다.
 
 
 
@@ -7051,7 +7044,7 @@ to start the traceback.
 <pre>const char *luaL_typename (lua_State *L, int index);</pre>
 
 <p>
-Returns the name of the type of the value at the given index.
+지정한 인덱스에 있는 값의 타입 이름을 반환한다.
 
 
 
@@ -7062,16 +7055,16 @@ Returns the name of the type of the value at the given index.
 <pre>void luaL_unref (lua_State *L, int t, int ref);</pre>
 
 <p>
-Releases reference <code>ref</code> from the table at index <code>t</code>
-(see <a href="#luaL_ref"><code>luaL_ref</code></a>).
-The entry is removed from the table,
-so that the referred object can be collected.
-The reference <code>ref</code> is also freed to be used again.
+인덱스 <code>t</code>에 있는 테이블에서 참조 <code>ref</code>를 해제한다.
+(<a href="#luaL_ref"><code>luaL_ref</code></a> 참고.)
+테이블에서 항목을 제거하여
+피참조 객체가 수집될 수 있게 한다.
+참조 <code>ref</code>도 해제하여 다시 쓸 수 있게 한다.
 
 
 <p>
-If <code>ref</code> is <a href="#pdf-LUA_NOREF"><code>LUA_NOREF</code></a> or <a href="#pdf-LUA_REFNIL"><code>LUA_REFNIL</code></a>,
-<a href="#luaL_unref"><code>luaL_unref</code></a> does nothing.
+<code>ref</code>가 <a href="#pdf-LUA_NOREF"><code>LUA_NOREF</code></a>나 <a href="#pdf-LUA_REFNIL"><code>LUA_REFNIL</code></a>이면
+<a href="#luaL_unref"><code>luaL_unref</code></a>는 아무것도 하지 않는다.
 
 
 
@@ -7082,20 +7075,19 @@ If <code>ref</code> is <a href="#pdf-LUA_NOREF"><code>LUA_NOREF</code></a> or <a
 <pre>void luaL_where (lua_State *L, int lvl);</pre>
 
 <p>
-Pushes onto the stack a string identifying the current position
-of the control at level <code>lvl</code> in the call stack.
-Typically this string has the following format:
+호출 스택 <code>lvl</code> 단계에서의 현재 제어 위치를 나타내는
+문자열을 스택에 집어넣는다.
+보통 이 문자열은 다음 형식이다.
 
 <pre>
-     <em>chunkname</em>:<em>currentline</em>:
+     <em>청크이름</em>:<em>현재행</em>:
 </pre><p>
-Level&nbsp;0 is the running function,
-level&nbsp;1 is the function that called the running function,
-etc.
+0번 단계가 동작 중인 함수이고
+1번 단계가 그 동작 중인 함수를 호출한 함수인 식이다.
 
 
 <p>
-This function is used to build a prefix for error messages.
+오류 메시지 시작 부분을 만드는 데 이 함수가 쓰인다.
 
 
 
