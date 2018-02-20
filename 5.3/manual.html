@@ -3444,7 +3444,7 @@ C 함수에서 루아로 값을 반환할 때는
                         int strip);</pre>
 
 <p>
-함수를 바이너리 청크로 덤프 한다.
+함수를 바이너리 청크 형태로 덤프 한다.
 스택 상단의 루아 함수를 받아서
 바이너리 청크를 만들어 내는데,
 그 청크를 다시 적재하면
@@ -6517,7 +6517,7 @@ userdata인지 확인하고 그 userdata 주소를
                       const char *mode);</pre>
 
 <p>
-버퍼를 루아 청크로 적재한다.
+버퍼에서 루아 청크를 적재한다.
 <a href="#lua_load"><code>lua_load</code></a>를 사용해
 <code>buff</code>가 가리키는 크기 <code>sz</code>인 버퍼에 있는 청크를 적재한다.
 
@@ -6549,7 +6549,7 @@ userdata인지 확인하고 그 userdata 주소를
                                             const char *mode);</pre>
 
 <p>
-파일을 루아 청크로 적재한다.
+파일에서 루아 청크를 적재한다.
 <a href="#lua_load"><code>lua_load</code></a>를 사용해
 이름이 <code>filename</code>인 파일에 있는 청크를 적재한다.
 <code>filename</code>이 <code>NULL</code>이면
@@ -6580,7 +6580,7 @@ userdata인지 확인하고 그 userdata 주소를
 <pre>int luaL_loadstring (lua_State *L, const char *s);</pre>
 
 <p>
-문자열을 루아 청크로 적재한다.
+문자열에서 루아 청크를 적재한다.
 <a href="#lua_load"><code>lua_load</code></a>를 사용해
 영 종료 문자열 <code>s</code>에 있는 청크를 적재한다.
 
