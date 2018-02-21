@@ -304,7 +304,7 @@ C 레지스트리의 특수 인덱스에 그 값을 유지한다. (<a href="#4.5
 
 <p>
 루아에서 청크를 적재할 때
-그 <code>_ENV</code> upvalue의 기본 값은 전역 환경이다.
+그 <code>_ENV</code> upvalue의 기본값은 전역 환경이다.
 (<a href="#pdf-load"><code>load</code></a> 참고.)
 따라서 기본적으로 루아 코드의 유휴 이름들은
 전역 환경 내 항목들을 가리킨다.
@@ -6249,7 +6249,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 <p>
 <code>def</code>가 <code>NULL</code>이 아니면
 인자 <code>arg</code>가 없거나 그 인자가 <b>nil</b>일 때
-기본 값으로 <code>def</code>를 쓴다.
+기본값으로 <code>def</code>를 쓴다.
 
 
 <p>
@@ -6705,7 +6705,7 @@ userdata의 메타테이블로 쓸 새 테이블을 만들고,
      (lua_isnoneornil(L,(arg)) ? (dflt) : func(L,(arg)))
 </pre><p>
 말로 하자면, <code>arg</code> 번째 인자가 nil이거나 존재하지 않으면
-기본 값 <code>dflt</code>가 매크로 결과가 된다.
+기본값 <code>dflt</code>가 매크로 결과가 된다.
 아니면 상태 <code>L</code>과 인자 인덱스 <code>arg</code>를
 매개변수로 해서 <code>func</code>를 호출한 결과를 내놓는다.
 식 <code>dflt</code>를 필요시에만 평가한다는 점에 유의하라.
