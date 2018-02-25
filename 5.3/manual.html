@@ -7793,14 +7793,14 @@ yield의 결과로 전달된다.
 
 
 
-<h2>6.3 &ndash; <a name="6.3">Modules</a></h2>
+<h2>6.3 &ndash; <a name="6.3">모듈</a></h2>
 
 <p>
-The package library provides basic
-facilities for loading modules in Lua.
-It exports one function directly in the global environment:
-<a href="#pdf-require"><code>require</code></a>.
-Everything else is exported in a table <a name="pdf-package"><code>package</code></a>.
+패키지 라이브러리는 루아에서 모듈을 적재하기 위한
+기본 요소들을 제공한다.
+전역 환경으로 직접 내보내는 함수는
+<a href="#pdf-require"><code>require</code></a> 하나이다.
+나머지는 모두 테이블 <a name="#pdf-package"><code>package</code></a>를 통해 내보낸다.
 
 
 <p>
@@ -7808,54 +7808,56 @@ Everything else is exported in a table <a name="pdf-package"><code>package</code
 
 
 <p>
-Loads the given module.
-The function starts by looking into the <a href="#pdf-package.loaded"><code>package.loaded</code></a> table
-to determine whether <code>modname</code> is already loaded.
-If it is, then <code>require</code> returns the value stored
-at <code>package.loaded[modname]</code>.
-Otherwise, it tries to find a <em>loader</em> for the module.
+지정한 모듈을 적재한다.
+먼저 <a href="#pdf-package.loaded"><code>package.loaded</code></a> 테이블을 확인해서
+<code>modname</code>이 이미 적재되어 있는지 알아본다.
+그 경우에는 <code>package.loaded[modname]</code>에 저장된 값을
+<code>require</code>가 반환한다.
+아닌 경우에는 그 모듈을 위한 <em>적재 함수</em>를 찾아 본다.
 
 
 <p>
-To find a loader,
-<code>require</code> is guided by the <a href="#pdf-package.searchers"><code>package.searchers</code></a> sequence.
-By changing this sequence,
-we can change how <code>require</code> looks for a module.
-The following explanation is based on the default configuration
-for <a href="#pdf-package.searchers"><code>package.searchers</code></a>.
+<code>require</code>에서 적재 함수를 찾는 동작은
+<a href="#pdf-package.searchers"><code>package.searchers</code></a> 열에 따라 이뤄진다.
+이 열을 바꾸면
+<code>require</code>에서 모듈을 찾는 방식을 바꿀 수 있다.
+이어지는 설명은 <a href="#pdf-package.searchers"><code>package.searchers</code></a>의
+기본 설정을 기준으로 한 것이다.
 
 
 <p>
-First <code>require</code> queries <code>package.preload[modname]</code>.
-If it has a value,
-this value (which must be a function) is the loader.
-Otherwise <code>require</code> searches for a Lua loader using the
-path stored in <a href="#pdf-package.path"><code>package.path</code></a>.
-If that also fails, it searches for a C&nbsp;loader using the
-path stored in <a href="#pdf-package.cpath"><code>package.cpath</code></a>.
-If that also fails,
-it tries an <em>all-in-one</em> loader (see <a href="#pdf-package.searchers"><code>package.searchers</code></a>).
+<code>require</code>에서 먼저 <code>package.preload[modname]</code>을 확인한다.
+값이 있으면 (함수여야 하는) 그 값이 적재 함수이다.
+그렇지 않으면
+<a href="#pdf-package.path"><code>package.path</code></a>에 저장된
+경로를 이용해 루아 적재 함수를 탐색한다.
+그것도 실패하면
+<a href="#pdf-package.cpath"><code>package.cpath</code></a>에 저장된
+경로를 이용해 C 적재 함수를 탐색한다.
+그것도 실패하면
+<em>일체형</em> 적재 함수를 시도한다.
+(<a href="#pdf-package.searchers"><code>package.searchers</code></a> 참고.)
 
 
 <p>
-Once a loader is found,
-<code>require</code> calls the loader with two arguments:
-<code>modname</code> and an extra value dependent on how it got the loader.
-(If the loader came from a file,
-this extra value is the file name.)
-If the loader returns any non-nil value,
-<code>require</code> assigns the returned value to <code>package.loaded[modname]</code>.
-If the loader does not return a non-nil value and
-has not assigned any value to <code>package.loaded[modname]</code>,
-then <code>require</code> assigns <b>true</b> to this entry.
-In any case, <code>require</code> returns the
-final value of <code>package.loaded[modname]</code>.
+적재 함수를 찾으면
+<code>modname</code>, 그리고 적재 함수를 찾은 방법에 따라 달라지는 어떤 추가 값을
+인자로 해서 <code>require</code>에서 적재 함수를 호출한다.
+(적재 함수가 파일에서 왔다면
+그 추가 값은 파일 이름이다.)
+적재 함수가 nil 아닌 값을 반환하면
+<code>require</code>에서 그 반환 값을 <code>package.loaded[modname]</code>에 할당한다.
+적재 함수가 nil 아닌 값을 반환하지 않고
+<code>package.loaded[modname]</code>에 어떤 값도 할당하지 않았으면
+<code>require</code>에서 그 항목에 <b>true</b>를 할당한다.
+어느 경우이든 <code>package.loaded[modname]</code>의 최종 값을
+<code>require</code>가 반환한다.
 
 
 <p>
-If there is any error loading or running the module,
-or if it cannot find any loader for the module,
-then <code>require</code> raises an error.
+모듈 적재나 실행 중 오류가 있거나
+모듈 적재 함수를 찾을 수 없는 경우에는
+<code>require</code>가 오류를 제기한다.
 
 
 
@@ -7865,28 +7867,27 @@ then <code>require</code> raises an error.
 
 
 <p>
-A string describing some compile-time configurations for packages.
-This string is a sequence of lines:
+패키지에 관한 몇 가지 컴파일 타임 설정들을 기술하는 문자열.
+이 문자열은 다음 행들이 이어진 것이다.
 
 <ul>
 
-<li>The first line is the directory separator string.
-Default is '<code>\</code>' for Windows and '<code>/</code>' for all other systems.</li>
+<li>첫 번째 행은 디렉터리 구분 문자열이다.
+기본값은 윈도우에서 '<code>\</code>'이고 다른 모든 시스템에서 '<code>/</code>'이다.</li>
 
-<li>The second line is the character that separates templates in a path.
-Default is '<code>;</code>'.</li>
+<li>두 번째 행은 경로 내에서 템플릿들을 구분하는 문자이다.
+기본값은 '<code>;</code>'이다.</li>
 
-<li>The third line is the string that marks the
-substitution points in a template.
-Default is '<code>?</code>'.</li>
+<li>세 번째 행은 템플릿 내에서 치환 지점을 표시하는 문자열이다.
+기본값은 '<code>?</code>'이다.</li>
 
-<li>The fourth line is a string that, in a path in Windows,
-is replaced by the executable's directory.
-Default is '<code>!</code>'.</li>
+<li>네 번째 행은 윈도우 경로에서 실행 파일의 디렉터리로
+바뀌는 문자열이다.
+기본값은 '<code>!</code>'이다.</li>
 
-<li>The fifth line is a mark to ignore all text after it
-when building the <code>luaopen_</code> function name.
-Default is '<code>-</code>'.</li>
+<li>다섯 번째 행은 <code>luaopen_</code> 함수 이름을 만들어 낼 때
+이후 텍스트를 모두 무시하게 하는 표시이다.
+기본값은 '<code>-</code>'이다.</li>
 
 </ul>
 
@@ -7897,15 +7898,15 @@ Default is '<code>-</code>'.</li>
 
 
 <p>
-The path used by <a href="#pdf-require"><code>require</code></a> to search for a C&nbsp;loader.
+<a href="#pdf-require"><code>require</code></a>에서 C 적재 함수 탐색에 쓰는 경로.
 
 
 <p>
-Lua initializes the C&nbsp;path <a href="#pdf-package.cpath"><code>package.cpath</code></a> in the same way
-it initializes the Lua path <a href="#pdf-package.path"><code>package.path</code></a>,
-using the environment variable <a name="pdf-LUA_CPATH_5_3"><code>LUA_CPATH_5_3</code></a>,
-or the environment variable <a name="pdf-LUA_CPATH"><code>LUA_CPATH</code></a>,
-or a default path defined in <code>luaconf.h</code>.
+루아 경로 <a href="#pdf-package.path"><code>package.path</code></a>와 같은 방식으로
+C 경로 <a href="#pdf-package.cpath"><code>package.cpath</code></a>를 초기화 한다.
+환경 변수 <a name="#pdf-LUA_CPATH_5_3"><code>LUA_CPATH_5_3</code></a>이나
+환경 변수 <a name="#pdf-LUA_CPATH"><code>LUA_CPATH</code></a>를 사용하거나
+<code>luaconf.h</code>에 정의된 기본 경로를 사용한다.
 
 
 
@@ -7915,17 +7916,17 @@ or a default path defined in <code>luaconf.h</code>.
 
 
 <p>
-A table used by <a href="#pdf-require"><code>require</code></a> to control which
-modules are already loaded.
-When you require a module <code>modname</code> and
-<code>package.loaded[modname]</code> is not false,
-<a href="#pdf-require"><code>require</code></a> simply returns the value stored there.
+어느 모듈이 이미 적재되어 있는지를 제어하기 위해
+<a href="#pdf-require"><code>require</code></a>에서 쓰는 테이블.
+모듈 <code>modname</code>을 요구했는데
+<code>package.loaded[modname]</code>이 거짓이 아니면
+<a href="#pdf-require"><code>require</code></a>는 그냥 거기 저장되어 있는 값을 반환한다.
 
 
 <p>
-This variable is only a reference to the real table;
-assignments to this variable do not change the
-table used by <a href="#pdf-require"><code>require</code></a>.
+이 변수는 실제 테이블에 대한 참조일 뿐이다.
+이 변수에 할당을 해도
+<a href="#pdf-require"><code>require</code></a>에서 쓰는 테이블이 바뀌지 않는다.
 
 
 
@@ -7935,38 +7936,39 @@ table used by <a href="#pdf-require"><code>require</code></a>.
 
 
 <p>
-Dynamically links the host program with the C&nbsp;library <code>libname</code>.
+호스트 프로그램을 C 라이브러리 <code>libname</code>과 동적으로 링크 한다.
 
 
 <p>
-If <code>funcname</code> is "<code>*</code>",
-then it only links with the library,
-making the symbols exported by the library
-available to other dynamically linked libraries.
-Otherwise,
-it looks for a function <code>funcname</code> inside the library
-and returns this function as a C&nbsp;function.
-So, <code>funcname</code> must follow the <a href="#lua_CFunction"><code>lua_CFunction</code></a> prototype
-(see <a href="#lua_CFunction"><code>lua_CFunction</code></a>).
+<code>funcname</code>이 "<code>*</code>"이면
+라이브러리와 링크 해서
+그 라이브러리가 내보내는 심볼들을
+다른 동적 링크 라이브러리에서 사용할 수 있게 만들기만 한다.
+그렇지 않으면
+라이브러리 안에서 함수 <code>funcname</code>을 찾아서
+그 함수를 C 함수 형태로 반환한다.
+따라서 <code>funcname</code>은 <a href="#lua_CFunction"><code>lua_CFunction</code></a> 원형을 따라야 한다.
+(<a href="#luaCFunction"><code>lua_CFunction</code></a> 참고.)
 
 
 <p>
-This is a low-level function.
-It completely bypasses the package and module system.
-Unlike <a href="#pdf-require"><code>require</code></a>,
-it does not perform any path searching and
-does not automatically adds extensions.
-<code>libname</code> must be the complete file name of the C&nbsp;library,
-including if necessary a path and an extension.
-<code>funcname</code> must be the exact name exported by the C&nbsp;library
-(which may depend on the C&nbsp;compiler and linker used).
+이 함수는 패키지 및 모듈 시스템을 완전히 건너뛰는
+저수준 함수이다.
+<a href="#pdf-require"><code>require</code></a>와 달리
+경로 탐색을 수행하지 않으며
+자동으로 확장자를 추가하지 않는다.
+<code>libname</code>은 필요 시 경로와 확장자까지 포함한
+C 라이브러리의 완전한 파일 이름이어야 한다.
+<code>funcname</code>은 C 라이브러리에서 내보내는 정확한 이름이어야 한다.
+(사용하는 C 컴파일러와 링커에 따라 달라질 수도 있다.)
 
 
 <p>
-This function is not supported by Standard&nbsp;C.
-As such, it is only available on some platforms
-(Windows, Linux, Mac OS X, Solaris, BSD,
-plus other Unix systems that support the <code>dlfcn</code> standard).
+이 기능을 표준 C에서 지원하지 않는다.
+그래서 일부 플랫폼에서만
+(윈도우, 리눅스, 맥 OS X, 솔라리스, BSD,
+기타 <code>dlfcn</code> 표준을 지원하는 유닉스 시스템)
+사용 가능하다.
 
 
 
@@ -7976,17 +7978,17 @@ plus other Unix systems that support the <code>dlfcn</code> standard).
 
 
 <p>
-The path used by <a href="#pdf-require"><code>require</code></a> to search for a Lua loader.
+<a href="#pdf-require"><code>require</code></a>에서 루아 적재 함수 탐색에 쓰는 경로.
 
 
 <p>
-At start-up, Lua initializes this variable with
-the value of the environment variable <a name="pdf-LUA_PATH_5_3"><code>LUA_PATH_5_3</code></a> or
-the environment variable <a name="pdf-LUA_PATH"><code>LUA_PATH</code></a> or
-with a default path defined in <code>luaconf.h</code>,
-if those environment variables are not defined.
-Any "<code>;;</code>" in the value of the environment variable
-is replaced by the default path.
+루아가 시작할 때 이 변수를
+환경 변수 <a name="#pdf-LUA_PATH_5_3"><code>LUA_PATH_5_3</code></a>이나
+환경 변수 <a name="#pdf-LUA_PATH"><code>LUA_PATH</code></a>로 초기화 한다.
+그 환경 변수들이 정의되어 있지 않으면
+<code>luaconf.h</code>에 정의된 기본 경로로 초기화 한다.
+환경 변수 값 내에 "<code>;;</code>"가 있으면
+거기에 기본 경로를 바꿔 넣는다.
 
 
 
@@ -7996,14 +7998,14 @@ is replaced by the default path.
 
 
 <p>
-A table to store loaders for specific modules
-(see <a href="#pdf-require"><code>require</code></a>).
+개별 모듈의 적재 함수들을 저장하는 테이블.
+(<a href="#pdf-require"><code>require</code></a> 참고.)
 
 
 <p>
-This variable is only a reference to the real table;
-assignments to this variable do not change the
-table used by <a href="#pdf-require"><code>require</code></a>.
+이 변수는 실제 테이블에 대한 참조일 뿐이다.
+이 변수에 할당을 해도
+<a href="#pdf-require"><code>require</code></a>에서 쓰는 테이블이 바뀌지 않는다.
 
 
 
@@ -8013,83 +8015,84 @@ table used by <a href="#pdf-require"><code>require</code></a>.
 
 
 <p>
-A table used by <a href="#pdf-require"><code>require</code></a> to control how to load modules.
+모듈 적재 방식을 제어하기 위한 <a href="#pdf-require"><code>require</code></a>에서 쓰는 테이블.
 
 
 <p>
-Each entry in this table is a <em>searcher function</em>.
-When looking for a module,
-<a href="#pdf-require"><code>require</code></a> calls each of these searchers in ascending order,
-with the module name (the argument given to <a href="#pdf-require"><code>require</code></a>) as its
-sole parameter.
-The function can return another function (the module <em>loader</em>)
-plus an extra value that will be passed to that loader,
-or a string explaining why it did not find that module
-(or <b>nil</b> if it has nothing to say).
+이 테이블의 각 항목은 <em>탐색 함수</em>이다.
+모듈을 찾을 때
+<a href="#pdf-require"><code>require</code></a>에서 이 탐색 함수 각각을 오름차순으로,
+모듈 이름(<a href="#pdf-require"><code>require</code></a>에 준 인자)을
+유일한 매개변수로 해서 호출한다.
+그 함수는 다른 함수(모듈 <em>적재 함수</em>)에 더해
+그 적재 함수에게 전달할 값을 추가로 반환할 수 있다.
+또는 모듈을 찾지 못한 이유를 설명하는 문자열을
+(설명할 것이 없으면 <b>nil</b>을) 반환할 수 있다.
 
 
 <p>
-Lua initializes this table with four searcher functions.
+루아가 네 가지 탐색 함수로 이 테이블을 초기화 한다.
 
 
 <p>
-The first searcher simply looks for a loader in the
-<a href="#pdf-package.preload"><code>package.preload</code></a> table.
+첫 번째 탐색 함수는
+<a href="#pdf-package.preload"><code>package.preload</code></a> 테이블 안의
+적재 함수만 찾아 본다.
 
 
 <p>
-The second searcher looks for a loader as a Lua library,
-using the path stored at <a href="#pdf-package.path"><code>package.path</code></a>.
-The search is done as described in function <a href="#pdf-package.searchpath"><code>package.searchpath</code></a>.
+두 번째 탐색 함수는
+<a href="#pdf-package.path"><code>package.path</code></a>에 저장된 경로를 이용해
+루아 라이브러리 적재 함수를 찾는다.
+함수 <a href="#pdf-package.searchpath"><code>package.searchpath</code></a>에서
+기술하는 대로 탐색이 이뤄진다.
 
 
 <p>
-The third searcher looks for a loader as a C&nbsp;library,
-using the path given by the variable <a href="#pdf-package.cpath"><code>package.cpath</code></a>.
-Again,
-the search is done as described in function <a href="#pdf-package.searchpath"><code>package.searchpath</code></a>.
-For instance,
-if the C&nbsp;path is the string
+세 번째 탐색 함수는
+변수 <a href="#pdf-package.cpath"><code>package.cpath</code></a>에서 얻은 경로를 이용해
+C 라이브러리 적재 함수를 찾는다.
+마찬가지로
+함수 <a href="#pdf-package.searchpath"><code>package.searchpath</code></a>에서
+기술하는 대로 탐색이 이뤄진다.
+예를 들어 C 경로가 다음 문자열일 때
 
 <pre>
      "./?.so;./?.dll;/usr/local/?/init.so"
 </pre><p>
-the searcher for module <code>foo</code>
-will try to open the files <code>./foo.so</code>, <code>./foo.dll</code>,
-and <code>/usr/local/foo/init.so</code>, in that order.
-Once it finds a C&nbsp;library,
-this searcher first uses a dynamic link facility to link the
-application with the library.
-Then it tries to find a C&nbsp;function inside the library to
-be used as the loader.
-The name of this C&nbsp;function is the string "<code>luaopen_</code>"
-concatenated with a copy of the module name where each dot
-is replaced by an underscore.
-Moreover, if the module name has a hyphen,
-its suffix after (and including) the first hyphen is removed.
-For instance, if the module name is <code>a.b.c-v2.1</code>,
-the function name will be <code>luaopen_a_b_c</code>.
+모듈 <code>foo</code> 탐색 함수는 파일
+<code>./foo.so</code>, <code>./foo.dll</code>,
+<code>/usr/local/foo/init.so</code>를 차례대로 열어 보게 된다.
+C 라이브러리를 찾으면 탐색 함수에서는 먼저 동적 링크 기제를 이용해
+응용을 그 라이브러리와 링크 한다.
+그러고 나서 적재 함수로 사용할 C 함수를 그 라이브러리 안에서 찾아 본다.
+그 C 함수의 이름은 문자열 "<code>luaopen_</code>"에
+모듈 이름을 덧붙이고서 마침표를 밑줄로 바꾼 것이다.
+그리고 모듈 이름에 하이픈이 있으면
+첫 번째 하이픈부터 이후를 제거한다.
+예를 들어 모듈 이름이 <code>a.b.c-v2.1</code>이면
+함수 이름이 <code>luaopen_a_b_c</code>가 된다.
 
 
 <p>
-The fourth searcher tries an <em>all-in-one loader</em>.
-It searches the C&nbsp;path for a library for
-the root name of the given module.
-For instance, when requiring <code>a.b.c</code>,
-it will search for a C&nbsp;library for <code>a</code>.
-If found, it looks into it for an open function for
-the submodule;
-in our example, that would be <code>luaopen_a_b_c</code>.
-With this facility, a package can pack several C&nbsp;submodules
-into one single library,
-with each submodule keeping its original open function.
+네 번째 탐색 함수는 <em>일체형 적재 함수</em>를 시도한다.
+지정한 모듈의 최상위 단계 이름으로
+C 경로에서 라이브러리를 탐색한다.
+예를 들어 <code>a.b.c</code>를 요청하는 경우
+<code>a</code>로 C 라이브러리를 탐색하게 된다.
+발견하면 그 안에서
+서브모듈의 열기 함수를 찾는다.
+예컨대 <code>luaopen_a_b_c</code>를 찾게 된다.
+이 기제를 이용하면 패키지에서 C 서브모듈 여러 개를
+라이브러리 한 개에 집어넣을 수 있다.
+그러면서 각 서브모듈의 원래 열기 함수를 그대로 유지한다.
 
 
 <p>
-All searchers except the first one (preload) return as the extra value
-the file name where the module was found,
-as returned by <a href="#pdf-package.searchpath"><code>package.searchpath</code></a>.
-The first searcher returns no extra value.
+첫 번째(preload)를 제외한 모든 탐색 함수는
+<a href="#pdf-package.searchpath"><code>package.searchpath</code></a>가 반환한
+모듈 발견 파일 이름을 추가 값으로 반환한다.
+첫 번째 탐색 함수는 추가 값을 반환하지 않는다.
 
 
 
@@ -8099,39 +8102,36 @@ The first searcher returns no extra value.
 
 
 <p>
-Searches for the given <code>name</code> in the given <code>path</code>.
+지정한 <code>path</code>에서 지정한 <code>name</code>을 찾는다.
 
 
 <p>
-A path is a string containing a sequence of
-<em>templates</em> separated by semicolons.
-For each template,
-the function replaces each interrogation mark (if any)
-in the template with a copy of <code>name</code>
-wherein all occurrences of <code>sep</code>
-(a dot, by default)
-were replaced by <code>rep</code>
-(the system's directory separator, by default),
-and then tries to open the resulting file name.
+<code>path</code>는 <em>템플릿</em>들을 세미콜론으로 구분해 담은 문자열이다.
+각 템플릿에 대해서
+템플릿 안에 물음표가 있으면
+(<code>sep</code>(기본값은 마침표)를 모두
+<code>rep</code>(기본값은 시스템의 디렉터리 구분자)로 바꾼)
+<code>name</code> 사본으로 바꾸고서
+결과로 나온 파일 이름으로 열기를 시도한다.
 
 
 <p>
-For instance, if the path is the string
+예를 들어 <code>path</code>가 다음 문자열인 경우에
 
 <pre>
      "./?.lua;./?.lc;/usr/local/?/init.lua"
 </pre><p>
-the search for the name <code>foo.a</code>
-will try to open the files
-<code>./foo/a.lua</code>, <code>./foo/a.lc</code>, and
-<code>/usr/local/foo/a/init.lua</code>, in that order.
+이름을 <code>foo.a</code>로 해서 탐색하면 파일
+<code>./foo/a.lua</code>, <code>./foo/a.lc</code>,
+<code>/usr/local/foo/a/init.lua</code>를 차례대로
+열어 보게 된다.
 
 
 <p>
-Returns the resulting name of the first file that it can
-open in read mode (after closing the file),
-or <b>nil</b> plus an error message if none succeeds.
-(This error message lists all file names it tried to open.)
+읽기 모드로 열 수 있는 첫 번째 파일의 치환 후 이름을
+(파일을 닫고 나서) 반환한다.
+성공한 파일이 없으면 <b>nil</b>에 더해 오류 메시지를 반환한다.
+(그 오류 메시지에는 열기를 시도한 파일 이름이 모두 나열되어 있다.)
 
 
 
