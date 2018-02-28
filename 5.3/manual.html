@@ -4355,7 +4355,7 @@ C 함수를 스택에 집어넣는다.
 <pre>const char *lua_pushfstring (lua_State *L, const char *fmt, ...);</pre>
 
 <p>
-형식 준 문자열을 스택에 집어넣고
+서식을 준 문자열을 스택에 집어넣고
 그 문자열에 대한 포인터를 반환한다.
 ISO C 함수 <code>sprintf</code>와 비슷하지만
 몇 가지 중요한 차이가 있다.
@@ -7492,7 +7492,7 @@ error 호출 경우에
 임의 개수의 인자를 받아서
 <a href="#pdf-tostring"><code>tostring</code></a> 함수로 각 인자를 문자열로 변환하여
 그 값들을 <code>stdout</code>으로 찍는다.
-<code>print</code>는 형식 있는 출력을 위한 것이 아니다.
+<code>print</code>는 서식을 준 출력을 위한 것이 아니다.
 디버깅 등을 위해
 간단히 값을 표시하는 방법일 뿐이다.
 출력을 완전히 제어하려면
