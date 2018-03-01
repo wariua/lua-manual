@@ -8551,173 +8551,171 @@ C89 컴파일러로 루아를 컴파일 하는 경우에는
 
 
 
-<h3>6.4.1 &ndash; <a name="6.4.1">Patterns</a></h3>
+<h3>6.4.1 &ndash; <a name="6.4.1">패턴</a></h3>
 
 <p>
-Patterns in Lua are described by regular strings,
-which are interpreted as patterns by the pattern-matching functions
+루아에서는 정규 문자열로 패턴을 기술한다.
+그 문자열을 패턴 검사 함수
 <a href="#pdf-string.find"><code>string.find</code></a>,
 <a href="#pdf-string.gmatch"><code>string.gmatch</code></a>,
 <a href="#pdf-string.gsub"><code>string.gsub</code></a>,
-and <a href="#pdf-string.match"><code>string.match</code></a>.
-This section describes the syntax and the meaning
-(that is, what they match) of these strings.
+<a href="#pdf-string.match"><code>string.match</code></a>에서
+패턴으로 해석한다.
+이 절에서는 그 문자열의 문법과 의미(즉 무엇에 들어맞는지)를 설명한다.
 
 
 
-<h4>Character Class:</h4><p>
-A <em>character class</em> is used to represent a set of characters.
-The following combinations are allowed in describing a character class:
+<h4>문자 클래스:</h4><p>
+<em>문자 클래스</em>를 사용해 문자들의 집합을 나타낸다.
+다음 요소들로 문자 클래스를 기술할 수 있다.
 
 <ul>
 
 <li><b><em>x</em>: </b>
-(where <em>x</em> is not one of the <em>magic characters</em>
-<code>^$()%.[]*+-?</code>)
-represents the character <em>x</em> itself.
+(<em>x</em>가
+<em>특수 문자</em> <code>^$()%.[]*+-?</code> 중 하나가 아님)
+문자 <em>x</em> 자체를 나타낸다.
 </li>
 
-<li><b><code>.</code>: </b> (a dot) represents all characters.</li>
+<li><b><code>.</code>: </b> (마침표) 모든 문자를 나타낸다.</li>
 
-<li><b><code>%a</code>: </b> represents all letters.</li>
+<li><b><code>%a</code>: </b> 모든 알파벳 글자를 나타낸다.</li>
 
-<li><b><code>%c</code>: </b> represents all control characters.</li>
+<li><b><code>%c</code>: </b> 모든 제어 문자를 나타낸다.</li>
 
-<li><b><code>%d</code>: </b> represents all digits.</li>
+<li><b><code>%d</code>: </b> 모든 숫자를 나타낸다.</li>
 
-<li><b><code>%g</code>: </b> represents all printable characters except space.</li>
+<li><b><code>%g</code>: </b> 공백을 제외한 모든 출력 가능 문자를 나타낸다.</li>
 
-<li><b><code>%l</code>: </b> represents all lowercase letters.</li>
+<li><b><code>%l</code>: </b> 모든 소문자 글자를 나타낸다.</li>
 
-<li><b><code>%p</code>: </b> represents all punctuation characters.</li>
+<li><b><code>%p</code>: </b> 모든 문장 부호 문자를 나타낸다.</li>
 
-<li><b><code>%s</code>: </b> represents all space characters.</li>
+<li><b><code>%s</code>: </b> 모든 공백 문자를 나타낸다.</li>
 
-<li><b><code>%u</code>: </b> represents all uppercase letters.</li>
+<li><b><code>%u</code>: </b> 모든 대문자 글자를 나타낸다.</li>
 
-<li><b><code>%w</code>: </b> represents all alphanumeric characters.</li>
+<li><b><code>%w</code>: </b> 모든 알파벳 및 숫자를 나타낸다.</li>
 
-<li><b><code>%x</code>: </b> represents all hexadecimal digits.</li>
+<li><b><code>%x</code>: </b> 모든 16진수 숫자를 나타낸다.</li>
 
-<li><b><code>%<em>x</em></code>: </b> (where <em>x</em> is any non-alphanumeric character)
-represents the character <em>x</em>.
-This is the standard way to escape the magic characters.
-Any non-alphanumeric character
-(including all punctuation characters, even the non-magical)
-can be preceded by a '<code>%</code>'
-when used to represent itself in a pattern.
+<li><b><code>%<em>x</em></code>: </b> (<em>x</em>가 알파벳/숫자 아닌 문자)
+문자 <em>x</em>를 나타낸다.
+특수 문자를 이스케이프 하는 표준 방식이다.
+패턴에서 알파벳 및 숫자가 아닌 모든 문자
+(특수 문자 여부 상관없이 모든 문장 부호 포함) 앞에
+'<code>%</code>'를 붙여서 그 문자 자체를 나타낼 수 있다.
 </li>
 
 <li><b><code>[<em>set</em>]</code>: </b>
-represents the class which is the union of all
-characters in <em>set</em>.
-A range of characters can be specified by
-separating the end characters of the range,
-in ascending order, with a '<code>-</code>'.
-All classes <code>%</code><em>x</em> described above can also be used as
-components in <em>set</em>.
-All other characters in <em>set</em> represent themselves.
-For example, <code>[%w_]</code> (or <code>[_%w]</code>)
-represents all alphanumeric characters plus the underscore,
-<code>[0-7]</code> represents the octal digits,
-and <code>[0-7%l%-]</code> represents the octal digits plus
-the lowercase letters plus the '<code>-</code>' character.
+<em>set</em> 안의 모든 문자들의 합집합인
+클래스를 나타낸다.
+오름차순 범위의 끝 문자를 '<code>-</code>'로 붙여 써서
+문자 범위를 지정할 수 있다.
+그리고 위에서 설명한 <code>%</code><em>x</em> 형태 클래스들을 모두
+<em>set</em>의 요소로 쓸 수 있다.
+그 외의 문자들은 <em>set</em> 안에서 그 자체를 나타낸다.
+예를 들어 <code>[%w_]</code> (또는 <code>[_%w]</code>) 패턴은
+모든 알파벳/숫자 문자에 밑줄을 더한 것을 나타내고,
+<code>[0-7]</code> 패턴은 8진수 숫자를 나타내며,
+<code>[0-7%l%-]</code> 패턴은 8진수 숫자 더하기
+소문자 글자 더하기 '<code>-</code>' 문자를 나타낸다.
 
 
 <p>
-You can put a closing square bracket in a set
-by positioning it as the first character in the set.
-You can put an hyphen in a set
-by positioning it as the first or the last character in the set.
-(You can also use an escape for both cases.)
+닫는 대괄호를 집합에 넣으려면
+집합 첫 번째 문자로 두면 된다.
+하이픈을 집합에 넣으려면
+집합 첫 번째 문자나 마지막 문자로 두면 된다.
+(두 경우 모두 이스케이프를 쓸 수도 있다.)
 
 
 <p>
-The interaction between ranges and classes is not defined.
-Therefore, patterns like <code>[%a-z]</code> or <code>[a-%%]</code>
-have no meaning.
+범위와 클래스 간의 상호작용은 규정되어 있지 않다.
+그러므로 <code>[%a-z]</code>나 <code>[a-%%]</code> 같은 패턴은
+의미가 없다.
 </li>
 
 <li><b><code>[^<em>set</em>]</code>: </b>
-represents the complement of <em>set</em>,
-where <em>set</em> is interpreted as above.
+<em>set</em>의 여집합을 나타낸다.
+<em>set</em>은 위에서처럼 해석한다.
 </li>
 
 </ul><p>
-For all classes represented by single letters (<code>%a</code>, <code>%c</code>, etc.),
-the corresponding uppercase letter represents the complement of the class.
-For instance, <code>%S</code> represents all non-space characters.
+한 글자로 나타내는 클래스 (<code>%a</code>, <code>%c</code> 등) 모두에 대해
+대응하는 대문자 글자가 그 클래스의 여집합을 나타낸다.
+예를 들어 <code>%S</code>는 공백이 아닌 모든 문자를 나타낸다.
 
 
 <p>
-The definitions of letter, space, and other character groups
-depend on the current locale.
-In particular, the class <code>[a-z]</code> may not be equivalent to <code>%l</code>.
+글자, 공백, 기타 문자 그룹들의 정의는
+현재 로캘에 따라 정해진다.
+특히 클래스 <code>[a-z]</code>가 <code>%l</code>과 동등하지 않을 수도 있다.
 
 
 
 
 
-<h4>Pattern Item:</h4><p>
-A <em>pattern item</em> can be
+<h4>패턴 항목:</h4><p>
+다음이 <em>패턴 항목</em>이 될 수 있다.
 
 <ul>
 
 <li>
+문자 클래스 하나.
+클래스 내의 아무 문자 하나와 들어맞는다.
 a single character class,
 which matches any single character in the class;
 </li>
 
 <li>
-a single character class followed by '<code>*</code>',
-which matches zero or more repetitions of characters in the class.
-These repetition items will always match the longest possible sequence;
+문자 클래스 하나 뒤에 '<code>*</code>'를 붙인 것.
+클래스의 문자들이 0번 이상 반복되는 것에 들어맞는다.
+이 반복 항목은 항상 가급적 긴 열에 일치하려 한다.
 </li>
 
 <li>
-a single character class followed by '<code>+</code>',
-which matches one or more repetitions of characters in the class.
-These repetition items will always match the longest possible sequence;
+문자 클래스 하나 뒤에 '<code>+</code>'를 붙인 것.
+클래스의 문자들이 1번 이상 반복되는 것에 들어맞는다.
+이 반복 항목은 항상 가급적 긴 열에 일치하려 한다.
 </li>
 
 <li>
-a single character class followed by '<code>-</code>',
-which also matches zero or more repetitions of characters in the class.
-Unlike '<code>*</code>',
-these repetition items will always match the shortest possible sequence;
+문자 클래스 하나 뒤에 '<code>-</code>'를 붙인 것.
+클래스의 문자들이 0번 이상 반복되는 것에 들어맞는다.
+'<code>*</code>'와 달리
+항상 가급적 짧은 열에 일치하려 한다.
 </li>
 
 <li>
-a single character class followed by '<code>?</code>',
-which matches zero or one occurrence of a character in the class.
-It always matches one occurrence if possible;
+문자 클래스 하나 뒤에 '<code>?</code>'를 붙인 것.
+클래스의 문자가 0번 또는 1번 등장하는 것에 들어맞는다.
+가능한 경우 항상 1번 등장하는 것으로 일치한다.
 </li>
 
 <li>
-<code>%<em>n</em></code>, for <em>n</em> between 1 and 9;
-such item matches a substring equal to the <em>n</em>-th captured string
-(see below);
+<code>%<em>n</em></code>. <em>n</em>은 1에서 9까지이다.
+이 항목은 <em>n</em> 번째 포획 문자열(아래 참고)과 같은 부분 문자열에 들어맞는다.
 </li>
 
 <li>
-<code>%b<em>xy</em></code>, where <em>x</em> and <em>y</em> are two distinct characters;
-such item matches strings that start with&nbsp;<em>x</em>, end with&nbsp;<em>y</em>,
-and where the <em>x</em> and <em>y</em> are <em>balanced</em>.
-This means that, if one reads the string from left to right,
-counting <em>+1</em> for an <em>x</em> and <em>-1</em> for a <em>y</em>,
-the ending <em>y</em> is the first <em>y</em> where the count reaches 0.
-For instance, the item <code>%b()</code> matches expressions with
-balanced parentheses.
+<code>%b<em>xy</em></code>. <em>x</em>와 <em>y</em>는 별개 문자이다.
+이 항목은 <em>x</em>로 시작해서 <em>y</em>로 끝나고
+<em>x</em>와 <em>y</em>가 <em>균형이 맞는(balanced)</em> 문자열에 들어맞는다.
+균형이 맞는다는 것은 왼쪽에서 오른쪽으로 읽어 나가면서
+<em>x</em>에서 <em>+1</em> 하고 <em>y</em>에서 <em>-1</em> 한다고 할 때
+0이 되는 첫 번째 <em>y</em>가 끝내는 <em>y</em>가 된다는 뜻이다.
+예를 들어 <code>%b()</code> 항목은 짝 맞는 괄호로 감싼 식에 들어맞는다.
 </li>
 
 <li>
-<code>%f[<em>set</em>]</code>, a <em>frontier pattern</em>;
-such item matches an empty string at any position such that
-the next character belongs to <em>set</em>
-and the previous character does not belong to <em>set</em>.
-The set <em>set</em> is interpreted as previously described.
-The beginning and the end of the subject are handled as if
-they were the character '<code>\0</code>'.
+<code>%f[<em>set</em>]</code>. <em>경계(frontier) 패턴</em>이다.
+이 항목은 다음 문자는 <em>set</em>에 속하고
+이전 문자는 <em>set</em>에 속하지 않는 위치의
+빈 문자열에 들어맞는다.
+집합 <em>set</em>은 앞서 설명한 대로 해석한다.
+대상 문자열의 시작과 끝에
+'<code>\0</code>' 문자가 있는 것처럼 처리한다.
 </li>
 
 </ul>
@@ -8725,37 +8723,37 @@ they were the character '<code>\0</code>'.
 
 
 
-<h4>Pattern:</h4><p>
-A <em>pattern</em> is a sequence of pattern items.
-A caret '<code>^</code>' at the beginning of a pattern anchors the match at the
-beginning of the subject string.
-A '<code>$</code>' at the end of a pattern anchors the match at the
-end of the subject string.
-At other positions,
-'<code>^</code>' and '<code>$</code>' have no special meaning and represent themselves.
+<h4>패턴:</h4><p>
+<em>패턴</em>은 일련의 패턴 항목들이다.
+패턴 시작의 캐럿 '<code>^</code>'은 일치 열을
+대상 문자열 시작점에 고정시킨다.
+패턴 끝의 '<code>$</code>'는 일치 열을
+대상 문자열 끝점에 고정시킨다.
+다른 위치에서는 '<code>^</code>'과 '<code>$</code>'가
+특별한 의미 없이 그 자체를 나타낸다.
 
 
 
 
 
-<h4>Captures:</h4><p>
-A pattern can contain sub-patterns enclosed in parentheses;
-they describe <em>captures</em>.
-When a match succeeds, the substrings of the subject string
-that match captures are stored (<em>captured</em>) for future use.
-Captures are numbered according to their left parentheses.
-For instance, in the pattern <code>"(a*(.)%w(%s*))"</code>,
-the part of the string matching <code>"a*(.)%w(%s*)"</code> is
-stored as the first capture (and therefore has number&nbsp;1);
-the character matching "<code>.</code>" is captured with number&nbsp;2,
-and the part matching "<code>%s*</code>" has number&nbsp;3.
+<h4>포획:</h4><p>
+패턴 안에 괄호로 둘러싸인 하위 패턴이 있을 수 있으며
+그것이 <em>포획(capture)</em>이다.
+일치에 성공했을 때 포획 부분에 들어맞는 부분 문자열을
+향후 사용을 위해 저장(<em>포획</em>)해 둔다.
+왼쪽 괄호에 따라서 포획에 번호가 붙는다.
+예를 들어 패턴 <code>"(a*(.)%w(%s*))"</code>가 있을 때,
+대상 문자열에서 <code>"a*(.)%w(%s*)"</code>에 들어맞는 부분이
+첫 번째 포획 값으로 저장되고 (그래서 1번이 되고),
+"<code>.</code>"에 들어맞는 문자가 2번으로 포획되고,
+"<code>%s*</code>"에 들어맞는 부분이 3번이 된다.
 
 
 <p>
-As a special case, the empty capture <code>()</code> captures
-the current string position (a number).
-For instance, if we apply the pattern <code>"()aa()"</code> on the
-string <code>"flaaap"</code>, there will be two captures: 3&nbsp;and&nbsp;5.
+특별히 빈 포획 <code>()</code>는
+현재 문자열 위치를 (수 값으로) 포획한다.
+예를 들어 문자열 <code>"flaaap"</code>에 패턴 <code>"()aa()"</code>를 적용하면
+포획 값이 3과 5가 된다.
 
 
 
