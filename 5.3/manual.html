@@ -8140,58 +8140,57 @@ C 경로에서 라이브러리를 탐색한다.
 
 
 
-<h2>6.4 &ndash; <a name="6.4">String Manipulation</a></h2>
+<h2>6.4 &ndash; <a name="6.4">문자열 조작</a></h2>
 
 <p>
-This library provides generic functions for string manipulation,
-such as finding and extracting substrings, and pattern matching.
-When indexing a string in Lua, the first character is at position&nbsp;1
-(not at&nbsp;0, as in C).
-Indices are allowed to be negative and are interpreted as indexing backwards,
-from the end of the string.
-Thus, the last character is at position -1, and so on.
-
-
-<p>
-The string library provides all its functions inside the table
-<a name="pdf-string"><code>string</code></a>.
-It also sets a metatable for strings
-where the <code>__index</code> field points to the <code>string</code> table.
-Therefore, you can use the string functions in object-oriented style.
-For instance, <code>string.byte(s,i)</code>
-can be written as <code>s:byte(i)</code>.
+이 라이브러리는 부분 문자열 검색과 추출, 패턴 일치 검사 같은
+문자열 조작을 위한 범용 함수들을 제공한다.
+루아에서 문자열에 인덱스를 쓸 때는 첫 번째 글자가
+1번 위치이다. (C에서처럼 0번이 아니다.)
+인덱스가 음수일 수 있어서 문자열 끝을 기준으로 한
+역방향 인덱스로 해석한다.
+즉 마지막 문자가 -1번 위치에 있는 식이다.
 
 
 <p>
-The string library assumes one-byte character encodings.
+문자열 라이브러리는 모든 함수를
+테이블 <a name="pdf-string"><code>string</code></a> 안에 제공한다.
+그리고 문자열들에 메타테이블을 설정하는데
+거기서 <code>__index</code> 필드가 <code>string</code> 테이블을 가리킨다.
+그래서 문자열 함수들을 객체 지향 스타일로 사용할 수 있다.
+예를 들어 <code>string.byte(s,i)</code>를
+<code>s:byte(i)</code>라고 쓸 수 있다.
+
+
+<p>
+문자열 라이브러리에서는 1바이트 문자 인코딩을 상정한다.
 
 
 <p>
 <hr><h3><a name="pdf-string.byte"><code>string.byte (s [, i [, j]])</code></a></h3>
-Returns the internal numeric codes of the characters <code>s[i]</code>,
-<code>s[i+1]</code>, ..., <code>s[j]</code>.
-The default value for <code>i</code> is&nbsp;1;
-the default value for <code>j</code> is&nbsp;<code>i</code>.
-These indices are corrected
-following the same rules of function <a href="#pdf-string.sub"><code>string.sub</code></a>.
+문자 <code>s[i]</code>, <code>s[i+1]</code>, ..., <code>s[j]</code>의
+내부 숫자 코드들을 반환한다.
+<code>i</code>의 기본값은 1이고
+<code>j</code>의 기본값은 <code>i</code>이다.
+<a href="#pdf-string.sub"><code>string.sub</code></a> 함수와 같은 규칙에 따라서
+인덱스들을 정정한다.
 
 
 <p>
-Numeric codes are not necessarily portable across platforms.
+숫자 코드가 반드시 플랫폼 간에 이식 가능한 것은 아니다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.char"><code>string.char (&middot;&middot;&middot;)</code></a></h3>
-Receives zero or more integers.
-Returns a string with length equal to the number of arguments,
-in which each character has the internal numeric code equal
-to its corresponding argument.
+0개 이상의 정수를 받아서
+길이가 인자 개수와 같은 문자열을 반환한다.
+문자열 각 문자의 내부 숫자 코드가 대응하는 인자와 같다.
 
 
 <p>
-Numeric codes are not necessarily portable across platforms.
+숫자 코드가 반드시 플랫폼 간에 이식 가능한 것은 아니다.
 
 
 
@@ -8201,24 +8200,23 @@ Numeric codes are not necessarily portable across platforms.
 
 
 <p>
-Returns a string containing a binary representation
-(a <em>binary chunk</em>)
-of the given function,
-so that a later <a href="#pdf-load"><code>load</code></a> on this string returns
-a copy of the function (but with new upvalues).
-If <code>strip</code> is a true value,
-the binary representation may not include all debug information
-about the function,
-to save space.
+주어진 함수의 이진 표현(<em>바이너리 청크</em>)을 담은
+문자열을 반환한다.
+이후 그 문자열에 <a href="#pdf-load"><code>load</code></a> 하면
+함수의 복사본을 (하지만 upvalue는 새 값으로) 반환한다.
+<code>strip</code>이 참 값이면
+공간 절약을 위해
+함수에 대한 디버그 정보를
+이진 표현에 모두 포함시키지 않을 수도 있다.
 
 
 <p>
-Functions with upvalues have only their number of upvalues saved.
-When (re)loaded,
-those upvalues receive fresh instances containing <b>nil</b>.
-(You can use the debug library to serialize
-and reload the upvalues of a function
-in a way adequate to your needs.)
+upvalue가 있는 함수인 경우 upvalue 개수만 저장된다.
+(재)적재 때
+upvalue들이 <b>nil</b>을 담은 새 인스턴스를 받는다.
+(디버그 라이브러리를 이용하면
+원하는 방식으로 함수의 upvalue를
+직렬화 및 재적재할 수 있다.)
 
 
 
@@ -8228,26 +8226,26 @@ in a way adequate to your needs.)
 
 
 <p>
-Looks for the first match of
-<code>pattern</code> (see <a href="#6.4.1">&sect;6.4.1</a>) in the string <code>s</code>.
-If it finds a match, then <code>find</code> returns the indices of&nbsp;<code>s</code>
-where this occurrence starts and ends;
-otherwise, it returns <b>nil</b>.
-A third, optional numeric argument <code>init</code> specifies
-where to start the search;
-its default value is&nbsp;1 and can be negative.
-A value of <b>true</b> as a fourth, optional argument <code>plain</code>
-turns off the pattern matching facilities,
-so the function does a plain "find substring" operation,
-with no characters in <code>pattern</code> being considered magic.
-Note that if <code>plain</code> is given, then <code>init</code> must be given as well.
+문자열 <code>s</code>에서 <code>pattern</code>의 첫 번째 일치를 찾는다.
+(<a href="#6.4.1">6.4.1절</a> 참고.)
+일치하는 열을 발견하면 시작점과 끝점의
+<code>s</code> 내 인덱스를 반환한다.
+못 찾으면 <b>nil</b>을 반환한다.
+세 번째의 선택적인 수 인자 <code>init</code>은
+탐색을 시작할 위치를 지정한다.
+기본값이 1이고 음수일 수 있다.
+네 번째의 선택적 인자 <code>plain</code>에
+<b>true</b> 값을 주면 패턴 일치 검사 기능을 끈다.
+그래서 <code>pattern</code> 내의 어떤 문자도 특수하게 취급하지 않고
+단순한 "부분 문자열 찾기" 동작을 한다.
+<code>plain</code>에 값을 주려면 <code>init</code>에도 주어야 한다는 점에 유의하라.
 
 
 <p>
-If the pattern has captures,
-then in a successful match
-the captured values are also returned,
-after the two indices.
+패턴에 포획이 있으면
+성공 일치 시
+두 인덱스 뒤에
+포획한 값들을 함께 반환한다.
 
 
 
@@ -8257,25 +8255,25 @@ after the two indices.
 
 
 <p>
-Returns a formatted version of its variable number of arguments
-following the description given in its first argument (which must be a string).
-The format string follows the same rules as the ISO&nbsp;C function <code>sprintf</code>.
-The only differences are that the options/modifiers
+첫 번째 인자(문자열이어야 함)에 따라서
+가변 개수 인자들로 서식을 적용해 만든 문자열을 반환한다.
+서식 문자열은 ISO C 함수 <code>sprintf</code>와 같은 규칙을 따른다.
+다만 옵션/수식자
 <code>*</code>, <code>h</code>, <code>L</code>, <code>l</code>, <code>n</code>,
-and <code>p</code> are not supported
-and that there is an extra option, <code>q</code>.
+<code>p</code>를 지원하지 않으며
+추가로 <code>q</code> 옵션이 있다.
 
 
 <p>
-The <code>q</code> option formats a string between double quotes,
-using escape sequences when necessary to ensure that
-it can safely be read back by the Lua interpreter.
-For instance, the call
+<code>q</code> 옵션은 문자열을 큰따옴표 안에 넣으며
+필요하면 이스케이프 열을 쓴다.
+그래서 그 결과를 루아 인터프리터가 안전하게 읽을 수 있다.
+예를 들어 다음과 같이 호출하면
 
 <pre>
      string.format('%q', 'a string with "quotes" and \n new line')
 </pre><p>
-may produce the string:
+다음 문자열이 나온다.
 
 <pre>
      "a string with \"quotes\" and \
@@ -8283,41 +8281,41 @@ may produce the string:
 </pre>
 
 <p>
-Options
+옵션
 <code>A</code>, <code>a</code>, <code>E</code>, <code>e</code>, <code>f</code>,
-<code>G</code>, and <code>g</code> all expect a number as argument.
-Options <code>c</code>, <code>d</code>,
-<code>i</code>, <code>o</code>, <code>u</code>, <code>X</code>, and <code>x</code>
-expect an integer.
-When Lua is compiled with a C89 compiler,
-options <code>A</code> and <code>a</code> (hexadecimal floats)
-do not support any modifier (flags, width, length).
+<code>G</code>, <code>g</code>는 모두 인자로 수를 요구한다.
+옵션 <code>c</code>, <code>d</code>,
+<code>i</code>, <code>o</code>, <code>u</code>, <code>X</code>, <code>x</code>는
+정수를 요구한다.
+C89 컴파일러로 루아를 컴파일 하는 경우에는
+<code>A</code> 및 <code>a</code> 옵션(16진수 실수)에
+어떤 수식자(플래그, 폭, 길이)도 지원하지 않는다.
 
 
 <p>
-Option <code>s</code> expects a string;
-if its argument is not a string,
-it is converted to one following the same rules of <a href="#pdf-tostring"><code>tostring</code></a>.
-If the option has any modifier (flags, width, length),
-the string argument should not contain embedded zeros.
+옵션 <code>s</code>는 문자열을 요구한다.
+인자가 문자열이 아니면
+<a href="#pdf-tostring"><code>tostring</code></a>과 같은 규칙에 따라 문자열로 변환한다.
+옵션에 수식자(플래그, 폭, 길이)가 있는 경우에는
+문자열 인자에 0이 들어 있지 않아야 한다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.gmatch"><code>string.gmatch (s, pattern)</code></a></h3>
-Returns an iterator function that,
-each time it is called,
-returns the next captures from <code>pattern</code> (see <a href="#6.4.1">&sect;6.4.1</a>)
-over the string <code>s</code>.
-If <code>pattern</code> specifies no captures,
-then the whole match is produced in each call.
+반복자 함수를 반환한다.
+호출할 때마다 그 함수는
+문자열 <code>s</code>에 대한 <code>pattern</code>의 다음 포획 값들을 반환한다.
+(<a href="#6.4.1">6.4.1절</a> 참고.)
+<code>pattern</code>에 포획을 지정하지 않으면
+각 호출마다 일치 열 전체를 내놓는다.
 
 
 <p>
-As an example, the following loop
-will iterate over all the words from string <code>s</code>,
-printing one per line:
+예를 들어 다음 루프는
+문자열 <code>s</code>의 단어를 모두 돌면서
+한 줄에 하나씩 찍는다.
 
 <pre>
      s = "hello world from Lua"
@@ -8325,8 +8323,8 @@ printing one per line:
        print(w)
      end
 </pre><p>
-The next example collects all pairs <code>key=value</code> from the
-given string into a table:
+다음 예는 주어진 문자열에서 <code>key=value</code> 쌍을 모두 모아서
+테이블에 넣는다.
 
 <pre>
      t = {}
@@ -8337,62 +8335,59 @@ given string into a table:
 </pre>
 
 <p>
-For this function, a caret '<code>^</code>' at the start of a pattern does not
-work as an anchor, as this would prevent the iteration.
+이 함수에서는 패턴 시작의 '<code>^</code>'가 앵커 기능을 하지 않는다.
+그러면 반복이 불가능해지기 때문이다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.gsub"><code>string.gsub (s, pattern, repl [, n])</code></a></h3>
-Returns a copy of <code>s</code>
-in which all (or the first <code>n</code>, if given)
-occurrences of the <code>pattern</code> (see <a href="#6.4.1">&sect;6.4.1</a>) have been
-replaced by a replacement string specified by <code>repl</code>,
-which can be a string, a table, or a function.
-<code>gsub</code> also returns, as its second value,
-the total number of matches that occurred.
-The name <code>gsub</code> comes from <em>Global SUBstitution</em>.
+<code>s</code>에서 모든 (또는 처음 <code>n</code>개)
+<code>pattern</code>을 <code>repl</code>로 지정한 대체 문자열로 바꾼
+사본을 반환한다. (<a href="#6.4.1">6.4.1절</a> 참고.)
+<code>repl</code>은 문자열, 테이블, 함수일 수 있다.
+<code>gsub</code>는 또한 두 번째 값으로 치환 횟수를 반환한다.
+<code>gsub</code>라는 이름은 <em>Global SUBstitution(전역 치환)</em>에서 온 것이다.
 
 
 <p>
-If <code>repl</code> is a string, then its value is used for replacement.
-The character&nbsp;<code>%</code> works as an escape character:
-any sequence in <code>repl</code> of the form <code>%<em>d</em></code>,
-with <em>d</em> between 1 and 9,
-stands for the value of the <em>d</em>-th captured substring.
-The sequence <code>%0</code> stands for the whole match.
-The sequence <code>%%</code> stands for a single&nbsp;<code>%</code>.
+<code>repl</code>이 문자열이면 그 값을 교체에 쓴다.
+문자 <code>%</code>는 이스케이프 문자 기능을 하는데,
+<code>repl</code> 내에 <code>%<em>d</em></code> 형태의 열이 있으면
+(<em>d</em>는 1에서 9 사이)
+<em>d</em> 번째로 포획한 부분 문자열의 값을 나타낸다.
+<code>%0</code>은 일치 열 전체를 나타낸다.
+<code>%%</code>은 <code>%</code> 한 개를 나타낸다.
 
 
 <p>
-If <code>repl</code> is a table, then the table is queried for every match,
-using the first capture as the key.
+<code>repl</code>이 테이블이면 일치가 있을 때마다
+첫 번째 포획 값을 키로 해서 테이블에 질의한다.
 
 
 <p>
-If <code>repl</code> is a function, then this function is called every time a
-match occurs, with all captured substrings passed as arguments,
-in order.
+<code>repl</code>이 함수이면 일치가 있을 때마다
+포획한 부분 문자열 모두를 순서 대로 인자로 해서 그 함수를 호출한다.
 
 
 <p>
-In any case,
-if the pattern specifies no captures,
-then it behaves as if the whole pattern was inside a capture.
+어느 경우이든
+패턴에 포획을 지정하지 않으면
+패턴 전체가 포획 안에 있는 것처럼 동작한다.
 
 
 <p>
-If the value returned by the table query or by the function call
-is a string or a number,
-then it is used as the replacement string;
-otherwise, if it is <b>false</b> or <b>nil</b>,
-then there is no replacement
-(that is, the original match is kept in the string).
+테이블 질의나 함수 호출의 반환 값이
+문자열이나 수이면
+대체 문자열로 쓴다.
+그렇지 않고 <b>false</b>나 <b>nil</b>이면
+교체하지 않는 것이다.
+(즉 문자열 내의 그 일치 열을 그대로 유지한다.)
 
 
 <p>
-Here are some examples:
+몇 가지 예를 들면 다음과 같다.
 
 <pre>
      x = string.gsub("hello world", "(%w+)", "%1 %1")
@@ -8421,36 +8416,36 @@ Here are some examples:
 
 <p>
 <hr><h3><a name="pdf-string.len"><code>string.len (s)</code></a></h3>
-Receives a string and returns its length.
-The empty string <code>""</code> has length 0.
-Embedded zeros are counted,
-so <code>"a\000bc\000"</code> has length 5.
+문자열을 받아서 그 길이를 반환한다.
+빈 문자열 <code>""</code>의 길이는 0이다.
+문자열 내의 0도 길이에 산입한다.
+따라서 <code>"a\000bc\000"</code>의 길이가 5이다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.lower"><code>string.lower (s)</code></a></h3>
-Receives a string and returns a copy of this string with all
-uppercase letters changed to lowercase.
-All other characters are left unchanged.
-The definition of what an uppercase letter is depends on the current locale.
+문자열을 받아서 대문자 글자가 모두 소문자로 바뀐
+문자열 사본을 반환한다.
+다른 글자들은 바뀌지 않는다.
+무엇이 대문자 글자인지에 대한 정의는 현재 로캘에 따라 정해진다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.match"><code>string.match (s, pattern [, init])</code></a></h3>
-Looks for the first <em>match</em> of
-<code>pattern</code> (see <a href="#6.4.1">&sect;6.4.1</a>) in the string <code>s</code>.
-If it finds one, then <code>match</code> returns
-the captures from the pattern;
-otherwise it returns <b>nil</b>.
-If <code>pattern</code> specifies no captures,
-then the whole match is returned.
-A third, optional numeric argument <code>init</code> specifies
-where to start the search;
-its default value is&nbsp;1 and can be negative.
+문자열 <code>s</code>에서 <code>pattern</code>의 첫 번째 <em>일치</em>를 찾는다.
+(<a href="#6.4.1">6.4.1절</a> 참고.)
+일치하는 열을 발견하면
+패턴의 포획 값들을 반환한다.
+못 찾으면 <b>nil</b>을 반환한다.
+<code>pattern</code>에 포획을 지정하지 않으면
+일치 열 전체를 반환한다.
+세 번째의 선택적인 수 인자 <code>init</code>은
+탐색을 시작할 위치를 지정한다.
+기본값이 1이고 음수일 수 있다.
 
 
 
@@ -8460,9 +8455,10 @@ its default value is&nbsp;1 and can be negative.
 
 
 <p>
-Returns a binary string containing the values <code>v1</code>, <code>v2</code>, etc.
-packed (that is, serialized in binary form)
-according to the format string <code>fmt</code> (see <a href="#6.4.2">&sect;6.4.2</a>).
+값 <code>v1</code>, <code>v2</code> 등을
+형식 문자열 <code>fmt</code>에 따라 포장해서 담은
+(즉 이진 형태로 직렬화 한) 이진 문자열을 반환한다.
+(<a href="#6.4.2">6.4.2절</a> 참고.)
 
 
 
@@ -8472,61 +8468,58 @@ according to the format string <code>fmt</code> (see <a href="#6.4.2">&sect;6.4.
 
 
 <p>
-Returns the size of a string resulting from <a href="#pdf-string.pack"><code>string.pack</code></a>
-with the given format.
-The format string cannot have the variable-length options
-'<code>s</code>' or '<code>z</code>' (see <a href="#6.4.2">&sect;6.4.2</a>).
+지정한 형식으로 <a href="#pdf-string.pack"><code>string.pack</code></a> 하면
+나오는 문자열의 크기를 반환한다.
+형식 문자열에 가변 길이 옵션인 '<code>s</code>'나 '<code>z</code>'가
+있을 수 없다. (<a href="#6.4.2">6.4.2절</a> 참고.)
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.rep"><code>string.rep (s, n [, sep])</code></a></h3>
-Returns a string that is the concatenation of <code>n</code> copies of
-the string <code>s</code> separated by the string <code>sep</code>.
-The default value for <code>sep</code> is the empty string
-(that is, no separator).
-Returns the empty string if <code>n</code> is not positive.
+문자열 <code>s</code>의 사본 <code>n</code>개를
+문자열 <code>sep</code>를 구분자로 해서 이어 붙인 문자열을 반환한다.
+<code>sep</code>의 기본값은 빈 문자열(즉 구분자 없음)이다.
+<code>n</code>이 양수가 아니면 빈 문자열을 반환한다.
 
 
 <p>
-(Note that it is very easy to exhaust the memory of your machine
-with a single call to this function.)
+(이 함수 호출 한 번으로 머신의 메모리를 아주 쉽게
+고갈시킬 수 있다는 점에 유의하라.)
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.reverse"><code>string.reverse (s)</code></a></h3>
-Returns a string that is the string <code>s</code> reversed.
+문자열 <code>s</code>를 뒤집은 문자열을 반환한다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.sub"><code>string.sub (s, i [, j])</code></a></h3>
-Returns the substring of <code>s</code> that
-starts at <code>i</code>  and continues until <code>j</code>;
-<code>i</code> and <code>j</code> can be negative.
-If <code>j</code> is absent, then it is assumed to be equal to -1
-(which is the same as the string length).
-In particular,
-the call <code>string.sub(s,1,j)</code> returns a prefix of <code>s</code>
-with length <code>j</code>,
-and <code>string.sub(s, -i)</code> (for a positive <code>i</code>)
-returns a suffix of <code>s</code>
-with length <code>i</code>.
+<code>i</code>에서 시작해서 <code>j</code>까지 이어지는
+<code>s</code>의 부분 문자열을 반환한다.
+<code>i</code>와 <code>j</code>가 음수일 수 있다.
+<code>j</code>가 없으면 (문자열 길이와 같은) -1로 상정한다.
+특히
+<code>string.sub(s,1,j)</code> 호출은
+길이 <code>j</code>인 <code>s</code>의 머리를 반환하고
+<code>string.sub(s, -i)</code> (<code>i</code>는 양수) 호출은
+길이 <code>i</code>인 <code>s</code>의 꼬리를 반환한다.
 
 
 <p>
-If, after the translation of negative indices,
-<code>i</code> is less than 1,
-it is corrected to 1.
-If <code>j</code> is greater than the string length,
-it is corrected to that length.
-If, after these corrections,
-<code>i</code> is greater than <code>j</code>,
-the function returns the empty string.
+음수 인덱스 변환 후에,
+<code>i</code>가 1보다 작으면
+1로 정정한다.
+<code>j</code>가 문자열 길이보다 크면
+그 길이로 정정한다.
+이런 정정 후에
+<code>i</code>가 <code>j</code>보다 크면
+빈 문자열을 반환한다.
 
 
 
@@ -8536,22 +8529,23 @@ the function returns the empty string.
 
 
 <p>
-Returns the values packed in string <code>s</code> (see <a href="#pdf-string.pack"><code>string.pack</code></a>)
-according to the format string <code>fmt</code> (see <a href="#6.4.2">&sect;6.4.2</a>).
-An optional <code>pos</code> marks where
-to start reading in <code>s</code> (default is 1).
-After the read values,
-this function also returns the index of the first unread byte in <code>s</code>.
+형식 문자열 <code>fmt</code>에 따라 문자열 <code>s</code>에 포장된
+(<a href="#pdf-string.pack"><code>string.pack</code></a> 참고) 값들을 반환한다.
+(<a href="#6.4.2">6.4.2절</a> 참고.)
+<code>pos</code>는 선택적이며 <code>s</code>의 어디부터
+읽기를 시작할지 표시한다. (기본값은 1이다.)
+읽은 값들 뒤에
+<code>s</code>에서 읽지 않은 첫 바이트의 인덱스를 함께 반환한다.
 
 
 
 
 <p>
 <hr><h3><a name="pdf-string.upper"><code>string.upper (s)</code></a></h3>
-Receives a string and returns a copy of this string with all
-lowercase letters changed to uppercase.
-All other characters are left unchanged.
-The definition of what a lowercase letter is depends on the current locale.
+문자열을 받아서 소문자 글자가 모두 대문자로 바뀐
+문자열 사본을 반환한다.
+다른 글자들은 바뀌지 않는다.
+무엇이 소문자 글자인지에 대한 정의는 현재 로캘에 따라 정해진다.
 
 
 
