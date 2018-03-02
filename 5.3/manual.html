@@ -8946,18 +8946,18 @@ C89 컴파일러로 루아를 컴파일 하는 경우에는
 
 
 
-<h2>6.6 &ndash; <a name="6.6">Table Manipulation</a></h2>
+<h2>6.6 &ndash; <a name="6.6">테이블 조작</a></h2>
 
 <p>
-This library provides generic functions for table manipulation.
-It provides all its functions inside the table <a name="pdf-table"><code>table</code></a>.
+이 라이브러리는 테이블 조작을 위한 일반적 함수들을 제공한다.
+모든 함수를 테이블 <a name="#pdf-table"><code>table</code></a> 안에서 제공한다.
 
 
 <p>
-Remember that, whenever an operation needs the length of a table,
-all caveats about the length operator apply (see <a href="#3.4.7">&sect;3.4.7</a>).
-All functions ignore non-numeric keys
-in the tables given as arguments.
+연산에 테이블 길이가 필요한 경우마다
+길이 연산자에 대한 주의 사항들이 모두 적용된다. (<a href="#3.4.7">3.4.7절</a> 참고.)
+모든 함수에서 인자로 받은 테이블의
+수 아닌 키는 무시한다.
 
 
 <p>
@@ -8965,12 +8965,12 @@ in the tables given as arguments.
 
 
 <p>
-Given a list where all elements are strings or numbers,
-returns the string <code>list[i]..sep..list[i+1] &middot;&middot;&middot; sep..list[j]</code>.
-The default value for <code>sep</code> is the empty string,
-the default for <code>i</code> is 1,
-and the default for <code>j</code> is <code>#list</code>.
-If <code>i</code> is greater than <code>j</code>, returns the empty string.
+모든 항목이 문자열이나 수인 리스트를 받아서
+문자열 <code>list[i]..sep..list[i+1] &middot;&middot;&middot; sep..list[j]</code>를 반환한다.
+<code>sep</code>의 기본값은 빈 문자열이고,
+<code>i</code>의 기본값은 1이며,
+<code>j</code>의 기본값은 <code>#list</code>이다.
+<code>i</code>가 <code>j</code>보다 크면 빈 문자열을 반환한다.
 
 
 
@@ -8980,12 +8980,11 @@ If <code>i</code> is greater than <code>j</code>, returns the empty string.
 
 
 <p>
-Inserts element <code>value</code> at position <code>pos</code> in <code>list</code>,
-shifting up the elements
-<code>list[pos], list[pos+1], &middot;&middot;&middot;, list[#list]</code>.
-The default value for <code>pos</code> is <code>#list+1</code>,
-so that a call <code>table.insert(t,x)</code> inserts <code>x</code> at the end
-of list <code>t</code>.
+<code>list</code>의 위치 <code>pos</code>에 항목 <code>value</code>를 삽입한다.
+기존 항목 <code>list[pos], list[pos+1], &middot;&middot;&middot;, list[#list]</code>를 뒤로 민다.
+<code>pos</code>의 기본값이 <code>#list+1</code>이다.
+그래서 <code>table.insert(t,x)</code> 호출이
+리스트 <code>t</code> 끝에 <code>x</code>를 집어넣는다.
 
 
 
@@ -8995,17 +8994,17 @@ of list <code>t</code>.
 
 
 <p>
-Moves elements from table <code>a1</code> to table <code>a2</code>,
-performing the equivalent to the following
-multiple assignment:
-<code>a2[t],&middot;&middot;&middot; = a1[f],&middot;&middot;&middot;,a1[e]</code>.
-The default for <code>a2</code> is <code>a1</code>.
-The destination range can overlap with the source range.
-The number of elements to be moved must fit in a Lua integer.
+다중 할당
+<code>a2[t],&middot;&middot;&middot; = a1[f],&middot;&middot;&middot;,a1[e]</code>와
+동등한 동작을 수행하여
+테이블 <code>a1</code>의 항목들을 테이블 <code>a2</code>로 옮긴다.
+<code>a2</code>의 기본값은 <code>a1</code>이다.
+도착 범위가 출발 범위와 겹칠 수 있다.
+옮길 항목 개수가 루아 정수에 맞는 값이어야 한다.
 
 
 <p>
-Returns the destination table <code>a2</code>.
+도착 테이블 <code>a2</code>를 반환한다.
 
 
 
@@ -9015,9 +9014,9 @@ Returns the destination table <code>a2</code>.
 
 
 <p>
-Returns a new table with all parameters stored into keys 1, 2, etc.
-and with a field "<code>n</code>" with the total number of parameters.
-Note that the resulting table may not be a sequence.
+모든 인자들을 키 1, 2, 3 등에 차례로 저장하고
+필드 "<code>n</code>"에 매개변수 총개수를 넣은 새 테이블을 반환한다.
+참고로 결과로 나오는 테이블이 열이 아닐 수도 있다.
 
 
 
@@ -9027,21 +9026,20 @@ Note that the resulting table may not be a sequence.
 
 
 <p>
-Removes from <code>list</code> the element at position <code>pos</code>,
-returning the value of the removed element.
-When <code>pos</code> is an integer between 1 and <code>#list</code>,
-it shifts down the elements
-<code>list[pos+1], list[pos+2], &middot;&middot;&middot;, list[#list]</code>
-and erases element <code>list[#list]</code>;
-The index <code>pos</code> can also be 0 when <code>#list</code> is 0,
-or <code>#list + 1</code>;
-in those cases, the function erases the element <code>list[pos]</code>.
+<code>list</code>에서 위치 <code>pos</code>에 있는 항목을 제거하고
+그 항목의 값을 반환한다.
+<code>pos</code>가 1과 <code>#list</code> 사이 정수이면
+항목 <code>list[pos+1], list[pos+2], &middot;&middot;&middot;, list[#list]</code>를
+앞으로 밀어서 항목 <code>list[#list]</code>를 없앤다.
+<code>#list</code>가 0일 때는 <code>pos</code>가 0일 수 있고
+또는 <code>#list + 1</code>일 수도 있다.
+그런 경우에 함수는 항목 <code>list[pos]</code>를 없앤다.
 
 
 <p>
-The default value for <code>pos</code> is <code>#list</code>,
-so that a call <code>table.remove(l)</code> removes the last element
-of list <code>l</code>.
+<code>pos</code>의 기본값이 <code>#list</code>이다.
+그래서 <code>table.remove(l)</code> 호출이
+리스트 <code>l</code>의 마지막 항목을 제거한다.
 
 
 
@@ -9051,29 +9049,29 @@ of list <code>l</code>.
 
 
 <p>
-Sorts list elements in a given order, <em>in-place</em>,
-from <code>list[1]</code> to <code>list[#list]</code>.
-If <code>comp</code> is given,
-then it must be a function that receives two list elements
-and returns true when the first element must come
-before the second in the final order
-(so that, after the sort,
-<code>i &lt; j</code> implies <code>not comp(list[j],list[i])</code>).
-If <code>comp</code> is not given,
-then the standard Lua operator <code>&lt;</code> is used instead.
+<code>list[1]</code>부터 <code>list[#list]</code>까지
+리스트 항목들을 지정한 순서로, <em>제자리에서</em> 정렬한다.
+<code>comp</code>를 준다면 함수여야 하는데,
+그 함수는 리스트 항목 두 개를 받아서
+첫 번째 항목이 두 번째 항목보다 최종 순서에서 앞에 와야 하면
+참을 반환한다.
+(그래서 정렬 후에
+<code>i &lt; j</code>이면 <code>not comp(list[j],list[i])</code>여야 한다.)
+<code>comp</code>를 주지 않으면 대신
+표준 루아 연산자 <code>&lt;</code>를 사용한다.
 
 
 <p>
-Note that the <code>comp</code> function must define
-a strict partial order over the elements in the list;
-that is, it must be asymmetric and transitive.
-Otherwise, no valid sort may be possible.
+참고로 <code>comp</code> 함수가
+리스트 내 항목들에 대한 순 부분 순서를 정의해야 한다.
+즉, 비대칭성과 추이성이 있어야 한다.
+그렇지 않으면 어떤 유효한 정렬도 가능하지 않다.
 
 
 <p>
-The sort algorithm is not stable:
-elements considered equal by the given order
-may have their relative positions changed by the sort.
+정렬 알고리즘이 안정적이지 않다.
+즉, 지정한 순서에서 같은 것으로 여기는 항목들의
+상대적 위치가 정렬에 의해 바뀔 수도 있다.
 
 
 
@@ -9083,13 +9081,13 @@ may have their relative positions changed by the sort.
 
 
 <p>
-Returns the elements from the given list.
-This function is equivalent to
+받은 리스트의 항목들을 반환한다.
+이 함수는 다음과 동등하다.
 
 <pre>
      return list[i], list[i+1], &middot;&middot;&middot;, list[j]
 </pre><p>
-By default, <code>i</code> is&nbsp;1 and <code>j</code> is <code>#list</code>.
+<code>i</code>의 기본값은 1이고 <code>j</code>는 <code>#list</code>이다.
 
 
 
