@@ -5077,8 +5077,8 @@ C 함수 <code>f</code>를 전역 <code>name</code>의 새 값으로 설정한�
 <code>lua_tolstring</code>은
 루아 상태 내 문자열에 대한 포인터를 반환한다.
 이 문자열에는 (C에서처럼) 항상 마지막 문자 뒤에
-영('<code>\0</code>')이 있다.
-하지만 내용 중간에도 영이 있을 수 있다.
+0('<code>\0</code>')이 있다.
+하지만 내용 중간에도 0이 있을 수 있다.
 
 
 <p>
@@ -5973,7 +5973,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 <code>s</code>가 가리키는 길이 <code>l</code>인 문자열을
 버퍼 <code>B</code>에 추가한다.
 (<a href="#luaL_Buffer"><code>luaL_Buffer</code></a> 참고.)
-문자열 내에 영이 있을 수 있다.
+문자열 내에 0이 있을 수 있다.
 
 
 
