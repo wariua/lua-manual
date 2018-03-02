@@ -1,8 +1,6 @@
 This is Korean translation of Lua 5.3 Reference Manual.
 
-And ... 어... 네, 그렇습니다. 다음 주소에서 볼 수 있습니다.
-
-https://wariua.github.io/lua-manual/5.3/
+And ... 어... 네, 그렇습니다.
 
 원문은 다음 주소에서 볼 수 있습니다.
 
