@@ -8759,88 +8759,84 @@ C89 컴파일러로 루아를 컴파일 하는 경우에는
 
 
 
-<h3>6.4.2 &ndash; <a name="6.4.2">Format Strings for Pack and Unpack</a></h3>
+<h3>6.4.2 &ndash; <a name="6.4.2">포장 형식 문자열</a></h3>
 
 <p>
-The first argument to <a href="#pdf-string.pack"><code>string.pack</code></a>,
-<a href="#pdf-string.packsize"><code>string.packsize</code></a>, and <a href="#pdf-string.unpack"><code>string.unpack</code></a>
-is a format string,
-which describes the layout of the structure being created or read.
+<a href="#pdf-string.pack"><code>string.pack</code></a>,
+<a href="#pdf-string.packsize"><code>string.packsize</code></a>,
+<a href="#pdf-string.unpack"><code>string.unpack</code></a>의
+첫 번째 인자는 만들거나 읽으려는 구조의 레이아웃을 기술하는 형식 문자열이다.
 
 
 <p>
-A format string is a sequence of conversion options.
-The conversion options are as follows:
+형식 문자열은 일련의 변환 옵션들이다.
+가능한 변환 옵션은 다음과 같다.
 
 <ul>
-<li><b><code>&lt;</code>: </b>sets little endian</li>
-<li><b><code>&gt;</code>: </b>sets big endian</li>
-<li><b><code>=</code>: </b>sets native endian</li>
-<li><b><code>![<em>n</em>]</code>: </b>sets maximum alignment to <code>n</code>
-(default is native alignment)</li>
-<li><b><code>b</code>: </b>a signed byte (<code>char</code>)</li>
-<li><b><code>B</code>: </b>an unsigned byte (<code>char</code>)</li>
-<li><b><code>h</code>: </b>a signed <code>short</code> (native size)</li>
-<li><b><code>H</code>: </b>an unsigned <code>short</code> (native size)</li>
-<li><b><code>l</code>: </b>a signed <code>long</code> (native size)</li>
-<li><b><code>L</code>: </b>an unsigned <code>long</code> (native size)</li>
-<li><b><code>j</code>: </b>a <code>lua_Integer</code></li>
-<li><b><code>J</code>: </b>a <code>lua_Unsigned</code></li>
-<li><b><code>T</code>: </b>a <code>size_t</code> (native size)</li>
-<li><b><code>i[<em>n</em>]</code>: </b>a signed <code>int</code> with <code>n</code> bytes
-(default is native size)</li>
-<li><b><code>I[<em>n</em>]</code>: </b>an unsigned <code>int</code> with <code>n</code> bytes
-(default is native size)</li>
-<li><b><code>f</code>: </b>a <code>float</code> (native size)</li>
-<li><b><code>d</code>: </b>a <code>double</code> (native size)</li>
-<li><b><code>n</code>: </b>a <code>lua_Number</code></li>
-<li><b><code>c<em>n</em></code>: </b>a fixed-sized string with <code>n</code> bytes</li>
-<li><b><code>z</code>: </b>a zero-terminated string</li>
-<li><b><code>s[<em>n</em>]</code>: </b>a string preceded by its length
-coded as an unsigned integer with <code>n</code> bytes
-(default is a <code>size_t</code>)</li>
-<li><b><code>x</code>: </b>one byte of padding</li>
-<li><b><code>X<em>op</em></code>: </b>an empty item that aligns
-according to option <code>op</code>
-(which is otherwise ignored)</li>
-<li><b>'<code> </code>': </b>(empty space) ignored</li>
+<li><b><code>&lt;</code>: </b>리틀 엔디안 설정</li>
+<li><b><code>&gt;</code>: </b>빅 엔디안 설정</li>
+<li><b><code>=</code>: </b>시스템 기본 엔디안 설정</li>
+<li><b><code>![<em>n</em>]</code>: </b>최대 정렬 크기를 <code>n</code>으로 설정
+(생략 시 시스템 기본 정렬 크기)</li>
+<li><b><code>b</code>: </b>부호 있는 바이트 (<code>char</code>)</li>
+<li><b><code>B</code>: </b>부호 없는 바이트 (<code>char</code>)</li>
+<li><b><code>h</code>: </b>부호 있는 <code>short</code> (시스템 기본 크기)</li>
+<li><b><code>H</code>: </b>부호 없는 <code>short</code> (시스템 기본 크기)</li>
+<li><b><code>l</code>: </b>부호 있는 <code>long</code> (시스템 기본 크기)</li>
+<li><b><code>L</code>: </b>부호 없는 <code>long</code> (시스템 기본 크기)</li>
+<li><b><code>j</code>: </b><code>lua_Integer</code></li>
+<li><b><code>J</code>: </b><code>lua_Unsigned</code></li>
+<li><b><code>T</code>: </b><code>size_t</code> (시스템 기본 크기)</li>
+<li><b><code>i[<em>n</em>]</code>: </b>부호 있는 <code>n</code> 바이트 <code>int</code>
+(생략 시 시스템 기본 크기)</li>
+<li><b><code>I[<em>n</em>]</code>: </b>부호 없는 <code>n</code> 바이트 <code>int</code>
+(생략 시 시스템 기본 크기)</li>
+<li><b><code>f</code>: </b><code>float</code> (시스템 기본 크기)</li>
+<li><b><code>d</code>: </b><code>double</code> (시스템 기본 크기)</li>
+<li><b><code>n</code>: </b><code>lua_Number</code></li>
+<li><b><code>c<em>n</em></code>: </b><code>n</code> 바이트 고정 크기 문자열</li>
+<li><b><code>z</code>: </b>영 종료 문자열</li>
+<li><b><code>s[<em>n</em>]</code>: </b><code>n</code> 바이트 부호 없는 정수로
+표현한 길이가 앞에 붙은 문자열
+(생략 시 <code>size_t</code>)</li>
+<li><b><code>x</code>: </b>패딩 1바이트</li>
+<li><b><code>X<em>op</em></code>: </b>옵션 <code>op</code>의 크기에 따라
+정렬을 맞춘 빈 항목
+(<code>op</code>는 크기만 얻고 무시)</li>
+<li><b>'<code> </code>': </b>(공백) 무시됨</li>
 </ul><p>
-(A "<code>[<em>n</em>]</code>" means an optional integral numeral.)
-Except for padding, spaces, and configurations
-(options "<code>xX &lt;=&gt;!</code>"),
-each option corresponds to an argument (in <a href="#pdf-string.pack"><code>string.pack</code></a>)
-or a result (in <a href="#pdf-string.unpack"><code>string.unpack</code></a>).
+("<code>[<em>n</em>]</code>"은 선택적인 정수 숫자를 뜻한다.)
+패딩, 공백, 설정을 (옵션 "<code>xX &lt;=&gt;!</code>를) 제외한
+각 옵션은 (<a href="#pdf-string.pack"><code>string.pack</code></a>의) 인자 한 개 내지
+(<a href="#pdf-string.unpack"><code>string.unpack</code></a>의) 결과 한 개에 대응한다.
 
 
 <p>
-For options "<code>!<em>n</em></code>", "<code>s<em>n</em></code>", "<code>i<em>n</em></code>", and "<code>I<em>n</em></code>",
-<code>n</code> can be any integer between 1 and 16.
-All integral options check overflows;
-<a href="#pdf-string.pack"><code>string.pack</code></a> checks whether the given value fits in the given size;
-<a href="#pdf-string.unpack"><code>string.unpack</code></a> checks whether the read value fits in a Lua integer.
+옵션 "<code>!<em>n</em></code>", "<code>s<em>n</em></code>", "<code>i<em>n</em></code>", "<code>I<em>n</em></code>"에서
+<code>n</code>에는 1에서 16까지 아무 정수나 가능하다.
+모든 정수 옵션마다 오버플로우 검사를 한다.
+즉, <a href="#pdf-string.pack"><code>string.pack</code></a>에서는 받은 값이 지정한 크기에 들어가는지 확인하며
+<a href="#pdf-string.unpack"><code>string.unpack</code></a>에서는 읽은 값이 루아 정수에 들어가는지 확인한다.
 
 
 <p>
-Any format string starts as if prefixed by "<code>!1=</code>",
-that is,
-with maximum alignment of 1 (no alignment)
-and native endianness.
+모든 형식 문자열은 앞에 "<code>!1=</code>"가 붙은 것처럼,
+즉 최대 정렬 크기 1(정렬 없음)과 시스템 기본 엔디안으로 시작한다.
 
 
 <p>
-Alignment works as follows:
-For each option,
-the format gets extra padding until the data starts
-at an offset that is a multiple of the minimum between the
-option size and the maximum alignment;
-this minimum must be a power of 2.
-Options "<code>c</code>" and "<code>z</code>" are not aligned;
-option "<code>s</code>" follows the alignment of its starting integer.
+정렬 방식을 설명하자면,
+각 옵션에 대해
+옵션 크기와 최대 정렬 크기 중 작은 값의 배수인
+오프셋에서 데이터가 시작할 때까지 패딩을 추가한다.
+그 작은 값은 2의 거듭제곱수여야 한다.
+옵션 "<code>c</code>"와 "<code>z</code>"는 따로 정렬을 맞추지 않으며,
+옵션 "<code>s</code>"는 앞머리 정수의 정렬을 따른다.
 
 
 <p>
-All padding is filled with zeros by <a href="#pdf-string.pack"><code>string.pack</code></a>
-(and ignored by <a href="#pdf-string.unpack"><code>string.unpack</code></a>).
+모든 패딩을 <a href="#pdf-string.pack"><code>string.pack</code></a>에서 0으로 채운다.
+(그리고 <a href="#pdf-string.unpack"><code>string.unpack</code></a>에서 무시한다.)
 
 
 
