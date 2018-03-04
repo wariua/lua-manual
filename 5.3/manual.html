@@ -9828,10 +9828,10 @@ POSIX를 준수하지 않는 시스템에서는
 
 
 
-<h2>6.9 &ndash; <a name="6.9">Operating System Facilities</a></h2>
+<h2>6.9 &ndash; <a name="6.9">운영 체제 기능</a></h2>
 
 <p>
-This library is implemented through table <a name="pdf-os"><code>os</code></a>.
+이 라이브러리는 테이블 <a name="pdf-os"><code>os</code></a>를 통해 구현되어 있다.
 
 
 <p>
@@ -9839,8 +9839,7 @@ This library is implemented through table <a name="pdf-os"><code>os</code></a>.
 
 
 <p>
-Returns an approximation of the amount in seconds of CPU time
-used by the program.
+프로그램이 사용한 CPU 시간의 초 단위 근삿값을 반환한다.
 
 
 
@@ -9850,49 +9849,49 @@ used by the program.
 
 
 <p>
-Returns a string or a table containing date and time,
-formatted according to the given string <code>format</code>.
+문자열 <code>format</code>의 형식에 따라서
+날짜와 시간을 담은 문자열 내지 테이블을 반환한다.
 
 
 <p>
-If the <code>time</code> argument is present,
-this is the time to be formatted
-(see the <a href="#pdf-os.time"><code>os.time</code></a> function for a description of this value).
-Otherwise, <code>date</code> formats the current time.
+<code>time</code> 인자가 있으면
+그 시간을 사용한다.
+(이 값에 대한 설명은 <a href="#pdf-os.time"><code>os.time</code></a> 함수를 보라.)
+아니면 현재 시간을 사용한다.
 
 
 <p>
-If <code>format</code> starts with '<code>!</code>',
-then the date is formatted in Coordinated Universal Time.
-After this optional character,
-if <code>format</code> is the string "<code>*t</code>",
-then <code>date</code> returns a table with the following fields:
+<code>format</code>이 '<code>!</code>'으로 시작하면
+협정 세계시를 사용한다.
+선택적인 이 문자 다음에
+<code>format</code>이 문자열 "<code>*t</code>"이면
+테이블을 반환한다. 그 테이블에는
 <code>year</code>, <code>month</code> (1&ndash;12), <code>day</code> (1&ndash;31),
 <code>hour</code> (0&ndash;23), <code>min</code> (0&ndash;59), <code>sec</code> (0&ndash;61),
-<code>wday</code> (weekday, 1&ndash;7, Sunday is&nbsp;1),
-<code>yday</code> (day of the year, 1&ndash;366),
-and <code>isdst</code> (daylight saving flag, a boolean).
-This last field may be absent
-if the information is not available.
+<code>wday</code> (주별 날 번호, 1&ndash;7, 일요일이 1),
+<code>yday</code> (연별 날 번호, 1&ndash;366),
+<code>isdst</code> (일광 절약 플래그, 불리언)
+필드가 있다.
+마지막 필드는 해당 정보가 없으면 빠져 있을 수도 있다.
 
 
 <p>
-If <code>format</code> is not "<code>*t</code>",
-then <code>date</code> returns the date as a string,
-formatted according to the same rules as the ISO&nbsp;C function <code>strftime</code>.
+<code>format</code>이 "<code>*t</code>"가 아니면
+ISO C 함수 <code>strftime</code>과 같은 규칙에 따라 서식을 준
+문자열로 일시를 반환한다.
 
 
 <p>
-When called without arguments,
-<code>date</code> returns a reasonable date and time representation that depends on
-the host system and on the current locale.
-(More specifically, <code>os.date()</code> is equivalent to <code>os.date("%c")</code>.)
+인자 없이 호출 시에는
+호스트 시스템과 현재 로캘에 따라
+적당하게 표현한 날짜와 시간을 반환한다.
+(구체적으로 말해 <code>os.date()</code>는 <code>os.date("%c")</code>와 동등하다.)
 
 
 <p>
-On non-POSIX systems,
-this function may be not thread safe
-because of its reliance on C&nbsp;function <code>gmtime</code> and C&nbsp;function <code>localtime</code>.
+POSIX를 준수하지 않는 시스템에서는
+C 함수 <code>gmtime</code>과 C 함수 <code>localtime</code>을 쓰기 때문에
+이 함수가 스레드에 안전하지 않을 수도 있다.
 
 
 
@@ -9902,11 +9901,11 @@ because of its reliance on C&nbsp;function <code>gmtime</code> and C&nbsp;functi
 
 
 <p>
-Returns the difference, in seconds,
-from time <code>t1</code> to time <code>t2</code>
-(where the times are values returned by <a href="#pdf-os.time"><code>os.time</code></a>).
-In POSIX, Windows, and some other systems,
-this value is exactly <code>t2</code><em>-</em><code>t1</code>.
+시간 <code>t1</code>부터 시간 <code>t2</code>까지의 차이를
+초 단위로 반환한다.
+(시간 값들은 <a href="#pdf-os.time"><code>os.time</code></a>이 반환한 것이다.)
+POSIX, 윈도우, 기타 일부 시스템에서
+이 값은 <code>t2</code><em>-</em><code>t1</code> 그대로이다.
 
 
 
@@ -9916,32 +9915,30 @@ this value is exactly <code>t2</code><em>-</em><code>t1</code>.
 
 
 <p>
-This function is equivalent to the ISO&nbsp;C function <code>system</code>.
-It passes <code>command</code> to be executed by an operating system shell.
-Its first result is <b>true</b>
-if the command terminated successfully,
-or <b>nil</b> otherwise.
-After this first result
-the function returns a string plus a number,
-as follows:
+이 함수는 ISO C 함수 <code>system</code>과 동등하다.
+<code>command</code>를 운영 체제 셸로 전달해서 실행하게 한다.
+명령이 성공적으로 종료되었으면 첫 번째 결과가 <b>true</b>이고,
+아니면 <b>nil</b>이다.
+그 첫 번째 결과에 더해서
+다음과 같이 문자열과 수를 반환한다.
 
 <ul>
 
 <li><b>"<code>exit</code>": </b>
-the command terminated normally;
-the following number is the exit status of the command.
+명령이 정상적으로 종료되었다.
+이어지는 수는 명령의 종료 상태 값이다.
 </li>
 
 <li><b>"<code>signal</code>": </b>
-the command was terminated by a signal;
-the following number is the signal that terminated the command.
+명령이 시그널에 의해 종료되었다.
+이어지는 수는 명령을 끝낸 시그널 번호이다.
 </li>
 
 </ul>
 
 <p>
-When called without a <code>command</code>,
-<code>os.execute</code> returns a boolean that is true if a shell is available.
+<code>command</code> 없이 호출 시
+<code>os.execute</code>는 불리언을 반환하는데, 셸이 사용 가능한 경우 참이다.
 
 
 
@@ -9951,19 +9948,19 @@ When called without a <code>command</code>,
 
 
 <p>
-Calls the ISO&nbsp;C function <code>exit</code> to terminate the host program.
-If <code>code</code> is <b>true</b>,
-the returned status is <code>EXIT_SUCCESS</code>;
-if <code>code</code> is <b>false</b>,
-the returned status is <code>EXIT_FAILURE</code>;
-if <code>code</code> is a number,
-the returned status is this number.
-The default value for <code>code</code> is <b>true</b>.
+ISO C 함수 <code>exit</code>을 호출해서 호스트 프로그램을 종료한다.
+<code>code</code>가 <b>true</b>이면
+반환 상태가 <code>EXIT_SUCCESS</code>이다.
+<code>code</code>가 <b>false</b>이면
+반환 상태가 <code>EXIT_FAILURE</code>이다.
+<code>code</code>가 수이면
+반환 상태가 그 수이다.
+<code>code</code>의 기본값은 <b>true</b>이다.
 
 
 <p>
-If the optional second argument <code>close</code> is true,
-closes the Lua state before exiting.
+선택적인 두 번째 인자 <code>close</code>가 참이면
+끝내기 전에 루아 상태를 닫는다.
 
 
 
@@ -9973,8 +9970,8 @@ closes the Lua state before exiting.
 
 
 <p>
-Returns the value of the process environment variable <code>varname</code>,
-or <b>nil</b> if the variable is not defined.
+프로세스 환경 변수 <code>varname</code>의 값을 반환한다.
+그 변수가 정의되어 있지 않으면 <b>nil</b>을 반환한다.
 
 
 
@@ -9984,11 +9981,10 @@ or <b>nil</b> if the variable is not defined.
 
 
 <p>
-Deletes the file (or empty directory, on POSIX systems)
-with the given name.
-If this function fails, it returns <b>nil</b>,
-plus a string describing the error and the error code.
-Otherwise, it returns true.
+지정한 이름의 파일을 (POSIX 시스템에서는 빈 디렉터리도 가능) 삭제한다.
+실패하면 <b>nil</b>에 더해
+오류를 기술하는 문자열과 오류 코드를 반환한다.
+아니면 참을 반환한다.
 
 
 
@@ -9998,10 +9994,11 @@ Otherwise, it returns true.
 
 
 <p>
-Renames the file or directory named <code>oldname</code> to <code>newname</code>.
-If this function fails, it returns <b>nil</b>,
-plus a string describing the error and the error code.
-Otherwise, it returns true.
+이름이 <code>oldname</code>인 파일이나 디렉터리의
+이름을 <code>newname</code>으로 바꾼다.
+실패하면 <b>nil</b>에 더해
+오류를 기술하는 문자열과 오류 코드를 반환한다.
+아니면 참을 반환한다.
 
 
 
@@ -10011,32 +10008,31 @@ Otherwise, it returns true.
 
 
 <p>
-Sets the current locale of the program.
-<code>locale</code> is a system-dependent string specifying a locale;
-<code>category</code> is an optional string describing which category to change:
+프로그램의 현행 로캘을 설정한다.
+<code>locale</code>은 로캘을 지정하는 시스템별 문자열이다.
+<code>category</code>는 바꿀 범주를 나타내는 선택적 문자열이다.
 <code>"all"</code>, <code>"collate"</code>, <code>"ctype"</code>,
-<code>"monetary"</code>, <code>"numeric"</code>, or <code>"time"</code>;
-the default category is <code>"all"</code>.
-The function returns the name of the new locale,
-or <b>nil</b> if the request cannot be honored.
+<code>"monetary"</code>, <code>"numeric"</code>, <code>"time"</code> 중 하나이며,
+기본 범주는 <code>"all"</code>이다.
+새 로캘의 이름을 반환하며,
+요청에 응할 수 없으면 <b>nil</b>을 반환한다.
 
 
 <p>
-If <code>locale</code> is the empty string,
-the current locale is set to an implementation-defined native locale.
-If <code>locale</code> is the string "<code>C</code>",
-the current locale is set to the standard C locale.
+<code>locale</code>이 빈 문자열이면
+현행 로캘을 구현체에서 정의한 시스템 기본 로캘로 설정한다.
+<code>locale</code>이 문자열 "<code>C</code>"이면
+현행 로캘을 표준 C 로캘로 설정한다.
 
 
 <p>
-When called with <b>nil</b> as the first argument,
-this function only returns the name of the current locale
-for the given category.
+첫 번째 인자를 <b>nil</b>로 해서 호출하면
+지정한 범주에 대해 현행 로캘의 이름을 반환하기만 한다.
 
 
 <p>
-This function may be not thread safe
-because of its reliance on C&nbsp;function <code>setlocale</code>.
+C 함수 <code>setlocale</code>을 이용하기 때문에
+스레드에 안전하지 않을 수도 있다.
 
 
 
@@ -10046,34 +10042,33 @@ because of its reliance on C&nbsp;function <code>setlocale</code>.
 
 
 <p>
-Returns the current time when called without arguments,
-or a time representing the local date and time specified by the given table.
-This table must have fields <code>year</code>, <code>month</code>, and <code>day</code>,
-and may have fields
-<code>hour</code> (default is 12),
-<code>min</code> (default is 0),
-<code>sec</code> (default is 0),
-and <code>isdst</code> (default is <b>nil</b>).
-Other fields are ignored.
-For a description of these fields, see the <a href="#pdf-os.date"><code>os.date</code></a> function.
+인자 없이 호출하면 현재 시간을 반환한다.
+아니면 지정한 테이블이 가리키는 지역 날짜/시간을 나타내는 시간을 반환한다.
+그 테이블에는 <code>year</code>, <code>month</code>, <code>day</code> 필드가 있어야 하며,
+<code>hour</code> (기본값 12),
+<code>min</code> (기본값 0),
+<code>sec</code> (기본값 0),
+<code>isdst</code> (기본값 <b>nil</b>)
+필드가 있을 수 있다.
+다른 필드들은 무시한다.
+이 필드들에 대한 설명은 <a href="#pdf-os.date"><code>os.date</code></a> 함수를 보라.
 
 
 <p>
-The values in these fields do not need to be inside their valid ranges.
-For instance, if <code>sec</code> is -10,
-it means -10 seconds from the time specified by the other fields;
-if <code>hour</code> is 1000,
-it means +1000 hours from the time specified by the other fields.
+이 필드들의 값이 반드시 유효 범위 내에 있어야 하는 것은 아니다.
+예를 들어 <code>sec</code>이 -10이면
+다른 필드들이 가리키는 시간에서 10초 전을 뜻한다.
+<code>hour</code>가 1000이면
+다른 필드들이 가리키는 시간에서 1000시간 후를 뜻한다.
 
 
 <p>
-The returned value is a number, whose meaning depends on your system.
-In POSIX, Windows, and some other systems,
-this number counts the number
-of seconds since some given start time (the "epoch").
-In other systems, the meaning is not specified,
-and the number returned by <code>time</code> can be used only as an argument to
-<a href="#pdf-os.date"><code>os.date</code></a> and <a href="#pdf-os.difftime"><code>os.difftime</code></a>.
+반환하는 값이 수인데 시스템에 따라 그 의미가 다르다.
+POSIX, 윈도우, 기타 일부 시스템에서
+이 수는 어떤 기준 시간("에포크") 이후로 지난 초의 수를 센 것이다.
+다른 시스템에서는 그 의미가 명세되어 있지 않으므로
+<code>time</code>이 반환한 수를
+<a href="#pdf-os.date"><code>os.date</code></a>와 <a href="#pdf-os.difftime"><code>os.difftime</code></a>의 인자로만 쓸 수 있다.
 
 
 
@@ -10083,26 +10078,26 @@ and the number returned by <code>time</code> can be used only as an argument to
 
 
 <p>
-Returns a string with a file name that can
-be used for a temporary file.
-The file must be explicitly opened before its use
-and explicitly removed when no longer needed.
+임시 파일에 쓸 수 있는 파일 이름을
+문자열로 반환한다.
+사용 전에 파일을 명시적으로 열어야 하며
+더는 필요 없을 때 명시적으로 삭제해야 한다.
 
 
 <p>
-On POSIX systems,
-this function also creates a file with that name,
-to avoid security risks.
-(Someone else might create the file with wrong permissions
-in the time between getting the name and creating the file.)
-You still have to open the file to use it
-and to remove it (even if you do not use it).
+POSIX 시스템에서 이 함수는
+보안상 위험을 피하기 위해
+(이름을 얻는 시점과 파일을 생성하는 시점 사이에
+다른 누군가가 잘못된 권한으로 그 파일을 생성할 수 있을 것이다.)
+그 이름으로 파일을 만들기까지 한다.
+사용하려면 마찬가지로 파일을 열어야 하며
+(사용하지 않은 경우에도) 파일을 삭제해야 한다.
 
 
 <p>
-When possible,
-you may prefer to use <a href="#pdf-io.tmpfile"><code>io.tmpfile</code></a>,
-which automatically removes the file when the program ends.
+가능하다면
+프로그램이 끝날 때 파일을 자동으로 삭제해 주는
+<a href="#pdf-io.tmpfile"><code>io.tmpfile</code></a>을 쓰는 게 나을 수 있다.
 
 
 
