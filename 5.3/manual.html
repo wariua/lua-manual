@@ -10683,61 +10683,60 @@ upvalue를 공유하는 (즉 같은 외부 지역 변수에 접근하는)
 
 
 
-<h2>8.2 &ndash; <a name="8.2">Changes in the Libraries</a></h2>
+<h2>8.2 &ndash; <a name="8.2">라이브러리에서 바뀐 점</a></h2>
 <ul>
 
 <li>
-The <code>bit32</code> library has been deprecated.
-It is easy to require a compatible external library or,
-better yet, to replace its functions with appropriate bitwise operations.
-(Keep in mind that <code>bit32</code> operates on 32-bit integers,
-while the bitwise operators in Lua&nbsp;5.3 operate on Lua integers,
-which by default have 64&nbsp;bits.)
+<code>bit32</code> 라이브러리가 폐기 예정이 되었다.
+호환되는 외부 라이브러리를 요청하거나,
+더 좋게는 그 함수들을 적절한 비트 연산으로 바꿀 수 있다.
+(<code>bit32</code>는 32비트 정수에 대해 동작하는 반면
+루아 5.3의 비트 연산자는 기본적으로 64비트인
+루아 정수에 대해 동작한다는 점에 유의해야 한다.)
 </li>
 
 <li>
-The Table library now respects metamethods
-for setting and getting elements.
+테이블 라이브러리에서 항목을 설정하고 얻을 때
+이제 메타메소드를 준수한다.
 </li>
 
 <li>
-The <a href="#pdf-ipairs"><code>ipairs</code></a> iterator now respects metamethods and
-its <code>__ipairs</code> metamethod has been deprecated.
+<a href="#pdf-ipairs"><code>ipairs</code></a> 반복자에서 이제 메타메소드를 준수하며
+<code>__ipairs</code> 메타메소드가 폐기 예정이 되었다.
 </li>
 
 <li>
-Option names in <a href="#pdf-io.read"><code>io.read</code></a> do not have a starting '<code>*</code>' anymore.
-For compatibility, Lua will continue to accept (and ignore) this character.
+<a href="#pdf-io.read"><code>io.read</code></a>의 옵션 이름이 더는 '<code>*</code>'로 시작하지 않는다.
+호환성을 위해 루아에서 그 문자를 계속 받아들일 (그리고 무시할) 것이다.
 </li>
 
 <li>
-The following functions were deprecated in the mathematical library:
+수학 라이브러리에서 함수
 <code>atan2</code>, <code>cosh</code>, <code>sinh</code>, <code>tanh</code>, <code>pow</code>,
-<code>frexp</code>, and <code>ldexp</code>.
-You can replace <code>math.pow(x,y)</code> with <code>x^y</code>;
-you can replace <code>math.atan2</code> with <code>math.atan</code>,
-which now accepts one or two parameters;
-you can replace <code>math.ldexp(x,exp)</code> with <code>x * 2.0^exp</code>.
-For the other operations,
-you can either use an external library or
-implement them in Lua.
+<code>frexp</code>, <code>ldexp</code>가 폐기 예정이 되었다.
+<code>math.pow(x,y)</code>는 <code>x^y</code>로 대체할 수 있다.
+<code>math.atan2</code>는 매개변수를 한 개 또는 두 개 받는 <code>math.atan</code>로
+대체할 수 있다.
+<code>math.ldexp(x,exp)</code>는 <code>x * 2.0^exp</code>로 대체할 수 있다.
+다연 연산들에 대해선
+외부 라이브러리를 사용하거나 루아로 구현할 수 있다.
 </li>
 
 <li>
-The searcher for C loaders used by <a href="#pdf-require"><code>require</code></a>
-changed the way it handles versioned names.
-Now, the version should come after the module name
-(as is usual in most other tools).
-For compatibility, that searcher still tries the old format
-if it cannot find an open function according to the new style.
-(Lua&nbsp;5.2 already worked that way,
-but it did not document the change.)
+<a href="#pdf-require"><code>require</code></a>에서 C 적재 함수를
+탐색할 때 버전 붙은 이름을 다루는 방식이 바뀌었다.
+이제 버전이 (다른 대다수 도구들에서처럼)
+모듈 이름 뒤에 와야 한다.
+호환성을 위해 탐색 함수에서 새 형식으로 열기 함수를 찾을 수 없으면
+여전히 이전 형식을 시도한다.
+(루아 5.2에서 이미 이렇게 동작했지만
+그 내용을 기록하지 않았다.)
 </li>
 
 <li>
-The call <code>collectgarbage("count")</code> now returns only one result.
-(You can compute that second result from the fractional part
-of the first result.)
+<code>collectgarbage("count")</code> 호출이 이제 결과를 한 개만 반환한다.
+(첫 번째 결과의 소수 부분을 가지고
+그 두 번째 결과를 계산할 수 있다.)
 </li>
 
 </ul>
