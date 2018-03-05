@@ -10600,38 +10600,37 @@ upvalue를 공유하는 (즉 같은 외부 지역 변수에 접근하는)
 
 
 
-<h1>8 &ndash; <a name="8">Incompatibilities with the Previous Version</a></h1>
+<h1>8 &ndash; <a name="8">이전 버전과 호환되지 않는 점</a></h1>
 
 <p>
-Here we list the incompatibilities that you may find when moving a program
-from Lua&nbsp;5.2 to Lua&nbsp;5.3.
-You can avoid some incompatibilities by compiling Lua with
-appropriate options (see file <code>luaconf.h</code>).
-However,
-all these compatibility options will be removed in the future.
-
-
-<p>
-Lua versions can always change the C API in ways that
-do not imply source-code changes in a program,
-such as the numeric values for constants
-or the implementation of functions as macros.
-Therefore,
-you should not assume that binaries are compatible between
-different Lua versions.
-Always recompile clients of the Lua API when
-using a new version.
+여기선 프로그램을 루아 5.2에서 루아 5.3으로 옮기면서
+발견할 수 있는 비호환 사항들을 나열한다.
+어떤 사항들은 적절한 옵션으로 루아를 컴파일 하는 것으로
+(파일 <code>luaconf.h</code> 참고) 피할 수 있다.
+하지만 그 호환성 옵션들은 향후에 모두 없어질 것이다.
 
 
 <p>
-Similarly, Lua versions can always change the internal representation
-of precompiled chunks;
-precompiled chunks are not compatible between different Lua versions.
+루아 버전이 바뀔 때
+상수의 숫자 값이나 함수의 매크로 구현처럼
+프로그램 소스 코드 변경이 필요치 않은 방식으로는
+언제든 C API가 바뀔 수 있다.
+따라서
+루아 버전들 간에 바이너리가 호환된다고
+가정해서는 안 된다.
+항상 새 버전으로 루아 API 사용 프로그램을
+재컴파일 해야 한다.
 
 
 <p>
-The standard paths in the official distribution may
-change between versions.
+또한 루아 버전이 바뀌면서
+언제든 사전 컴파일 청크의 내부 표현 방식이 바뀔 수 있다.
+즉, 루아 버전들 간에 사전 컴파일 청크가 호환되지 않는다.
+
+
+<p>
+공식 배포본 내의 표준 경로들이
+버전들 사이에서 바뀔 수도 있다.
 
 
 
