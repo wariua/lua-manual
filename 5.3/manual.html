@@ -10744,37 +10744,37 @@ upvalue를 공유하는 (즉 같은 외부 지역 변수에 접근하는)
 
 
 
-<h2>8.3 &ndash; <a name="8.3">Changes in the API</a></h2>
+<h2>8.3 &ndash; <a name="8.3">API에서 바뀐 점</a></h2>
 
 
 <ul>
 
 <li>
-Continuation functions now receive as parameters what they needed
-to get through <code>lua_getctx</code>,
-so <code>lua_getctx</code> has been removed.
-Adapt your code accordingly.
+속행 함수에서 <code>lua_getctx</code>를 통해 얻어야 했던 것들을
+이제는 매개변수로 받으며,
+그래서 <code>lua_getctx</code>가 제거되었다.
+그에 맞게 코드를 고쳐야 한다.
 </li>
 
 <li>
-Function <a href="#lua_dump"><code>lua_dump</code></a> has an extra parameter, <code>strip</code>.
-Use 0 as the value of this parameter to get the old behavior.
+함수 <a href="#lua_dump"><code>lua_dump</code></a>에 매개변수 <code>strip</code>이 추가되었다.
+이 매개변수 값으로 0을 쓰면 이전 동작 방식이다.
 </li>
 
 <li>
-Functions to inject/project unsigned integers
+부호 없는 정수를 집어넣고 꺼내는 함수들이
 (<code>lua_pushunsigned</code>, <code>lua_tounsigned</code>, <code>lua_tounsignedx</code>,
 <code>luaL_checkunsigned</code>, <code>luaL_optunsigned</code>)
-were deprecated.
-Use their signed equivalents with a type cast.
+폐기 예정이 되었다.
+타입 캐스트 해서 부호 있는 정수용 버전을 쓰면 된다.
 </li>
 
 <li>
-Macros to project non-default integer types
+특수 정수 타입을 꺼내는 매크로들이
 (<code>luaL_checkint</code>, <code>luaL_optint</code>, <code>luaL_checklong</code>, <code>luaL_optlong</code>)
-were deprecated.
-Use their equivalent over <a href="#lua_Integer"><code>lua_Integer</code></a> with a type cast
-(or, when possible, use <a href="#lua_Integer"><code>lua_Integer</code></a> in your code).
+폐기 예정이 되었다.
+타입 캐스트 해서 <a href="#lua_Integer"><code>lua_Integer</code></a>용 버전을 쓰면 된다.
+(또는 가능하다면 코드에서 <a href="#lua_Integer"><code>lua_Integer</code></a>를 사용하면 된다.)
 </li>
 
 </ul>
