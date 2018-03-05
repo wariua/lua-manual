@@ -10105,29 +10105,28 @@ POSIX 시스템에서 이 함수는
 
 
 
-<h2>6.10 &ndash; <a name="6.10">The Debug Library</a></h2>
+<h2>6.10 &ndash; <a name="6.10">디버그 라이브러리</a></h2>
 
 <p>
-This library provides
-the functionality of the debug interface (<a href="#4.9">&sect;4.9</a>) to Lua programs.
-You should exert care when using this library.
-Several of its functions
-violate basic assumptions about Lua code
-(e.g., that variables local to a function
-cannot be accessed from outside;
-that userdata metatables cannot be changed by Lua code;
-that Lua programs do not crash)
-and therefore can compromise otherwise secure code.
-Moreover, some functions in this library may be slow.
+이 라이브러리는 루아 프로그램에게
+디버그 인터페이스(<a href="#4.9">4.9절</a>)의 기능들을 제공한다.
+이 라이브러리를 사용할 때는 주의를 기울여야 한다.
+여러 함수가
+루아 코드에 대한 기본적인 가정(가령
+함수에 로컬인 변수에 외부에서 접근할 수 없고,
+루아 코드에서 userdata 메타데이터를 바꿀 수 없고,
+루아 프로그램이 죽지 않음)을 위반하며,
+그래서 안전했을 코드를 위태롭게 만들 수 있다.
+또한 이 라이브러리의 일부 함수들이 느릴 수도 있다.
 
 
 <p>
-All functions in this library are provided
-inside the <a name="pdf-debug"><code>debug</code></a> table.
-All functions that operate over a thread
-have an optional first argument which is the
-thread to operate over.
-The default is always the current thread.
+이 라이브러리의 모든 함수들을
+<a name="pdf-debug"><code>debug</code></a> 테이블 내에서 제공한다.
+스레드를 대상으로 동작하는 함수들에는
+대상 스레드를 나타내는
+선택적인 첫 번째 인자가 있다.
+기본값은 항상 현재 스레드이다.
 
 
 <p>
@@ -10135,18 +10134,18 @@ The default is always the current thread.
 
 
 <p>
-Enters an interactive mode with the user,
-running each string that the user enters.
-Using simple commands and other debug facilities,
-the user can inspect global and local variables,
-change their values, evaluate expressions, and so on.
-A line containing only the word <code>cont</code> finishes this function,
-so that the caller continues its execution.
+대화형 모드로 들어가서
+사용자가 입력하는 각 문자열을 실행한다.
+간단한 명령과 다른 디버그 기능들을 이용해
+전역 및 지역 변수를 조사하고,
+변수 값을 바꾸고, 식을 평가하는 등의 일을 할 수 있다.
+단어 <code>cont</code>만 입력하면 이 함수가 끝나고
+호출자가 실행을 계속한다.
 
 
 <p>
-Note that commands for <code>debug.debug</code> are not lexically nested
-within any function and so have no direct access to local variables.
+참고로 <code>debug.debug</code>에서의 명령들은 문법적으로 어느 함수에도
+포함되지 않으며, 따라서 지역 변수에 바로 접근할 수 없다.
 
 
 
@@ -10156,10 +10155,9 @@ within any function and so have no direct access to local variables.
 
 
 <p>
-Returns the current hook settings of the thread, as three values:
-the current hook function, the current hook mask,
-and the current hook count
-(as set by the <a href="#pdf-debug.sethook"><code>debug.sethook</code></a> function).
+스레드의 현재 훅 설정을 값 세 개로
+(현재 훅 함수, 현재 훅 마스크, 현재 훅 카운트) 반환한다.
+(<a href="#pdf-debug.sethook"><code>debug.sethook</code></a> 함수로 설정하는 값이다.)
 
 
 
@@ -10169,40 +10167,35 @@ and the current hook count
 
 
 <p>
-Returns a table with information about a function.
-You can give the function directly
-or you can give a number as the value of <code>f</code>,
-which means the function running at level <code>f</code> of the call stack
-of the given thread:
-level&nbsp;0 is the current function (<code>getinfo</code> itself);
-level&nbsp;1 is the function that called <code>getinfo</code>
-(except for tail calls, which do not count on the stack);
-and so on.
-If <code>f</code> is a number larger than the number of active functions,
-then <code>getinfo</code> returns <b>nil</b>.
+함수에 대한 정보를 담은 테이블을 반환한다.
+<code>f</code>의 값으로 직접 함수를 줄 수도 있고 수를 줄 수도 있다.
+수는 지정한 스레드 호출 스택의 <code>f</code>번 단계에서
+실행 중인 함수를 뜻한다.
+0번 단계는 현재 함수(<code>getinfo</code> 자체)이고
+1번 단계는 <code>getinfo</code>를 호출한 함수인 식이다.
+(꼬리 호출은 스택에서 자리를 차지하지 않으므로 제외된다.)
+<code>f</code>가 활성 함수 개수보다 큰 수이면
+<code>getinfo</code>가 <b>nil</b>을 반환한다.
 
 
 <p>
-The returned table can contain all the fields returned by <a href="#lua_getinfo"><code>lua_getinfo</code></a>,
-with the string <code>what</code> describing which fields to fill in.
-The default for <code>what</code> is to get all information available,
-except the table of valid lines.
-If present,
-the option '<code>f</code>'
-adds a field named <code>func</code> with the function itself.
-If present,
-the option '<code>L</code>'
-adds a field named <code>activelines</code> with the table of
-valid lines.
+반환되는 테이블에는 <a href="#lua_getinfo"><code>lua_getinfo</code></a>가 반환하는
+모든 필드가 담길 수 있으며,
+문자열 <code>what</code>으로 어느 필드들을 채울지 기술한다.
+<code>what</code>의 기본값은 유효 행 테이블을 제외하고
+가능한 모든 정보를 얻는 것이다.
+옵션 '<code>f</code>'가 있으면 <code>func</code>라는 필드에
+함수 자체를 추가한다.
+옵션 '<code>L</code>'이 있으면 <code>activelines</code>라는 필드에
+유효 행 테이블을 추가한다.
 
 
 <p>
-For instance, the expression <code>debug.getinfo(1,"n").name</code> returns
-a name for the current function,
-if a reasonable name can be found,
-and the expression <code>debug.getinfo(print)</code>
-returns a table with all available information
-about the <a href="#pdf-print"><code>print</code></a> function.
+예를 들어 식 <code>debug.getinfo(1,"n").name</code>은
+적당한 이름이 있다면 현재 함수의 이름을 반환하며,
+식 <code>debug.getinfo(print)</code>는
+<a href="#pdf-print"><code>print</code></a> 함수에 대해
+얻을 수 있는 정보를 모두 담은 테이블을 반환한다.
 
 
 
@@ -10212,34 +10205,32 @@ about the <a href="#pdf-print"><code>print</code></a> function.
 
 
 <p>
-This function returns the name and the value of the local variable
-with index <code>local</code> of the function at level <code>f</code> of the stack.
-This function accesses not only explicit local variables,
-but also parameters, temporaries, etc.
+스택의 <code>f</code> 단계에 있는 함수에서
+인덱스가 <code>local</code>인 지역 변수의 이름과 값을 반환한다.
+이 함수는 명시적인 지역 변수뿐만 아니라
+매개변수나 임시 값 등에도 접근한다.
 
 
 <p>
-The first parameter or local variable has index&nbsp;1, and so on,
-following the order that they are declared in the code,
-counting only the variables that are active
-in the current scope of the function.
-Negative indices refer to vararg parameters;
--1 is the first vararg parameter.
-The function returns <b>nil</b> if there is no variable with the given index,
-and raises an error when called with a level out of range.
-(You can call <a href="#pdf-debug.getinfo"><code>debug.getinfo</code></a> to check whether the level is valid.)
+첫 번째 매개변수 내지 지역 변수의 인덱스가 1이고
+코드에 선언된 순서 대로 이어지는 식이며,
+함수의 현재 유효 범위에서 활성인 변수들만 센다.
+음수 인덱스는 vararg 매개변수들을 가리킨다.
+-1이 첫 번째 vararg 매개변수이다.
+지정한 인덱스의 변수가 없으면 <b>nil</b>을 반환하며,
+범위 밖의 단계로 호출하면 오류를 제기한다.
+(<a href="#pdf-debug.getinfo"><code>debug.getinfo</code></a>를 호출해서 단계가 유효한지 확인할 수 있다.)
 
 
 <p>
-Variable names starting with '<code>(</code>' (open parenthesis) 
-represent variables with no known names
-(internal variables such as loop control variables,
-and variables from chunks saved without debug information).
+'<code>(</code>' (여는 괄호)로 시작하는 변수 이름은
+이름을 모르는 변수(루프 제어 변수 같은 내부 변수나
+디버그 정보 없이 저장한 청크에서 온 변수)를 나타낸다.
 
 
 <p>
-The parameter <code>f</code> may also be a function.
-In that case, <code>getlocal</code> returns only the name of function parameters.
+매개변수 <code>f</code>가 함수일 수도 있다.
+그 경우 <code>getlocal</code>은 그 함수 매개변수들의 이름만 반환한다.
 
 
 
@@ -10249,8 +10240,8 @@ In that case, <code>getlocal</code> returns only the name of function parameters
 
 
 <p>
-Returns the metatable of the given <code>value</code>
-or <b>nil</b> if it does not have a metatable.
+지정한 <code>value</code>의 메타테이블을 반환한다.
+메타테이블을 가지고 있지 않으면 <b>nil</b>을 반환한다.
 
 
 
@@ -10260,7 +10251,7 @@ or <b>nil</b> if it does not have a metatable.
 
 
 <p>
-Returns the registry table (see <a href="#4.5">&sect;4.5</a>).
+레지스트리 테이블을 반환한다. (<a href="#4.5">4.5절</a> 참고.)
 
 
 
@@ -10270,15 +10261,14 @@ Returns the registry table (see <a href="#4.5">&sect;4.5</a>).
 
 
 <p>
-This function returns the name and the value of the upvalue
-with index <code>up</code> of the function <code>f</code>.
-The function returns <b>nil</b> if there is no upvalue with the given index.
+함수 <code>f</code>에서 인덱스가 <code>up</code>인 upvalue의
+이름과 값을 반환한다.
+지정한 인덱스의 upvalue가 없으면 <b>nil</b>을 반환한다.
 
 
 <p>
-Variable names starting with '<code>(</code>' (open parenthesis) 
-represent variables with no known names
-(variables from chunks saved without debug information).
+'<code>(</code>' (여는 괄호)로 시작하는 변수 이름은
+이름을 모르는 변수(디버그 정보 없이 저장한 청크에서 온 변수)를 나타낸다.
 
 
 
@@ -10288,9 +10278,8 @@ represent variables with no known names
 
 
 <p>
-Returns the Lua value associated to <code>u</code>.
-If <code>u</code> is not a full userdata,
-returns <b>nil</b>.
+<code>u</code>에 연계된 루아 값을 반환한다.
+<code>u</code>가 full userdata가 아니면 <b>nil</b>을 반환한다.
 
 
 
@@ -10300,40 +10289,38 @@ returns <b>nil</b>.
 
 
 <p>
-Sets the given function as a hook.
-The string <code>mask</code> and the number <code>count</code> describe
-when the hook will be called.
-The string mask may have any combination of the following characters,
-with the given meaning:
+지정한 함수를 훅으로 설정한다.
+문자열 <code>mask</code>와 수 <code>count</code>로
+언제 훅이 호출되어야 하는지 기술한다.
+문자열 <code>mask</code>에서 다음 문자들을 조합할 수 있다.
 
 <ul>
-<li><b>'<code>c</code>': </b> the hook is called every time Lua calls a function;</li>
-<li><b>'<code>r</code>': </b> the hook is called every time Lua returns from a function;</li>
-<li><b>'<code>l</code>': </b> the hook is called every time Lua enters a new line of code.</li>
+<li><b>'<code>c</code>': </b> 루아가 함수를 호출할 때마다 훅이 호출된다.</li>
+<li><b>'<code>r</code>': </b> 루아가 함수에서 반환할 때마다 훅이 호출된다.</li>
+<li><b>'<code>l</code>': </b> 루아가 코드 새 행에 들어갈 때마다 훅이 호출된다.</li>
 </ul><p>
-Moreover,
-with a <code>count</code> different from zero,
-the hook is called also after every <code>count</code> instructions.
+그리고
+<code>count</code>가 0이 아니면
+<code>count</code>개 인스트럭션마다 훅이 호출된다.
 
 
 <p>
-When called without arguments,
-<a href="#pdf-debug.sethook"><code>debug.sethook</code></a> turns off the hook.
+인자 없이 호출하면
+훅을 끈다.
 
 
 <p>
-When the hook is called, its first parameter is a string
-describing the event that has triggered its call:
-<code>"call"</code> (or <code>"tail call"</code>),
+훅이 호출될 때 받는 첫 번째 매개변수는
+그 호출을 유발한 이벤트를 기술하는 문자열이다.
+<code>"call"</code> (또는 <code>"tail call"</code>),
 <code>"return"</code>,
-<code>"line"</code>, and <code>"count"</code>.
-For line events,
-the hook also gets the new line number as its second parameter.
-Inside a hook,
-you can call <code>getinfo</code> with level&nbsp;2 to get more information about
-the running function
-(level&nbsp;0 is the <code>getinfo</code> function,
-and level&nbsp;1 is the hook function).
+<code>"line"</code>, <code>"count"</code> 중 하나이다.
+행 이벤트에서는
+훅의 두 번째 매개변수로 새 행 번호를 받는다.
+훅 안에서 단계를 2로 해서 <code>getinfo</code>를 호출하면
+실행 중인 함수에 대한 추가 정보를 얻을 수 있다.
+(0번 단계는 <code>getinfo</code> 함수이고
+1번 단계는 훅 함수이다.)
 
 
 
@@ -10343,18 +10330,17 @@ and level&nbsp;1 is the hook function).
 
 
 <p>
-This function assigns the value <code>value</code> to the local variable
-with index <code>local</code> of the function at level <code>level</code> of the stack.
-The function returns <b>nil</b> if there is no local
-variable with the given index,
-and raises an error when called with a <code>level</code> out of range.
-(You can call <code>getinfo</code> to check whether the level is valid.)
-Otherwise, it returns the name of the local variable.
+스택의 <code>level</code> 단계에 있는 함수에서
+인덱스가 <code>local</code>인 지역 변수에 값 <code>value</code>를 할당한다.
+지정한 인덱스의 지역 변수가 없으면 <b>nil</b>을 반환하며,
+범위 밖의 <code>level</code>로 호출하면 오류를 제기한다.
+(<code>getinfo</code>를 호출해서 단계가 유효한지 확인할 수 있다.)
+그 외 경우에는 그 지역 변수의 이름을 반환한다.
 
 
 <p>
-See <a href="#pdf-debug.getlocal"><code>debug.getlocal</code></a> for more information about
-variable indices and names.
+변수 인덱스와 이름에 대한 자세한 내용은
+<a href="#pdf-debug.getlocal"><code>debug.getlocal</code></a>을 보라.
 
 
 
@@ -10364,9 +10350,9 @@ variable indices and names.
 
 
 <p>
-Sets the metatable for the given <code>value</code> to the given <code>table</code>
-(which can be <b>nil</b>).
-Returns <code>value</code>.
+지정한 <code>value</code>의 메타테이블을 지정한 <code>table</code>로
+(<b>nil</b>일 수 있음) 설정한다.
+<code>value</code>를 반환한다.
 
 
 
@@ -10376,11 +10362,10 @@ Returns <code>value</code>.
 
 
 <p>
-This function assigns the value <code>value</code> to the upvalue
-with index <code>up</code> of the function <code>f</code>.
-The function returns <b>nil</b> if there is no upvalue
-with the given index.
-Otherwise, it returns the name of the upvalue.
+함수 <code>f</code>에서 인덱스가 <code>up</code>인 upvalue에
+값 <code>value</code>를 할당한다.
+지정한 인덱스의 upvalue가 없으면 <b>nil</b>을 반환한다.
+아니면 그 upvalue의 이름을 반환한다.
 
 
 
@@ -10390,13 +10375,13 @@ Otherwise, it returns the name of the upvalue.
 
 
 <p>
-Sets the given <code>value</code> as
-the Lua value associated to the given <code>udata</code>.
-<code>udata</code> must be a full userdata.
+지정한 <code>udata</code>에 연계된 루아 값을
+지정한 <code>value</code>로 설정한다.
+<code>udata</code>가 full userdata여야 한다.
 
 
 <p>
-Returns <code>udata</code>.
+<code>udata</code>를 반환한다.
 
 
 
@@ -10406,15 +10391,15 @@ Returns <code>udata</code>.
 
 
 <p>
-If <code>message</code> is present but is neither a string nor <b>nil</b>,
-this function returns <code>message</code> without further processing.
-Otherwise,
-it returns a string with a traceback of the call stack.
-The optional <code>message</code> string is appended
-at the beginning of the traceback.
-An optional <code>level</code> number tells at which level
-to start the traceback
-(default is 1, the function calling <code>traceback</code>).
+<code>message</code>가 있는데 문자열이 아니고 <b>nil</b>도 아니면
+다른 처리 없이 <code>message</code>를 반환한다.
+그렇지 않으면
+호출 스택의 트레이스백을 담은 문자열을 반환한다.
+선택적인 문자열 <code>message</code>를
+트레이스백 앞쪽에 덧붙인다.
+선택적인 수 <code>level</code>은 어느 단계에서
+트레이스백을 시작할지 알려 준다.
+(기본값은 1, 즉 <code>traceback</code>을 호출한 함수이다.)
 
 
 
@@ -10424,17 +10409,17 @@ to start the traceback
 
 
 <p>
-Returns a unique identifier (as a light userdata)
-for the upvalue numbered <code>n</code>
-from the given function.
+지정한 함수의
+<code>n</code> 번째 upvalue에 대한
+고유 식별자를 (light userdata 형태로) 반환한다.
 
 
 <p>
-These unique identifiers allow a program to check whether different
-closures share upvalues.
-Lua closures that share an upvalue
-(that is, that access a same external local variable)
-will return identical ids for those upvalue indices.
+이 고유 식별자를 이용하면 upvalue를 여러 클로저에서 공유하는지 여부를
+프로그램에서 확인할 수 있다.
+upvalue를 공유하는 (즉 같은 외부 지역 변수에 접근하는)
+루아 클로저들은 각각의 upvalue 인덱스에 대해
+동일한 ID를 반환하게 된다.
 
 
 
@@ -10444,8 +10429,8 @@ will return identical ids for those upvalue indices.
 
 
 <p>
-Make the <code>n1</code>-th upvalue of the Lua closure <code>f1</code>
-refer to the <code>n2</code>-th upvalue of the Lua closure <code>f2</code>.
+루아 클로저 <code>f1</code>의 <code>n1</code> 번째 upvalue가
+루아 클로저 <code>f2</code>의 <code>n2</code> 번째 upvalue를 가리키게 만든다.
 
 
 
