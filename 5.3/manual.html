@@ -740,7 +740,7 @@ index에서처럼
 C에서 <a href="#lua_gc"><code>lua_gc</code></a>를 호출하거나
 루아에서 <a href="#pdf-collectgarbage"><code>collectgarbage</code></a>를 호출해서
 이 수치들을 바꿀 수 있다.
-그 함수들을 사용하면 수집기를 직접 제어할 (가령 멈추거나 재시작할) 수도 있다.
+그 함수들을 사용하면 수집기를 직접 제어할 (가령 멈추거나 다시 시작할) 수도 있다.
 
 
 
@@ -3508,7 +3508,7 @@ C 함수에서 루아로 값을 반환할 때는
 </li>
 
 <li><b><code>LUA_GCRESTART</code>: </b>
-쓰레기 수집기를 재시작한다.
+쓰레기 수집기를 다시 시작한다.
 </li>
 
 <li><b><code>LUA_GCCOLLECT</code>: </b>
@@ -7203,12 +7203,12 @@ error 호출 경우에
 
 <li><b>"<code>stop</code>": </b>
 쓰레기 수집기의 자동 실행을 멈춘다.
-재시작 호출 전까지는
+다시 시작하기 전까지는
 명시적으로 부를 때만 수집기가 돌게 된다.
 </li>
 
 <li><b>"<code>restart</code>": </b>
-쓰레기 수집기의 자동 실행을 재시작한다.
+쓰레기 수집기의 자동 실행을 다시 시작한다.
 </li>
 
 <li><b>"<code>count</code>": </b>
@@ -7717,7 +7717,7 @@ error 호출 경우에
 <code>val1</code>, ... 값들이
 몸체 함수에게 인자로 전달된다.
 코루틴이 양보를 하고 난 후에
-<code>resume</code>은 코루틴을 재시작한다.
+<code>resume</code>은 코루틴을 재개한다.
 <code>val1</code>, ... 값들이
 yield의 결과로 전달된다.
 
