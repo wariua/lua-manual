@@ -945,7 +945,7 @@ GC 주기에서만 객체 메모리가 해제된다.
 <a href="#pdf-coroutine.yield"><code>coroutine.yield</code></a>를 호출해서 코루틴이 실행을 양보한다.
 코루틴이 양보하면
 대응하는 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 즉시 반환한다.
-중첩된 함수 호출 내에서
+중첩 함수 호출 내에서
 (즉 메인 함수 안이 아니라 메인 함수에서 직간접으로 호출한 함수 안에서)
 양보가 이뤄질 때도 마찬가지이다.
 양보하는 경우 <a href="#pdf-coroutine.resume"><code>coroutine.resume</code></a>이 <b>true</b>에 더해서
@@ -2335,7 +2335,7 @@ prefixexp의 값을 첫 번째 매개변수로 하고
 꼬리 호출에서는
 피호출 함수가 호출측 함수의 스택 항목을 재사용한다.
 따라서 프로그램에서 실행 가능한
-중첩된 꼬리 호출 횟수에 아무 제한이 없다.
+꼬리 호출 중첩 횟수에 아무 제한이 없다.
 하지만 꼬리 호출은 호출측 함수에 대한 디버그 정보를 모두 지워 버린다.
 참고로 특정 구문에서만,
 즉 <b>return</b>의 인자가 함수 호출 하나뿐일 때만
