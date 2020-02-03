@@ -1,11 +1,9 @@
-This is Korean translation of Lua 5.3 Reference Manual.
+루아(Lua) 5.3 참조 매뉴얼 한글 번역.
 
-And ... 어... 네, 그렇습니다.
+* [5.3](5.3/)
 
-원문은 다음 주소에서 볼 수 있습니다.
+원문: https://www.lua.org/manual/
 
-https://www.lua.org/manual/
+----
 
-고칠 점이나 개선할 점 있으면 이슈나 PR 날려 주시면 됩니다.
-
-문성민 님이 번역한 5.0 버전 매뉴얼이 있습니다: http://bleedmin.blogspot.kr/2012/04/lua-50.html
+문성민 님이 번역한 [5.0 버전 매뉴얼](http://bleedmin.blogspot.kr/2012/04/lua-50.html)이 있습니다.
