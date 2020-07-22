@@ -1,8 +1,8 @@
-루아(Lua) 5.3 참조 매뉴얼 한글 번역.
+루아(Lua) 참조 매뉴얼 한글 번역.
 
 * [5.3](5.3/)
 
-원문: https://www.lua.org/manual/
+원문: <https://www.lua.org/manual/>
 
 ----
 
