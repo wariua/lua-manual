@@ -1,154 +1,155 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-<TITLE>Lua 5.4 Reference Manual - contents</TITLE>
+<TITLE>루아 5.4 참조 매뉴얼 - 차례</TITLE>
 <LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
 <LINK REL="stylesheet" TYPE="text/css" HREF="index.css">
-<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=utf-8">
 </HEAD>
 
 <BODY>
 
 <H1>
 <A HREF="http://www.lua.org/"><IMG SRC="logo.gif" ALT="Lua"></A>
-Lua 5.4 Reference Manual
+루아 5.4 참조 매뉴얼
 </H1>
 
 <P>
-The reference manual is the official definition of the Lua language.
+참조 매뉴얼은 루아 언어를 공식적으로 정의하는 문서이다.
 <BR>
-For a complete introduction to Lua programming, see the book
-<A HREF="http://www.lua.org/pil/">Programming in Lua</A>.
+루아 프로그래밍에 대한 제대로 된 소개는 책
+<A HREF="http://www.lua.org/pil/">Programming in Lua</A>
+를 보라.
 
 <DIV CLASS="menubar">
-<A HREF="manual.html">start</A>
+<A HREF="manual.html">읽기 시작</A>
 &middot;
-<A HREF="#contents">contents</A>
+<A HREF="#contents">차례</A>
 &middot;
-<A HREF="#index">index</A>
+<A HREF="#index">색인</A>
 &middot;
-<A HREF="http://www.lua.org/manual/">other versions</A>
+<A HREF="http://www.lua.org/manual/">다른 버전</A>
 </DIV>
 
 <P>
 <SMALL>
 Copyright &copy; 2020 Lua.org, PUC-Rio.
-Freely available under the terms of the
-<A HREF="http://www.lua.org/license.html">Lua license</A>.
+<A HREF="http://www.lua.org/license.html">루아 라이선스</A>
+하에서 자유롭게 사용 가능.
 </SMALL>
 
-<H2><A NAME="contents">Contents</A></H2>
+<H2><A NAME="contents">차례</A></H2>
 <UL CLASS="contents menubar">
-<LI><A HREF="manual.html">1 &ndash; Introduction</A>
+<LI><A HREF="manual.html">1 &ndash; 소개</A>
 <P>
-<LI><A HREF="manual.html#2">2 &ndash; Basic Concepts</A>
+<LI><A HREF="manual.html#2">2 &ndash; 기본 개념</A>
 <UL>
-<LI><A HREF="manual.html#2.1">2.1 &ndash; Values and Types</A>
-<LI><A HREF="manual.html#2.2">2.2 &ndash; Environments and the Global Environment</A>
-<LI><A HREF="manual.html#2.3">2.3 &ndash; Error Handling</A>
-<LI><A HREF="manual.html#2.4">2.4 &ndash; Metatables and Metamethods</A>
-<LI><A HREF="manual.html#2.5">2.5 &ndash; Garbage Collection</A>
+<LI><A HREF="manual.html#2.1">2.1 &ndash; 값과 타입</A>
+<LI><A HREF="manual.html#2.2">2.2 &ndash; 환경과 전역 환경</A>
+<LI><A HREF="manual.html#2.3">2.3 &ndash; 오류 처리</A>
+<LI><A HREF="manual.html#2.4">2.4 &ndash; 메타테이블과 메타메소드</A>
+<LI><A HREF="manual.html#2.5">2.5 &ndash; 쓰레기 수집</A>
 <UL>
-<LI><A HREF="manual.html#2.5.1">2.5.1 &ndash; Incremental Garbage Collection</A>
-<LI><A HREF="manual.html#2.5.2">2.5.2 &ndash; Generational Garbage Collection</A>
-<LI><A HREF="manual.html#2.5.3">2.5.3 &ndash; Garbage-Collection Metamethods</A>
-<LI><A HREF="manual.html#2.5.4">2.5.4 &ndash; Weak Tables</A>
+<LI><A HREF="manual.html#2.5.1">2.5.1 &ndash; 점진식 쓰레기 수집</A>
+<LI><A HREF="manual.html#2.5.2">2.5.2 &ndash; 세대식 쓰레기 수집</A>
+<LI><A HREF="manual.html#2.5.3">2.5.3 &ndash; 쓰레기 수집 메타메소드</A>
+<LI><A HREF="manual.html#2.5.4">2.5.4 &ndash; 약한 테이블</A>
 </UL>
-<LI><A HREF="manual.html#2.6">2.6 &ndash; Coroutines</A>
-</UL>
-<P>
-<LI><A HREF="manual.html#3">3 &ndash; The Language</A>
-<UL>
-<LI><A HREF="manual.html#3.1">3.1 &ndash; Lexical Conventions</A>
-<LI><A HREF="manual.html#3.2">3.2 &ndash; Variables</A>
-<LI><A HREF="manual.html#3.3">3.3 &ndash; Statements</A>
-<UL>
-<LI><A HREF="manual.html#3.3.1">3.3.1 &ndash; Blocks</A>
-<LI><A HREF="manual.html#3.3.2">3.3.2 &ndash; Chunks</A>
-<LI><A HREF="manual.html#3.3.3">3.3.3 &ndash; Assignment</A>
-<LI><A HREF="manual.html#3.3.4">3.3.4 &ndash; Control Structures</A>
-<LI><A HREF="manual.html#3.3.5">3.3.5 &ndash; For Statement</A>
-<LI><A HREF="manual.html#3.3.6">3.3.6 &ndash; Function Calls as Statements</A>
-<LI><A HREF="manual.html#3.3.7">3.3.7 &ndash; Local Declarations</A>
-<LI><A HREF="manual.html#3.3.8">3.3.8 &ndash; To-be-closed Variables</A>
-</UL>
-<LI><A HREF="manual.html#3.4">3.4 &ndash; Expressions</A>
-<UL>
-<LI><A HREF="manual.html#3.4.1">3.4.1 &ndash; Arithmetic Operators</A>
-<LI><A HREF="manual.html#3.4.2">3.4.2 &ndash; Bitwise Operators</A>
-<LI><A HREF="manual.html#3.4.3">3.4.3 &ndash; Coercions and Conversions</A>
-<LI><A HREF="manual.html#3.4.4">3.4.4 &ndash; Relational Operators</A>
-<LI><A HREF="manual.html#3.4.5">3.4.5 &ndash; Logical Operators</A>
-<LI><A HREF="manual.html#3.4.6">3.4.6 &ndash; Concatenation</A>
-<LI><A HREF="manual.html#3.4.7">3.4.7 &ndash; The Length Operator</A>
-<LI><A HREF="manual.html#3.4.8">3.4.8 &ndash; Precedence</A>
-<LI><A HREF="manual.html#3.4.9">3.4.9 &ndash; Table Constructors</A>
-<LI><A HREF="manual.html#3.4.10">3.4.10 &ndash; Function Calls</A>
-<LI><A HREF="manual.html#3.4.11">3.4.11 &ndash; Function Definitions</A>
-</UL>
-<LI><A HREF="manual.html#3.5">3.5 &ndash; Visibility Rules</A>
+<LI><A HREF="manual.html#2.6">2.6 &ndash; 코루틴</A>
 </UL>
 <P>
-<LI><A HREF="manual.html#4">4 &ndash; The Application Program Interface</A>
+<LI><A HREF="manual.html#3">3 &ndash; 언어</A>
 <UL>
-<LI><A HREF="manual.html#4.1">4.1 &ndash; The Stack</A>
+<LI><A HREF="manual.html#3.1">3.1 &ndash; 어휘 규정</A>
+<LI><A HREF="manual.html#3.2">3.2 &ndash; 변수</A>
+<LI><A HREF="manual.html#3.3">3.3 &ndash; 문</A>
 <UL>
-<LI><A HREF="manual.html#4.1.1">4.1.1 &ndash; Stack Size</A>
-<LI><A HREF="manual.html#4.1.2">4.1.2 &ndash; Valid and Acceptable Indices</A>
+<LI><A HREF="manual.html#3.3.1">3.3.1 &ndash; 블록</A>
+<LI><A HREF="manual.html#3.3.2">3.3.2 &ndash; 청크</A>
+<LI><A HREF="manual.html#3.3.3">3.3.3 &ndash; 할당</A>
+<LI><A HREF="manual.html#3.3.4">3.3.4 &ndash; 제어 구조</A>
+<LI><A HREF="manual.html#3.3.5">3.3.5 &ndash; for 문</A>
+<LI><A HREF="manual.html#3.3.6">3.3.6 &ndash; 함수 호출 문</A>
+<LI><A HREF="manual.html#3.3.7">3.3.7 &ndash; 지역 선언</A>
+<LI><A HREF="manual.html#3.3.8">3.3.8 &ndash; 자동 닫힘 변수</A>
 </UL>
-<LI><A HREF="manual.html#4.2">4.2 &ndash; C Closures</A>
-<LI><A HREF="manual.html#4.3">4.3 &ndash; Registry</A>
-<LI><A HREF="manual.html#4.4">4.4 &ndash; Error Handling in C</A>
+<LI><A HREF="manual.html#3.4">3.4 &ndash; 식</A>
 <UL>
-<LI><A HREF="manual.html#4.4.1">4.4.1 &ndash; Status Codes</A>
+<LI><A HREF="manual.html#3.4.1">3.4.1 &ndash; 산술 연산자</A>
+<LI><A HREF="manual.html#3.4.2">3.4.2 &ndash; 비트 연산자</A>
+<LI><A HREF="manual.html#3.4.3">3.4.3 &ndash; 타입 강제와 변환</A>
+<LI><A HREF="manual.html#3.4.4">3.4.4 &ndash; 관계 연산자</A>
+<LI><A HREF="manual.html#3.4.5">3.4.5 &ndash; 논리 연산자</A>
+<LI><A HREF="manual.html#3.4.6">3.4.6 &ndash; 접합</A>
+<LI><A HREF="manual.html#3.4.7">3.4.7 &ndash; 길이 연산자</A>
+<LI><A HREF="manual.html#3.4.8">3.4.8 &ndash; 우선순위</A>
+<LI><A HREF="manual.html#3.4.9">3.4.9 &ndash; 테이블 생성자</A>
+<LI><A HREF="manual.html#3.4.10">3.4.10 &ndash; 함수 호출</A>
+<LI><A HREF="manual.html#3.4.11">3.4.11 &ndash; 함수 정의</A>
 </UL>
-<LI><A HREF="manual.html#4.5">4.5 &ndash; Handling Yields in C</A>
-<LI><A HREF="manual.html#4.6">4.6 &ndash; Functions and Types</A>
-<LI><A HREF="manual.html#4.7">4.7 &ndash; The Debug Interface</A>
-</UL>
-<P>
-<LI><A HREF="manual.html#5">5 &ndash; The Auxiliary Library</A>
-<UL>
-<LI><A HREF="manual.html#5.1">5.1 &ndash; Functions and Types</A>
-</UL>
-<P>
-<LI><A HREF="manual.html#6">6 &ndash; The Standard Libraries</A>
-<UL>
-<LI><A HREF="manual.html#6.1">6.1 &ndash; Basic Functions</A>
-<LI><A HREF="manual.html#6.2">6.2 &ndash; Coroutine Manipulation</A>
-<LI><A HREF="manual.html#6.3">6.3 &ndash; Modules</A>
-<LI><A HREF="manual.html#6.4">6.4 &ndash; String Manipulation</A>
-<UL>
-<LI><A HREF="manual.html#6.4.1">6.4.1 &ndash; Patterns</A>
-<LI><A HREF="manual.html#6.4.2">6.4.2 &ndash; Format Strings for Pack and Unpack</A>
-</UL>
-<LI><A HREF="manual.html#6.5">6.5 &ndash; UTF-8 Support</A>
-<LI><A HREF="manual.html#6.6">6.6 &ndash; Table Manipulation</A>
-<LI><A HREF="manual.html#6.7">6.7 &ndash; Mathematical Functions</A>
-<LI><A HREF="manual.html#6.8">6.8 &ndash; Input and Output Facilities</A>
-<LI><A HREF="manual.html#6.9">6.9 &ndash; Operating System Facilities</A>
-<LI><A HREF="manual.html#6.10">6.10 &ndash; The Debug Library</A>
+<LI><A HREF="manual.html#3.5">3.5 &ndash; 가시성 규칙</A>
 </UL>
 <P>
-<LI><A HREF="manual.html#7">7 &ndash; Lua Standalone</A>
-<P>
-<LI><A HREF="manual.html#8">8 &ndash; Incompatibilities with the Previous Version</A>
+<LI><A HREF="manual.html#4">4 &ndash; 응용 프로그램 인터페이스</A>
 <UL>
-<LI><A HREF="manual.html#8.1">8.1 &ndash; Incompatibilities in the Language</A>
-<LI><A HREF="manual.html#8.2">8.2 &ndash; Incompatibilities in the Libraries</A>
-<LI><A HREF="manual.html#8.3">8.3 &ndash; Incompatibilities in the API</A>
+<LI><A HREF="manual.html#4.1">4.1 &ndash; 스택</A>
+<UL>
+<LI><A HREF="manual.html#4.1.1">4.1.1 &ndash; 스택 크기</A>
+<LI><A HREF="manual.html#4.1.2">4.1.2 &ndash; 유효 인덱스와 허용 인덱스</A>
+</UL>
+<LI><A HREF="manual.html#4.2">4.2 &ndash; C 클로저</A>
+<LI><A HREF="manual.html#4.3">4.3 &ndash; 레지스트리</A>
+<LI><A HREF="manual.html#4.4">4.4 &ndash; C에서의 오류 처리</A>
+<UL>
+<LI><A HREF="manual.html#4.4.1">4.4.1 &ndash; 상태 코드</A>
+</UL>
+<LI><A HREF="manual.html#4.5">4.5 &ndash; C에서의 양보 처리</A>
+<LI><A HREF="manual.html#4.6">4.6 &ndash; 함수와 타입</A>
+<LI><A HREF="manual.html#4.7">4.7 &ndash; 디버그 인터페이스</A>
 </UL>
 <P>
-<LI><A HREF="manual.html#9">9 &ndash; The Complete Syntax of Lua</A>
+<LI><A HREF="manual.html#5">5 &ndash; 보조 라이브러리</A>
+<UL>
+<LI><A HREF="manual.html#5.1">5.1 &ndash; 함수와 타입</A>
+</UL>
+<P>
+<LI><A HREF="manual.html#6">6 &ndash; 표준 라이브러리</A>
+<UL>
+<LI><A HREF="manual.html#6.1">6.1 &ndash; 기본 함수</A>
+<LI><A HREF="manual.html#6.2">6.2 &ndash; 코루틴 조작</A>
+<LI><A HREF="manual.html#6.3">6.3 &ndash; 모듈</A>
+<LI><A HREF="manual.html#6.4">6.4 &ndash; 문자열 조작</A>
+<UL>
+<LI><A HREF="manual.html#6.4.1">6.4.1 &ndash; 패턴</A>
+<LI><A HREF="manual.html#6.4.2">6.4.2 &ndash; 포장 형식 문자열</A>
+</UL>
+<LI><A HREF="manual.html#6.5">6.5 &ndash; UTF-8 지원</A>
+<LI><A HREF="manual.html#6.6">6.6 &ndash; 테이블 조작</A>
+<LI><A HREF="manual.html#6.7">6.7 &ndash; 수학 함수</A>
+<LI><A HREF="manual.html#6.8">6.8 &ndash; 입출력 기능</A>
+<LI><A HREF="manual.html#6.9">6.9 &ndash; 운영 체제 기능</A>
+<LI><A HREF="manual.html#6.10">6.10 &ndash; 디버그 라이브러리</A>
+</UL>
+<P>
+<LI><A HREF="manual.html#7">7 &ndash; 단독형 루아</A>
+<P>
+<LI><A HREF="manual.html#8">8 &ndash; 이전 버전과 호환되지 않는 점</A>
+<UL>
+<LI><A HREF="manual.html#8.1">8.1 &ndash; 언어에서 호환되지 않는 점</A>
+<LI><A HREF="manual.html#8.2">8.2 &ndash; 라이브러리에서 호환되지 않는 점</A>
+<LI><A HREF="manual.html#8.3">8.3 &ndash; API에서 호환되지 않는 점</A>
+</UL>
+<P>
+<LI><A HREF="manual.html#9">9 &ndash; 루아 전체 문법</A>
 </UL>
 
-<H2><A NAME="index">Index</A></H2>
+<H2><A NAME="index">색인</A></H2>
 <TABLE CLASS="menubar" WIDTH="100%">
 <TR>
 <TD>
-<H3><A NAME="functions">Lua functions</A></H3>
+<H3><A NAME="functions">루아 함수</A></H3>
 <P>
-<A HREF="manual.html#6.1">basic</A><BR>
+<A HREF="manual.html#6.1">기본</A><BR>
 <A HREF="manual.html#pdf-_G">_G</A><BR>
 <A HREF="manual.html#pdf-_VERSION">_VERSION</A><BR>
 <A HREF="manual.html#pdf-assert">assert</A><BR>
@@ -329,7 +330,7 @@ Freely available under the terms of the
 <A HREF="manual.html#pdf-utf8.len">utf8.len</A><BR>
 <A HREF="manual.html#pdf-utf8.offset">utf8.offset</A><BR>
 
-<H3><A NAME="metamethods">metamethods</A></H3>
+<H3><A NAME="metamethods">메타메소드</A></H3>
 <P>
 <A HREF="manual.html#2.4">__add</A><BR>
 <A HREF="manual.html#2.4">__band</A><BR>
@@ -361,7 +362,7 @@ Freely available under the terms of the
 <A HREF="manual.html#pdf-tostring">__tostring</A><BR>
 <A HREF="manual.html#2.4">__unm</A><BR>
 
-<H3><A NAME="env">environment<BR>variables</A></H3>
+<H3><A NAME="env">환경 변수</A></H3>
 <P>
 <A HREF="manual.html#pdf-LUA_CPATH">LUA_CPATH</A><BR>
 <A HREF="manual.html#pdf-LUA_CPATH_5_4">LUA_CPATH_5_4</A><BR>
@@ -514,7 +515,7 @@ Freely available under the terms of the
 
 </TD>
 <TD>
-<H3><A NAME="auxlib">auxiliary library</A></H3>
+<H3><A NAME="auxlib">보조 라이브러리</A></H3>
 <P>
 <A HREF="manual.html#luaL_Buffer">luaL_Buffer</A><BR>
 <A HREF="manual.html#luaL_Reg">luaL_Reg</A><BR>
@@ -588,7 +589,7 @@ Freely available under the terms of the
 <A HREF="manual.html#luaL_unref">luaL_unref</A><BR>
 <A HREF="manual.html#luaL_where">luaL_where</A><BR>
 
-<H3><A NAME="library">standard library</A></H3>
+<H3><A NAME="library">표준 라이브러리</A></H3>
 <P>
 <A HREF="manual.html#pdf-luaopen_base">luaopen_base</A><BR>
 <A HREF="manual.html#pdf-luaopen_coroutine">luaopen_coroutine</A><BR>
@@ -601,7 +602,7 @@ Freely available under the terms of the
 <A HREF="manual.html#pdf-luaopen_table">luaopen_table</A><BR>
 <A HREF="manual.html#pdf-luaopen_utf8">luaopen_utf8</A><BR>
 
-<H3><A NAME="constants">constants</A></H3>
+<H3><A NAME="constants">상수</A></H3>
 <P>
 <A HREF="manual.html#pdf-LUA_ERRERR">LUA_ERRERR</A><BR>
 <A HREF="manual.html#pdf-LUA_ERRFILE">LUA_ERRFILE</A><BR>
