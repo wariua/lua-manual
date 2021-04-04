@@ -33,7 +33,7 @@
 
 <P>
 <SMALL>
-Copyright &copy; 2020 Lua.org, PUC-Rio.
+Copyright &copy; 2020&ndash;2021 Lua.org, PUC-Rio.
 <A HREF="http://www.lua.org/license.html">루아 라이선스</A>
 하에서 자유롭게 사용 가능.
 </SMALL>
@@ -96,6 +96,7 @@ Copyright &copy; 2020 Lua.org, PUC-Rio.
 <UL>
 <LI><A HREF="manual.html#4.1.1">4.1.1 &ndash; 스택 크기</A>
 <LI><A HREF="manual.html#4.1.2">4.1.2 &ndash; 유효 인덱스와 허용 인덱스</A>
+<LI><A HREF="manual.html#4.1.3">4.1.3 &ndash; 문자열 포인터</A>
 </UL>
 <LI><A HREF="manual.html#4.2">4.2 &ndash; C 클로저</A>
 <LI><A HREF="manual.html#4.3">4.3 &ndash; 레지스트리</A>
@@ -198,7 +199,6 @@ Copyright &copy; 2020 Lua.org, PUC-Rio.
 <A HREF="manual.html#pdf-debug.getregistry">debug.getregistry</A><BR>
 <A HREF="manual.html#pdf-debug.getupvalue">debug.getupvalue</A><BR>
 <A HREF="manual.html#pdf-debug.getuservalue">debug.getuservalue</A><BR>
-<A HREF="manual.html#pdf-debug.setcstacklimit">debug.setcstacklimit</A><BR>
 <A HREF="manual.html#pdf-debug.sethook">debug.sethook</A><BR>
 <A HREF="manual.html#pdf-debug.setlocal">debug.setlocal</A><BR>
 <A HREF="manual.html#pdf-debug.setmetatable">debug.setmetatable</A><BR>
@@ -397,6 +397,7 @@ Copyright &copy; 2020 Lua.org, PUC-Rio.
 <A HREF="manual.html#lua_callk">lua_callk</A><BR>
 <A HREF="manual.html#lua_checkstack">lua_checkstack</A><BR>
 <A HREF="manual.html#lua_close">lua_close</A><BR>
+<A HREF="manual.html#lua_closeslot">lua_closeslot</A><BR>
 <A HREF="manual.html#lua_compare">lua_compare</A><BR>
 <A HREF="manual.html#lua_concat">lua_concat</A><BR>
 <A HREF="manual.html#lua_copy">lua_copy</A><BR>
@@ -476,7 +477,6 @@ Copyright &copy; 2020 Lua.org, PUC-Rio.
 <A HREF="manual.html#lua_resume">lua_resume</A><BR>
 <A HREF="manual.html#lua_rotate">lua_rotate</A><BR>
 <A HREF="manual.html#lua_setallocf">lua_setallocf</A><BR>
-<A HREF="manual.html#lua_setcstacklimit">lua_setcstacklimit</A><BR>
 <A HREF="manual.html#lua_setfield">lua_setfield</A><BR>
 <A HREF="manual.html#lua_setglobal">lua_setglobal</A><BR>
 <A HREF="manual.html#lua_sethook">lua_sethook</A><BR>
@@ -665,10 +665,10 @@ Copyright &copy; 2020 Lua.org, PUC-Rio.
 
 <P CLASS="footer">
 Last update:
-Sat May 30 08:22:18 -03 2020
+Wed Mar  3 13:04:44 UTC 2021
 </P>
 <!--
-Last change: revised for Lua 5.4.0 (final)
+Last change: revised for Lua 5.4.3
 -->
 
 </BODY>
