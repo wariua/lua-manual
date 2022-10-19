@@ -21,7 +21,7 @@
 
 <P>
 <SMALL>
-Copyright &copy; 2020&ndash;2021 Lua.org, PUC-Rio.
+Copyright &copy; 2020&ndash;2022 Lua.org, PUC-Rio.
 <a href="http://www.lua.org/license.html">루아 라이선스</a>
 하에서 자유롭게 사용 가능.
 </SMALL>
@@ -953,11 +953,8 @@ GC 주기에서만 객체 메모리가 해제된다.
 
 
 <p>
-종료자는 양보를 할 수 없다.
-그것만 빼면 뭐든지 할 수 있는데,
-예를 들어 오류를 던지거나, 새 객체를 생성하거나,
-심지어 쓰레기 수집기를 돌릴 수도 있다.
-하지만 예측 불가능한 시점에 실행될 수 있으므로
+종료자는 양보를 하거나 쓰레기 수집기를 돌릴 수 없다.
+예측 불가능한 시점에 실행될 수 있으므로
 종료자에서는 연계 자원을 올바로 해제하기 위해
 필요한 최소한의 일만 하는 게 일반적으로 좋다.
 
@@ -1620,8 +1617,10 @@ Name은 식별자를 나타낸다. (<a href="#3.1">3.1절</a> 참고.)
 
 
 <p>
-할당 문에서는 먼저 모든 식들을 평가한 다음에
-할당을 수행한다.
+다중 할당 내에서 어떤 변수를
+할당도 하고 읽기도 하는 경우에
+변수 읽기가 할당 전 값을 얻음을
+루아에서 보장한다.
 그래서 다음 코드가 있을 때,
 
 <pre>
@@ -1642,6 +1641,14 @@ Name은 식별자를 나타낸다. (<a href="#3.1">3.1절</a> 참고.)
      x, y, z = y, z, x
 </pre><p>
 <code>x</code>, <code>y</code>, <code>z</code>의 값을 순환시킨다.
+
+
+<p>
+참고로 이 보장은 문법적으로
+할당 문 안에 있는 접근에만 적용된다.
+할당 동안 호출되는 함수나 메타메소드에서
+변수 값을 바꾸는 경우에는
+접근 순서에 대해 루아에서 무엇도 보장하지 않는다.
 
 
 <p>
@@ -2386,15 +2393,19 @@ IEEE 754 표준에 따라
 테이블에 길이 연산자를 적용하면
 그 테이블의 경계를 반환한다.
 테이블 <code>t</code>의 <em>경계(border)</em>란
-다음 조건을 충족시키는 자연수다.
+다음 조건을 충족시키는 음수 아닌 정수다.
 
 <pre>
-     (border == 0 or t[border] ~= nil) and t[border + 1] == nil
+     (border == 0 or t[border] ~= nil) and
+     (t[border + 1] == nil or border == math.maxinteger)
 </pre><p>
 다시 말해
-경계란 테이블에 존재하는 (자연수) 인덱스로서
+경계란 테이블에 존재하는 양수 인덱스로서
 바로 다음 인덱스가 없는 것이다.
-(인덱스 1이 없으면 0이다.)
+단, 인덱스 1이 없을 때는 0이며,
+정수 최댓값 인덱스가 존재할 때는 그 최댓값이다.
+참고로 양수 아닌 키는
+경계에 영향을 끼치지 않는다.
 
 
 <p>
@@ -2405,12 +2416,10 @@ IEEE 754 표준에 따라
 경계가 둘(3과 5)이므로 열이 아니다.
 (인덱스 4의 <b>nil</b>을 <em>구멍</em>이라고 한다.)
 테이블 <code>{nil, 20, 30, nil, nil, 60, nil}</code>은
-경계 셋(0, 3, 6)과 구멍 셋(인덱스 1, 4, 5)이 있으므로
+경계가 셋(0, 3, 6) 있으므로
 역시 열이 아니다.
 테이블 <code>{}</code>는
 경계가 0인 열이다.
-참고로 자연수 아닌 키는
-테이블이 열인지 여부에 영향을 주지 않는다.
 
 
 <p>
@@ -2428,7 +2437,7 @@ IEEE 754 표준에 따라
 <p>
 테이블 길이 계산의
 최악 실행 시간이 <em>O(log n)</em>이라고 보장된다.
-여기서 <em>n</em>은 테이블에서 가장 큰 자연수 키이다.
+여기서 <em>n</em>은 테이블에서 가장 큰 정수 키이다.
 
 
 <p>
@@ -3927,6 +3936,10 @@ C에서 결과 개수를 반환하면 된다.
 </ul><p>
 이 옵션들에 대한 더 자세한 내용은
 <a href="#pdf-collectgarbage"><code>collectgarbage</code></a>를 보라.
+
+
+<p>
+이 함수를 종료자에서 호출해선 안 된다.
 
 
 
@@ -5873,7 +5886,11 @@ C 함수에서 <a href="#lua_yieldk"><code>lua_yieldk</code></a>를 호출하면
 이 구조체의 비공개 부분만을 채운다.
 <a href="#lua_Debug"<code>lua_Debug</code></a>의 다른 필드들에
 유용한 정보를 채우려면
-<a href="#lua_getinfo"><code>lua_getinfo</code></a>를 호출해야 한다.
+적절한 매개변수로 <a href="#lua_getinfo"><code>lua_getinfo</code></a>를 호출해야 한다.
+(구체적으로는 어떤 필드를 얻으려면
+필드 주석의 괄호 안에 있는 글자를
+<a href="#lua_getinfo"><code>lua_getinfo</code></a>의 <code>what</code> 매개변수에
+추가해 줘야 한다.)
 
 
 <p>
@@ -6053,18 +6070,28 @@ C 함수면 <code>"C"</code>,
 <code>what</code> 문자열의 각 문자가
 <code>ar</code> 구조체에서 채울 필드나
 스택에 집어넣을 값을 선택한다.
+(<a href="#lua_Debug"><code>lua_Debug</code></a> 구조체
+선언을 보면 각 필드별 주석의 괄호 안에
+이 문자들이 적혀 있다.)
 
 <ul>
 
+<li><b>'<code>f</code>': </b>
+해당 단계에서 실행 중인 함수를
+스택에 집어넣는다.
+</li>
+
+<li><b>'<code>l</code>': </b> <code>currentline</code> 필드를 채운다.
+
 <li><b>'<code>n</code>': </b> <code>name</code> 및 <code>namewhat</code> 필드를 채운다.
+</li>
+
+<li><b>'<code>r</code>': </b> <code>ftransfer</code> 및 <code>ntransfer</code> 필드를 채운다.
 </li>
 
 <li><b>'<code>S</code>': </b>
 <code>source</code>, <code>short_src</code>, <code>linedefined</code>,
 <code>lastlinedefined</code>, <code>what</code> 필드를 채운다.
-</li>
-
-<li><b>'<code>l</code>': </b> <code>currentline</code> 필드를 채운다.
 </li>
 
 <li><b>'<code>t</code>': </b> <code>istailcall</code> 필드를 채운다.
@@ -6074,25 +6101,12 @@ C 함수면 <code>"C"</code>,
 <code>nparams</code>, <code>isvararg</code> 필드를 채운다.
 </li>
 
-<li><b>'<code>f</code>': </b>
-해당 단계에서 실행 중인 함수를
-스택에 집어넣는다.
-</li>
-
 <li><b>'<code>L</code>': </b>
-그 함수 상의 유효 행의 번호가 인덱스인 테이블을
-스택에 집어넣는다.
-(<em>유효 행</em>이란 어떤 연관 코드가 있는 행이다.
-즉, 중단점을 넣을 수 있는 행이다.
-유효하지 않은 행으로는 빈 행과 주석 등이 있다.)
-
-
-<p>
+어떤 연관 코드가 있는, 즉 중단점을 넣을 수 있는
+함수의 행들이 인덱스인 테이블을 스택에 집어넣는다.
+(연관 코드가 없는 행으로는 빈 행과 주석 등이 있다.)
 이 옵션을 '<code>f</code>' 옵션과 함께 주면
 함수 다음에 테이블을 집어넣는다.
-
-
-<p>
 유일하게 메모리 오류를 던질 수 있는 옵션이다.
 </li>
 
@@ -6455,7 +6469,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 
 
 <hr><h3><a name="luaL_addgsub"><code>luaL_addgsub</code></a></h3><p>
-<span class="apii">[-0, +0, <em>m</em>]</span>
+<span class="apii">[-?, +?, <em>m</em>]</span>
 <pre>const void luaL_addgsub (luaL_Buffer *B, const char *s,
                          const char *p, const char *r);</pre>
 
@@ -6512,7 +6526,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 
 
 <hr><h3><a name="luaL_addvalue"><code>luaL_addvalue</code></a></h3><p>
-<span class="apii">[-1, +?, <em>m</em>]</span>
+<span class="apii">[-?, +?, <em>m</em>]</span>
 <pre>void luaL_addvalue (luaL_Buffer *B);</pre>
 
 <p>
@@ -6665,7 +6679,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 
 
 <hr><h3><a name="luaL_buffinit"><code>luaL_buffinit</code></a></h3><p>
-<span class="apii">[-0, +0, &ndash;]</span>
+<span class="apii">[-0, +?, &ndash;]</span>
 <pre>void luaL_buffinit (lua_State *L, luaL_Buffer *B);</pre>
 
 <p>
@@ -6703,7 +6717,7 @@ C 함수 인자를 검사하는 데 쓰인다.
 
 
 <hr><h3><a name="luaL_buffsub"><code>luaL_buffsub</code></a></h3><p>
-<span class="apii">[-0, +0, &ndash;]</span>
+<span class="apii">[-?, +?, &ndash;]</span>
 <pre>void luaL_buffsub (luaL_Buffer *B, int n);</pre>
 
 <p>
@@ -7504,6 +7518,11 @@ userdata의 메타테이블로 쓸 새 테이블을 만들고,
 등록 후 스택에서 그 값들을 꺼낸다.
 
 
+<p>
+값이 <code>NULL</code>인 함수는 빈 자리를 나타내며
+<b>false</b>가 채워진다.
+
+
 
 
 
@@ -7863,6 +7882,10 @@ C 호스트 프로그램에서 이 라이브러리들에 접근하려면
 <a href="#2.5">2.5절</a>을 보라.
 
 
+<p>
+이 함수를 종료자에서 호출해선 안 된다.
+
+
 
 
 <p>
@@ -7880,7 +7903,7 @@ C 호스트 프로그램에서 이 라이브러리들에 접근하려면
 
 <p>
 <hr><h3><a name="pdf-error"><code>error (message [, level])</code></a></h3>
-@{message}를 오류 객체로 해서 오류를 던진다. (<a href="#2.3">2.3절</a> 참고.)
+<code>message</code>를 오류 객체로 해서 오류를 던진다. (<a href="#2.3">2.3절</a> 참고.)
 이 함수는 절대 반환하지 않는다.
 
 
@@ -8051,9 +8074,8 @@ C 호스트 프로그램에서 이 라이브러리들에 접근하려면
 
 
 <p>
-순회 도중에
-테이블에 존재하지 않던 필드에 값을 할당하는 경우
-<code>next</code>의 동작 방식이 규정되어 있지 않다.
+순화 도중에
+테이블에 존재하지 않던 필드에 값을 할달행선 안 된다.
 하지만 기존 필드를 변경하는 건 괜찮다.
 특히 기존 필드들을 nil로 설정할 수도 있다.
 
@@ -8099,7 +8121,7 @@ C 호스트 프로그램에서 이 라이브러리들에 접근하려면
 대신 <code>pcall</code>이 그 오류를 잡아서
 상태 코드를 반환한다.
 첫 번째 결과는 상태 코드(불리언)인데
-호출이 오류 없이 성공하면 참이다.
+호출이 오류 없이 성공하면 <b>true</b>다.
 그 경우 호출의 모든 결과를 <code>pcall</code>이
 첫 번째 결과 뒤에 붙여서 반환한다.
 오류 발생 시에는 <code>pcall</code>이 <b>false</b>와 오류 객체를 반환한다.
@@ -8374,7 +8396,7 @@ C 호스트 프로그램에서 이 라이브러리들에 접근하려면
 
 
 <p>
-코루틴 <code>co</code>가 양보할 수 있으면 참을 반환한다.
+코루틴 <code>co</code>가 양보할 수 있으면 <b>true</b>를 반환한다.
 <code>co</code>의 기본값은 동작 중인 코루틴이다.
 
 
@@ -8417,7 +8439,7 @@ yield의 결과로 전달된다.
 
 <p>
 동작 중인 코루틴에 더해서 불리언을 반환하는데,
-동작 중인 코루틴이 메인 코루틴일 때 참이다.
+동작 중인 코루틴이 메인 코루틴일 때 <b>true</b>다.
 
 
 
@@ -8949,7 +8971,7 @@ upvalue가 있는 함수인 경우 upvalue 개수만 저장된다.
 탐색을 시작할 위치를 지정한다.
 기본값은 1이며 음수일 수 있다.
 네 번째의 선택적 인자 <code>plain</code>에
-<b>true</b> 값을 주면 패턴 검사 기능을 끈다.
+<b>true</b>를 주면 패턴 검사 기능을 끈다.
 그래서 <code>pattern</code> 내의 어떤 문자도 특수하게 취급하지 않고
 단순한 "부분 문자열 찾기" 동작을 한다.
 
@@ -8972,9 +8994,11 @@ upvalue가 있는 함수인 경우 upvalue 개수만 저장된다.
 가변 개수 인자들로 만든 서식 적용 문자열을 반환한다.
 서식 문자열은 ISO C 함수 <code>sprintf</code>와 같은 규칙을 따른다.
 다만 변환 지정자 및 수식자
-<code>*</code>, <code>h</code>, <code>L</code>, <code>l</code>, <code>n</code>을
+<code>F</code>, <code>n</code>, <code>*</code>, <code>h</code>, <code>L</code>, <code>l</code>을
 지원하지 않으며
 추가로 지정자 <code>q</code>가 있다.
+폭과 정밀도는 사용 시
+숫자 두 자리로 제한된다.
 
 
 <p>
@@ -8997,7 +9021,7 @@ upvalue가 있는 함수인 경우 upvalue 개수만 저장된다.
      "a string with \"quotes\" and \
       new line"
 </pre><p>
-이 지정자는 수식자(플래그, 폭, 길이)를 지원하지 않는다.
+이 지정자는 수식자(플래그, 폭, 정밀도)를 지원하지 않는다.
 
 
 <p>
@@ -10267,7 +10291,7 @@ C89 컴파일러로 루아를 컴파일하는 경우에는
 <p>
 불리언을 반환한다.
 부호 없는 정수로 비교할 때 정수 <code>m</code>이 정수 <code>n</code>보다 작으면,
-그리고 그 경우에만 참이다.
+그리고 그 경우에만 <b>true</b>다.
 
 
 
@@ -11790,10 +11814,10 @@ full userdata가 이제 임의 개수의 연계 사용자 값을 가진다.
 
 <P CLASS="footer">
 Last update:
-Mon Mar 15 13:39:42 UTC 2021
+Thu Jan 13 11:33:16 UTC 2022
 </P>
 <!--
-Last change: revised for Lua 5.4.3
+Last change: revised for Lua 5.4.4
 -->
 
 </body></html>
